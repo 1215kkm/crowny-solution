@@ -6,8 +6,10 @@ export function generateStaticParams() {
   return MOCK_ENTERPRISES.map((ent) => ({ id: ent.id }));
 }
 
-export default async function EnterpriseDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function EnterpriseDetailPage(props: any) {
+  const params = await Promise.resolve(props.params);
+  const id = params?.id;
   const enterprise = MOCK_ENTERPRISES.find((e) => e.id === id);
 
   if (!enterprise) {
