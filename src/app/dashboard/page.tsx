@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, MOCK_STATS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon } from "@/lib/mockData";
+import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, MOCK_STATS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
 export default function DashboardPage() {
   return (
@@ -52,7 +52,7 @@ export default function DashboardPage() {
                   className="flex items-center justify-between py-3 border-b border-neutral-100 last:border-0 hover:bg-neutral-50 rounded-[3px] px-2 -mx-2 transition"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-[3px] bg-neutral-900 flex items-center justify-center text-xs font-bold text-white">
+                    <div className={`w-7 h-7 rounded-[3px] bg-gradient-to-br ${getIndustryAurora(ent.industry.code)} flex items-center justify-center text-xs font-bold text-white`}>
                       {getIndustryIcon(ent.industry.code)}
                     </div>
                     <div>

@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon } from "@/lib/mockData";
+import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
 export default function EnterpriseDetailPage() {
   const params = useParams();
@@ -39,7 +39,7 @@ export default function EnterpriseDetailPage() {
           <div className="p-8">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-[3px] bg-neutral-900 flex items-center justify-center text-lg font-bold text-white">
+                <div className={`w-12 h-12 rounded-[3px] bg-gradient-to-br ${getIndustryAurora(enterprise.industry.code)} flex items-center justify-center text-lg font-bold text-white`}>
                   {getIndustryIcon(enterprise.industry.code)}
                 </div>
                 <div>
