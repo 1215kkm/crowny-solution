@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { MOCK_ENTERPRISES, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon } from "@/lib/mockData";
+import { MOCK_ENTERPRISES, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
 export default function EnterprisesPage() {
   return (
@@ -40,7 +40,7 @@ export default function EnterprisesPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-[3px] bg-neutral-900 flex items-center justify-center text-xs font-bold text-white">
+                    <div className={`w-9 h-9 rounded-[3px] bg-gradient-to-br ${getIndustryAurora(ent.industry.code)} flex items-center justify-center text-xs font-bold text-white`}>
                       {getIndustryIcon(ent.industry.code)}
                     </div>
                     <div>

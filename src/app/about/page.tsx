@@ -6,8 +6,12 @@ export default function AboutPage() {
     <>
       <Navbar />
       {/* Hero */}
-      <section className="bg-neutral-950 text-white py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="bg-neutral-950 text-white py-20 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-30%] right-[-10%] w-[50%] h-[80%] bg-gradient-to-bl from-purple-500/[0.05] via-transparent to-transparent rounded-full blur-3xl" />
+          <div className="absolute bottom-[-20%] left-[-5%] w-[40%] h-[70%] bg-gradient-to-tr from-cyan-400/[0.05] via-transparent to-transparent rounded-full blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">CROWNY를 소개합니다</h1>
           <p className="text-lg text-neutral-400">153개국을 연결하는 글로벌 비즈니스 생태계</p>
         </div>
@@ -46,12 +50,12 @@ export default function AboutPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { title: "투명성", desc: "모든 자본 흐름과 사업 현황을 실시간으로 투명하게 공개합니다.", icon: "T" },
-              { title: "지속가능성", desc: "단기 이익이 아닌 장기적 가치 창출과 사회적 영향을 추구합니다.", icon: "S" },
-              { title: "글로벌 협력", desc: "국경을 넘어 각국의 강점을 결합하여 시너지를 극대화합니다.", icon: "G" },
+              { title: "투명성", desc: "모든 자본 흐름과 사업 현황을 실시간으로 투명하게 공개합니다.", icon: "T", aurora: "from-cyan-400/[0.08] via-neutral-900 to-neutral-900" },
+              { title: "지속가능성", desc: "단기 이익이 아닌 장기적 가치 창출과 사회적 영향을 추구합니다.", icon: "S", aurora: "from-emerald-400/[0.08] via-neutral-900 to-neutral-900" },
+              { title: "글로벌 협력", desc: "국경을 넘어 각국의 강점을 결합하여 시너지를 극대화합니다.", icon: "G", aurora: "from-purple-400/[0.08] via-neutral-900 to-neutral-900" },
             ].map((v) => (
               <div key={v.title} className="bg-white rounded-[3px] p-8 border border-neutral-200">
-                <div className="w-10 h-10 rounded-[3px] bg-neutral-900 flex items-center justify-center text-sm font-bold text-white mb-4">{v.icon}</div>
+                <div className={`w-10 h-10 rounded-[3px] bg-gradient-to-br ${v.aurora} flex items-center justify-center text-sm font-bold text-white mb-4`}>{v.icon}</div>
                 <h3 className="text-lg font-semibold text-neutral-900 mb-2">{v.title}</h3>
                 <p className="text-sm text-neutral-600 leading-relaxed">{v.desc}</p>
               </div>
@@ -77,7 +81,7 @@ export default function AboutPage() {
             ].map((item, i) => (
               <div key={item.phase} className="flex gap-6 items-start">
                 <div className="flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-[3px] flex items-center justify-center text-sm font-bold ${i === 0 ? "bg-neutral-900 text-white" : "bg-neutral-200 text-neutral-500"}`}>
+                  <div className={`w-10 h-10 rounded-[3px] flex items-center justify-center text-sm font-bold ${i === 0 ? "bg-gradient-to-br from-cyan-400/[0.08] via-neutral-900 to-neutral-900 text-white" : "bg-neutral-200 text-neutral-500"}`}>
                     {i + 1}
                   </div>
                   {i < 4 && <div className="w-0.5 h-12 bg-neutral-200 mt-2" />}
@@ -124,8 +128,12 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-neutral-900 py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center text-white">
+      <section className="bg-neutral-900 py-16 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-30%] left-[20%] w-[40%] h-[80%] bg-gradient-to-br from-purple-500/[0.04] via-transparent to-transparent rounded-full blur-3xl" />
+          <div className="absolute bottom-[-20%] right-[10%] w-[35%] h-[70%] bg-gradient-to-tl from-cyan-400/[0.04] via-transparent to-transparent rounded-full blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-6 text-center text-white relative z-10">
           <h2 className="text-2xl font-bold mb-4">지금 CROWNY와 함께하세요</h2>
           <p className="text-neutral-400 mb-8">글로벌 비즈니스의 새로운 기준을 만들어갑니다</p>
           <Link
