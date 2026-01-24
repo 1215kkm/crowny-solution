@@ -9,9 +9,9 @@ export default function Home() {
       <section className="bg-neutral-950 text-white relative overflow-hidden">
         {/* Aurora gradient blobs */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[80%] bg-gradient-to-br from-cyan-400/[0.12] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="absolute top-[10%] right-[-10%] w-[50%] h-[70%] bg-gradient-to-bl from-purple-500/[0.12] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="absolute bottom-[-20%] left-[30%] w-[40%] h-[60%] bg-gradient-to-t from-emerald-400/[0.10] via-transparent to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[80%] bg-gradient-to-br from-cyan-400/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-[10%] right-[-10%] w-[50%] h-[70%] bg-gradient-to-bl from-purple-500/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
+          <div className="absolute bottom-[-20%] left-[30%] w-[40%] h-[60%] bg-gradient-to-t from-emerald-400/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
         </div>
         <div className="max-w-6xl mx-auto px-6 py-28 text-center relative z-10">
           <div className="inline-block px-4 py-1.5 bg-neutral-800 border border-neutral-700 rounded-[3px] text-sm text-neutral-300 mb-6">
@@ -75,11 +75,11 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {[
-              { code: "F", name: "금융", desc: "디지털 금융 혁신", aurora: "from-cyan-400/[0.2] via-neutral-900 to-neutral-900" },
-              { code: "B", name: "바이오", desc: "생명공학 연구개발", aurora: "from-emerald-400/[0.2] via-neutral-900 to-neutral-900" },
-              { code: "E", name: "에너지", desc: "친환경 에너지 전환", aurora: "from-purple-400/[0.2] via-neutral-900 to-neutral-900" },
-              { code: "G", name: "재화", desc: "스마트 유통·물류", aurora: "from-blue-400/[0.2] via-neutral-900 to-neutral-900" },
-              { code: "A", name: "구호", desc: "국제 구호·교육", aurora: "from-rose-400/[0.2] via-neutral-900 to-neutral-900" },
+              { code: "F", name: "금융", desc: "디지털 금융 혁신", aurora: "from-cyan-400/[0.3] via-neutral-900 to-neutral-900" },
+              { code: "B", name: "바이오", desc: "생명공학 연구개발", aurora: "from-emerald-400/[0.3] via-neutral-900 to-neutral-900" },
+              { code: "E", name: "에너지", desc: "친환경 에너지 전환", aurora: "from-purple-400/[0.3] via-neutral-900 to-neutral-900" },
+              { code: "G", name: "재화", desc: "스마트 유통·물류", aurora: "from-blue-400/[0.3] via-neutral-900 to-neutral-900" },
+              { code: "A", name: "구호", desc: "국제 구호·교육", aurora: "from-rose-400/[0.3] via-neutral-900 to-neutral-900" },
             ].map((ind) => (
               <div key={ind.name} className="bg-white rounded-[3px] p-6 border border-neutral-200 hover:border-neutral-400 transition-all">
                 <div className={`w-10 h-10 rounded-[3px] bg-gradient-to-br ${ind.aurora} flex items-center justify-center text-sm font-bold text-white mb-4`}>
