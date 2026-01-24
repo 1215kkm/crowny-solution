@@ -6,8 +6,8 @@ import { Navbar } from "@/components/Navbar";
 import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
 export default function EnterpriseDetailPage() {
-  const params = useParams<{ id: string }>();
-  const enterprise = MOCK_ENTERPRISES.find((e) => e.id === params?.id);
+  const params = useParams();
+  const enterprise = MOCK_ENTERPRISES.find((e) => e.id === params.id);
 
   if (!enterprise) {
     return (
