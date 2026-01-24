@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  roles       UserRole[]
+  investments Investment[]
+
+  @@map("users")
+}
+
+model UserRole {
+  id        String  @id @default(cuid())
+  userId    String  @map("user_id")
+  role      Role
+  countryId String? @map("country_id")
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  country Country? @relation(fields: [countryId], references: [id])
+
+  @@unique([userId, role, countryId])
+  @@map("user_roles")
+}
+
+enum Role {
+  GLOBAL_ADMIN  // L0
+  COUNTRY_ADMIN // L1
+  INDUSTRY_ADMIN // L2
+  ENTERPRISE_ADMIN // L3
+  BUSINESSMAN   // L4
+  SALESMAN      // L5
+  INVESTOR      // L6
+}
+
+model Country {
+  id      String        @id @default(cuid())
+  isoCode String        @unique @map("iso_code")
+  name    String
+  status  CountryStatus @default(ACTIVE)
+
+  enterprises Enterprise[]
+  userRoles   UserRole[]
+
+  @@map("countries")
+}
+
+enum CountryStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Industry {
+  id   String @id @default(cuid())
+  code String @unique
+  name String
+
+  enterprises Enterprise[]
+
+  @@map("industries")
+}
+
+model Enterprise {
+  id               String           @id @default(cuid())
+  countryId        String           @map("country_id")
+  industryId       String           @map("industry_id")
+  name             String
+  valuationTarget  BigInt           @default(153000000000) @map("valuation_target")
+  currentValuation BigInt           @default(0) @map("current_valuation")
+  status           EnterpriseStatus @default(PENDING)
+  createdAt        DateTime         @default(now()) @map("created_at")
+
+  country       Country         @relation(fields: [countryId], references: [id])
+  industry      Industry        @relation(fields: [industryId], references: [id])
+  capitalLedger CapitalLedger[]
+  investments   Investment[]
+
+  @@map("enterprises")
+}
+
+enum EnterpriseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model CapitalLedger {
+  id           String     @id @default(cuid())
+  enterpriseId String     @map("enterprise_id")
+  type         LedgerType
+  amount       BigInt
+  description  String?
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  enterprise Enterprise @relation(fields: [enterpriseId], references: [id], onDelete: Cascade)
+
+  @@map("capital_ledgers")
+}
+
+enum LedgerType {
+  INVESTMENT
+  REVENUE
+  EXPENSE
+  DONATION
+}
+
+model Investment {
+  id           String           @id @default(cuid())
+  userId       String           @map("user_id")
+  enterpriseId String           @map("enterprise_id")
+  amount       BigInt
+  status       InvestmentStatus @default(PENDING)
+  createdAt    DateTime         @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enterprise Enterprise @relation(fields: [enterpriseId], references: [id], onDelete: Cascade)
+
+  @@map("investments")
+}
+
+enum InvestmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
