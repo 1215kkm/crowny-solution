@@ -1,88 +1,84 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-
-interface Enterprise {
-  id: string;
-  name: string;
-  status: string;
-  currentValuation: string;
-  valuationTarget: string;
-  createdAt: string;
-  country: { id: string; name: string; isoCode: string };
-  industry: { id: string; name: string; code: string };
-}
+import { MOCK_ENTERPRISES, formatKRW, getStatusLabel, getStatusColor, getIndustryColor, getIndustryIcon } from "@/lib/mockData";
 
 export default function EnterprisesPage() {
-  const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/enterprises")
-      .then((res) => res.json())
-      .then((data) => {
-        setEnterprises(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
-
   return (
     <>
       <Navbar />
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">기업 목록</h1>
+      <main className="max-w-6xl mx-auto px-6 py-10">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">등록 기업</h1>
+            <p className="text-sm text-slate-500 mt-1">현재 {MOCK_ENTERPRISES.length}개 기업이 등록되어 있습니다</p>
+          </div>
           <Link
             href="/enterprises/new"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm"
+            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl hover:from-blue-700 hover:to-indigo-700 shadow-sm transition"
           >
-            기업 등록
+            + 기업 등록
           </Link>
         </div>
 
-        {loading ? (
-          <p className="text-gray-500">로딩 중...</p>
-        ) : enterprises.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <p className="text-lg mb-2">등록된 기업이 없습니다.</p>
-            <p className="text-sm">첫 번째 기업을 등록해보세요.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {enterprises.map((enterprise) => (
-              <Link
-                key={enterprise.id}
-                href={`/enterprises/${enterprise.id}`}
-                className="block bg-white p-5 rounded-xl border shadow-sm hover:shadow-md transition"
-              >
+        {/* Filter Tags */}
+        <div className="flex gap-2 mb-6 flex-wrap">
+          <button className="px-4 py-1.5 bg-blue-600 text-white text-sm rounded-full">전체</button>
+          {["금융", "바이오", "에너지", "재화", "구호"].map((ind) => (
+            <button key={ind} className="px-4 py-1.5 bg-white text-slate-600 text-sm rounded-full border border-slate-200 hover:border-blue-300 hover:text-blue-600 transition">
+              {ind}
+            </button>
+          ))}
+        </div>
+
+        {/* Enterprise Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {MOCK_ENTERPRISES.map((ent) => (
+            <Link
+              key={ent.id}
+              href={`/enterprises/${ent.id}`}
+              className="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 overflow-hidden"
+            >
+              {/* Card Header */}
+              <div className={`h-2 bg-gradient-to-r ${getIndustryColor(ent.industry.code)}`} />
+              <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-semibold">{enterprise.name}</h3>
-                  <span
-                    className={`text-xs px-2 py-1 rounded ${
-                      enterprise.status === "APPROVED"
-                        ? "bg-green-100 text-green-700"
-                        : enterprise.status === "PENDING"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {enterprise.status === "APPROVED"
-                      ? "승인"
-                      : enterprise.status === "PENDING"
-                      ? "대기"
-                      : "거절"}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${getIndustryColor(ent.industry.code)} flex items-center justify-center text-lg`}>
+                      {getIndustryIcon(ent.industry.code)}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition">{ent.name}</h3>
+                      <p className="text-xs text-slate-400">{ent.industry.name} &middot; {ent.country.name}</p>
+                    </div>
+                  </div>
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(ent.status)}`}>
+                    {getStatusLabel(ent.status)}
                   </span>
                 </div>
-                <p className="text-sm text-gray-500">
-                  {enterprise.country.name} &middot; {enterprise.industry.name}
-                </p>
-              </Link>
-            ))}
-          </div>
-        )}
+
+                <p className="text-sm text-slate-500 mb-4 line-clamp-2">{ent.description}</p>
+
+                {/* Progress Bar */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">기업가치</span>
+                    <span className="font-medium text-slate-600">{formatKRW(ent.currentValuation)} / {formatKRW(ent.valuationTarget)}</span>
+                  </div>
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full bg-gradient-to-r ${getIndustryColor(ent.industry.code)}`}
+                      style={{ width: `${Math.min((ent.currentValuation / ent.valuationTarget) * 100, 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-slate-400 text-right">
+                    달성률 {((ent.currentValuation / ent.valuationTarget) * 100).toFixed(1)}%
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </main>
     </>
   );
