@@ -111,11 +111,9 @@ export default function Home() {
       <footer className="bg-slate-900 text-slate-400">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded flex items-center justify-center">
-                <span className="text-white text-xs font-bold">C</span>
-              </div>
-              <span className="font-semibold text-white">CROWNY</span>
+            <div className="flex flex-col items-start leading-none">
+              <span className="text-base font-black text-white tracking-tight">CROWNY</span>
+              <span className="text-[8px] font-medium text-slate-500 tracking-[0.3em]">PRESENT</span>
             </div>
             <div className="flex gap-6 text-sm">
               <Link href="/about" className="hover:text-white transition">소개</Link>

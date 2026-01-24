@@ -35,11 +35,9 @@ export default function LoginPage() {
       <div className="max-w-md w-full mx-4">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">C</span>
-            </div>
-            <span className="text-xl font-bold text-slate-800">CROWNY</span>
+          <Link href="/" className="inline-flex flex-col items-center leading-none">
+            <span className="text-3xl font-black text-slate-900 tracking-tight">CROWNY</span>
+            <span className="text-[10px] font-medium text-slate-400 tracking-[0.3em] mt-1">PRESENT</span>
           </Link>
         </div>
 

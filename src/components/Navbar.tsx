@@ -6,11 +6,9 @@ export function Navbar() {
   return (
     <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">C</span>
-          </div>
-          <span className="text-lg font-bold text-slate-800 tracking-tight">CROWNY</span>
+        <Link href="/" className="flex flex-col items-start leading-none">
+          <span className="text-xl font-black text-slate-900 tracking-tight">CROWNY</span>
+          <span className="text-[9px] font-medium text-slate-500 tracking-[0.3em] mt-0.5">PRESENT</span>
         </Link>
 
         <div className="flex items-center gap-1">
