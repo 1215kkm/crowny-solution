@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          roles: user.roles.map((r) => r.role),
+          roles: user.roles.map((r: { role: string }) => r.role),
         };
       },
     }),
@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.roles = (user as { roles: string[] }).roles;
+        token.roles = (user as unknown as { roles: string[] }).roles;
       }
       return token;
     },

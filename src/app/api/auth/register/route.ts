@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.roles.map((r) => r.role),
+      roles: user.roles.map((r: { role: string }) => r.role),
     });
   } catch (error) {
     console.error("Registration error:", error);
