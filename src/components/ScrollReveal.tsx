@@ -1,10 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -27,29 +23,41 @@ export function ScrollReveal({
     const el = ref.current;
     if (!el) return;
 
-    const fromVars: gsap.TweenVars = {
-      opacity: 0,
-      duration: 0.8,
-      delay,
-      ease: "power2.out",
-    };
+    let cleanup: (() => void) | undefined;
 
-    if (direction === "up") fromVars.y = distance;
-    else if (direction === "left") fromVars.x = distance;
-    else if (direction === "right") fromVars.x = -distance;
+    (async () => {
+      const gsapModule = await import("gsap");
+      const scrollModule = await import("gsap/ScrollTrigger");
+      const gsap = gsapModule.default;
+      const ScrollTrigger = scrollModule.ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger);
 
-    gsap.from(el, {
-      ...fromVars,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 85%",
-        once: true,
-      },
-    });
+      const fromVars: Record<string, unknown> = {
+        opacity: 0,
+        duration: 0.8,
+        delay,
+        ease: "power2.out",
+      };
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+      if (direction === "up") fromVars.y = distance;
+      else if (direction === "left") fromVars.x = distance;
+      else if (direction === "right") fromVars.x = -distance;
+
+      gsap.from(el, {
+        ...fromVars,
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      cleanup = () => {
+        ScrollTrigger.getAll().forEach((t) => t.kill());
+      };
+    })();
+
+    return () => { cleanup?.(); };
   }, [delay, direction, distance]);
 
   return (

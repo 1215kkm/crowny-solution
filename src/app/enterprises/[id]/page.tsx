@@ -1,13 +1,16 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
-export default function EnterpriseDetailPage() {
-  const params = useParams();
-  const enterprise = MOCK_ENTERPRISES.find((e) => e.id === params.id);
+export function generateStaticParams() {
+  return MOCK_ENTERPRISES.map((ent) => ({ id: ent.id }));
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function EnterpriseDetailPage(props: any) {
+  const params = await Promise.resolve(props.params);
+  const id = params?.id;
+  const enterprise = MOCK_ENTERPRISES.find((e) => e.id === id);
 
   if (!enterprise) {
     return (
