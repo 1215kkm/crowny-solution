@@ -67,3 +67,14 @@ html {
   background-size: 200% 200%;
   animation: aurora-icon 4s ease-in-out infinite;
 }
+
+/* Mobile aurora fix - make blobs larger and more visible */
+@media (max-width: 768px) {
+  .aurora-blob-1,
+  .aurora-blob-2,
+  .aurora-blob-3 {
+    width: 90% !important;
+    height: 70% !important;
+    opacity: 0.4;
+  }
+}
