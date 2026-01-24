@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -16,18 +15,15 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const result = await signIn("credentials", {
-      email: form.email,
-      password: form.password,
-      redirect: false,
-    });
-
-    if (result?.error) {
-      setError("이메일 또는 비밀번호가 올바르지 않습니다.");
-      setLoading(false);
-    } else {
-      router.push("/dashboard");
-    }
+    // Mock login - DB 연동 전 데모용
+    setTimeout(() => {
+      if (form.email && form.password) {
+        router.push("/dashboard");
+      } else {
+        setError("이메일과 비밀번호를 입력해주세요.");
+        setLoading(false);
+      }
+    }, 500);
   };
 
   return (
