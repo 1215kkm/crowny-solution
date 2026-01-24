@@ -103,31 +103,31 @@ export function getStatusLabel(status: string): string {
 
 export function getStatusColor(status: string): string {
   switch (status) {
-    case "APPROVED": return "text-emerald-600 bg-emerald-50";
-    case "PENDING": return "text-amber-600 bg-amber-50";
-    case "REJECTED": return "text-red-600 bg-red-50";
-    default: return "text-gray-600 bg-gray-50";
+    case "APPROVED": return "text-neutral-700 bg-neutral-100";
+    case "PENDING": return "text-neutral-500 bg-neutral-50";
+    case "REJECTED": return "text-neutral-400 bg-neutral-50";
+    default: return "text-neutral-500 bg-neutral-50";
   }
 }
 
 export function getIndustryColor(code: string): string {
   switch (code) {
-    case "finance": return "from-blue-500 to-indigo-600";
-    case "bio": return "from-green-500 to-teal-600";
-    case "energy": return "from-yellow-500 to-orange-600";
-    case "goods": return "from-purple-500 to-pink-600";
-    case "aid": return "from-rose-500 to-red-600";
-    default: return "from-gray-500 to-gray-600";
+    case "finance": return "from-neutral-700 to-neutral-900";
+    case "bio": return "from-neutral-600 to-neutral-800";
+    case "energy": return "from-neutral-500 to-neutral-700";
+    case "goods": return "from-neutral-600 to-neutral-800";
+    case "aid": return "from-neutral-500 to-neutral-700";
+    default: return "from-neutral-500 to-neutral-700";
   }
 }
 
 export function getIndustryIcon(code: string): string {
   switch (code) {
-    case "finance": return "💰";
-    case "bio": return "🧬";
-    case "energy": return "⚡";
-    case "goods": return "📦";
-    case "aid": return "🤝";
-    default: return "🏢";
+    case "finance": return "F";
+    case "bio": return "B";
+    case "energy": return "E";
+    case "goods": return "G";
+    case "aid": return "A";
+    default: return "C";
   }
 }
