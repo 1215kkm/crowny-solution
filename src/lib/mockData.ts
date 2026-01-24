@@ -134,11 +134,11 @@ export function getIndustryIcon(code: string): string {
 
 export function getIndustryAurora(code: string): string {
   switch (code) {
-    case "finance": return "from-cyan-400/[0.08] via-neutral-900 to-neutral-900";
-    case "bio": return "from-emerald-400/[0.08] via-neutral-900 to-neutral-900";
-    case "energy": return "from-purple-400/[0.08] via-neutral-900 to-neutral-900";
-    case "goods": return "from-blue-400/[0.08] via-neutral-900 to-neutral-900";
-    case "aid": return "from-rose-400/[0.08] via-neutral-900 to-neutral-900";
+    case "finance": return "from-cyan-400/[0.2] via-neutral-900 to-neutral-900";
+    case "bio": return "from-emerald-400/[0.2] via-neutral-900 to-neutral-900";
+    case "energy": return "from-purple-400/[0.2] via-neutral-900 to-neutral-900";
+    case "goods": return "from-blue-400/[0.2] via-neutral-900 to-neutral-900";
+    case "aid": return "from-rose-400/[0.2] via-neutral-900 to-neutral-900";
     default: return "from-neutral-700 to-neutral-900";
   }
 }

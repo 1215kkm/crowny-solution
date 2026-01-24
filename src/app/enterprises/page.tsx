@@ -1,8 +1,26 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { MOCK_ENTERPRISES, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
+const TABS = [
+  { label: "전체", code: "all" },
+  { label: "금융", code: "finance" },
+  { label: "바이오", code: "bio" },
+  { label: "에너지", code: "energy" },
+  { label: "재화", code: "goods" },
+  { label: "구호", code: "aid" },
+];
+
 export default function EnterprisesPage() {
+  const [activeTab, setActiveTab] = useState("all");
+
+  const filtered = activeTab === "all"
+    ? MOCK_ENTERPRISES
+    : MOCK_ENTERPRISES.filter((ent) => ent.industry.code === activeTab);
+
   return (
     <>
       <Navbar />
@@ -21,16 +39,23 @@ export default function EnterprisesPage() {
         </div>
 
         <div className="flex gap-2 mb-6 flex-wrap">
-          <button className="px-4 py-1.5 bg-neutral-900 text-white text-sm rounded-[3px]">전체</button>
-          {["금융", "바이오", "에너지", "재화", "구호"].map((ind) => (
-            <button key={ind} className="px-4 py-1.5 bg-white text-neutral-600 text-sm rounded-[3px] border border-neutral-200 hover:border-neutral-400 transition">
-              {ind}
+          {TABS.map((tab) => (
+            <button
+              key={tab.code}
+              onClick={() => setActiveTab(tab.code)}
+              className={`px-4 py-1.5 text-sm rounded-[3px] transition ${
+                activeTab === tab.code
+                  ? "bg-neutral-900 text-white"
+                  : "bg-white text-neutral-600 border border-neutral-200 hover:border-neutral-400"
+              }`}
+            >
+              {tab.label}
             </button>
           ))}
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {MOCK_ENTERPRISES.map((ent) => (
+          {filtered.map((ent) => (
             <Link
               key={ent.id}
               href={`/enterprises/${ent.id}`}
@@ -74,6 +99,12 @@ export default function EnterprisesPage() {
             </Link>
           ))}
         </div>
+
+        {filtered.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-neutral-400 text-sm">해당 산업의 등록된 기업이 없습니다</p>
+          </div>
+        )}
       </main>
     </>
   );
