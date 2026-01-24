@@ -79,8 +79,71 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Roadmap */}
+      {/* Token Economy */}
       <section className="bg-white py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <ScrollReveal>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-neutral-900 mb-3">토큰 이코노미</h2>
+              <p className="text-neutral-500">CROWNA 코인 기반의 내부 경제 시스템</p>
+            </div>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-2 gap-8">
+            <ScrollReveal direction="left">
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-neutral-900">CROWNA 코인</h3>
+                <ul className="space-y-3 text-sm text-neutral-600">
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
+                    <span>총 <strong className="text-neutral-900">234억개</strong> 발행, 폴리곤(Polygon) 네트워크 기반</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
+                    <span>중앙화 운영으로 시작, 전용 크라우니 지갑 제공</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
+                    <span>크라우니 네트워크 비즈니스 전용 결제 수단</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
+                    <span>코인 소각 없이 보유·유통으로 가치 관리</span>
+                  </li>
+                </ul>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal direction="right">
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-neutral-900">가치 체계</h3>
+                <div className="space-y-3">
+                  <div className="bg-neutral-50 rounded-[3px] p-4 border border-neutral-200">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-neutral-700">시작 가격</span>
+                      <span className="text-sm font-bold text-neutral-900">₩25,500 (10 PONE)</span>
+                    </div>
+                    <div className="h-1.5 bg-neutral-200 rounded-[3px] overflow-hidden">
+                      <div className="h-full bg-neutral-400 rounded-[3px]" style={{width: "16.7%"}} />
+                    </div>
+                  </div>
+                  <div className="bg-neutral-50 rounded-[3px] p-4 border border-neutral-200">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-neutral-700">목표 통용 가격</span>
+                      <span className="text-sm font-bold text-neutral-900">₩153,000</span>
+                    </div>
+                    <div className="h-1.5 bg-neutral-200 rounded-[3px] overflow-hidden">
+                      <div className="h-full bg-neutral-700 rounded-[3px]" style={{width: "100%"}} />
+                    </div>
+                  </div>
+                  <p className="text-xs text-neutral-500">평균 7% 이상 가치 상승 목표 &middot; ₩153,000 도달 시까지 내부 서비스 활성화</p>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap */}
+      <section className="bg-neutral-50 py-20">
         <div className="max-w-4xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
@@ -120,7 +183,7 @@ export default function AboutPage() {
       </section>
 
       {/* Organization */}
-      <section className="bg-neutral-50 py-20">
+      <section className="bg-white py-20">
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
