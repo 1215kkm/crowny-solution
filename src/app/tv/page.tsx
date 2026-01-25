@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { CountUp } from "@/components/CountUp";
@@ -41,6 +42,13 @@ const MATTHEW_GUESTS = [
   { name: "은우", topic: "SNS 3종 16콤보 K-pop아티스트 되기" },
   { name: "선우", topic: "3D프린터로 100만원짜리 부품 만들기" },
   { name: "매튜", topic: "근무시간에 방송해도 되는 일잘러 되기" },
+];
+
+const EVENT_PHOTOS = [
+  { src: "/images/20260125%20(1).jpg", alt: "킥오프 세미나 발표" },
+  { src: "/images/20260125%20(2).jpg", alt: "킥오프 세미나 참석자" },
+  { src: "/images/20260125%20(3).jpg", alt: "킥오프 세미나 진행" },
+  { src: "/images/20260125%20(4).jpg", alt: "킥오프 세미나 네트워킹" },
 ];
 
 export default function TVPage() {
@@ -96,6 +104,7 @@ export default function TVPage() {
               <a href="#matthew" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">매튜쇼</a>
               <a href="#benefits" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">기대효과</a>
               <a href="#rewards" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">참여혜택</a>
+              <a href="#events" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">최근 행사</a>
             </div>
           </ScrollReveal>
         </div>
@@ -245,6 +254,48 @@ export default function TVPage() {
           <ScrollReveal delay={0.2}>
             <p className="text-xs text-neutral-500 mt-6">
               2027년 9월 30일까지 · 프로젝트별 7회 방영 목표
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Recent Events Section */}
+      <section id="events" className="bg-white py-20 scroll-mt-16">
+        <div className="max-w-5xl mx-auto px-6">
+          <ScrollReveal>
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-neutral-900 mb-2">최근 행사</h2>
+              <p className="text-neutral-500">CROWNY의 오프라인 행사 현장</p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.1}>
+            <div className="mb-4">
+              <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-[3px]">
+                2026.01.25 킥오프 세미나
+              </span>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {EVENT_PHOTOS.map((photo, i) => (
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div className="relative aspect-[4/3] rounded-[3px] overflow-hidden border border-neutral-200 bg-neutral-100 group">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          <ScrollReveal delay={0.5}>
+            <p className="text-center text-xs text-neutral-400 mt-6">
+              크라우니 TV 프로젝트 킥오프 세미나 현장
             </p>
           </ScrollReveal>
         </div>
