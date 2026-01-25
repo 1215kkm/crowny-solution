@@ -18,6 +18,9 @@ export function Navbar() {
           <Link href="/enterprises" className="px-3 py-2 text-sm text-neutral-600 hover:text-neutral-900 rounded-[3px] hover:bg-neutral-100 transition-all">
             기업
           </Link>
+          <Link href="/tv" className="px-3 py-2 text-sm text-neutral-600 hover:text-neutral-900 rounded-[3px] hover:bg-neutral-100 transition-all">
+            TV
+          </Link>
           <Link href="/dashboard" className="px-3 py-2 text-sm text-neutral-600 hover:text-neutral-900 rounded-[3px] hover:bg-neutral-100 transition-all">
             대시보드
           </Link>
