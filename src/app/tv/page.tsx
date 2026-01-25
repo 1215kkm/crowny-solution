@@ -45,10 +45,10 @@ const MATTHEW_GUESTS = [
 ];
 
 const EVENT_PHOTOS = [
-  { src: "/images/kickoff-1.jpg", alt: "킥오프 세미나 발표" },
-  { src: "/images/kickoff-2.jpg", alt: "킥오프 세미나 참석자" },
-  { src: "/images/kickoff-3.jpg", alt: "킥오프 세미나 진행" },
-  { src: "/images/kickoff-4.jpg", alt: "킥오프 세미나 네트워킹" },
+  { src: "/images/20260125%20(1).jpg", alt: "킥오프 세미나 발표" },
+  { src: "/images/20260125%20(2).jpg", alt: "킥오프 세미나 참석자" },
+  { src: "/images/20260125%20(3).jpg", alt: "킥오프 세미나 진행" },
+  { src: "/images/20260125%20(4).jpg", alt: "킥오프 세미나 네트워킹" },
 ];
 
 export default function TVPage() {
