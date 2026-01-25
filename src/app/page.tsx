@@ -11,11 +11,11 @@ export default function Home() {
       <Navbar />
       {/* Hero Section */}
       <section className="bg-neutral-950 text-white relative overflow-hidden">
-        {/* Aurora gradient blobs - mobile optimized */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="aurora-blob-1 absolute top-[-10%] left-[-5%] md:top-[-20%] md:left-[-10%] w-[80%] md:w-[60%] h-[70%] md:h-[80%] bg-gradient-to-br from-cyan-400/[0.35] md:from-cyan-400/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="aurora-blob-2 absolute top-[20%] right-[-5%] md:top-[10%] md:right-[-10%] w-[70%] md:w-[50%] h-[60%] md:h-[70%] bg-gradient-to-bl from-purple-500/[0.35] md:from-purple-500/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="aurora-blob-3 absolute bottom-[-10%] left-[10%] md:bottom-[-20%] md:left-[30%] w-[70%] md:w-[40%] h-[50%] md:h-[60%] bg-gradient-to-t from-emerald-400/[0.35] md:from-emerald-400/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
+        {/* Aurora gradient blobs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="aurora-blob-1 absolute -top-[10%] -left-[5%] w-[60%] h-[60%] rounded-full blur-[100px] bg-cyan-500 opacity-30" />
+          <div className="aurora-blob-2 absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full blur-[100px] bg-purple-500 opacity-30" />
+          <div className="aurora-blob-3 absolute -bottom-[10%] left-[20%] w-[40%] h-[40%] rounded-full blur-[100px] bg-emerald-500 opacity-25" />
         </div>
         <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 text-center relative z-10">
           <ScrollReveal delay={0.1}>
@@ -127,9 +127,9 @@ export default function Home() {
 
       {/* Crowna Coin Section */}
       <section className="bg-neutral-950 text-white relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="aurora-blob-2 absolute top-[-10%] right-[-5%] md:top-[-20%] md:right-[-10%] w-[60%] md:w-[40%] h-[60%] md:h-[70%] bg-gradient-to-bl from-amber-400/[0.25] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="aurora-blob-3 absolute bottom-[-10%] left-[-5%] md:bottom-[-20%] md:left-[5%] w-[60%] md:w-[35%] h-[50%] md:h-[60%] bg-gradient-to-tr from-cyan-400/[0.2] via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="aurora-blob-2 absolute -top-[10%] -right-[10%] w-[50%] h-[50%] rounded-full blur-[100px] bg-amber-500 opacity-25" />
+          <div className="aurora-blob-3 absolute -bottom-[10%] -left-[5%] w-[40%] h-[40%] rounded-full blur-[100px] bg-cyan-500 opacity-20" />
         </div>
         <div className="max-w-6xl mx-auto px-6 py-20 relative z-10">
           <ScrollReveal>

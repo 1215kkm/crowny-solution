@@ -54,9 +54,9 @@ export default function TVPage() {
 
       {/* Hero Section */}
       <section className="bg-neutral-950 text-white relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="aurora-blob-1 absolute top-[-10%] left-[-5%] md:top-[-20%] md:left-[-10%] w-[70%] md:w-[50%] h-[60%] md:h-[70%] bg-gradient-to-br from-rose-400/[0.25] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="aurora-blob-2 absolute bottom-[-10%] right-[-5%] md:bottom-[-20%] md:right-[-10%] w-[60%] md:w-[40%] h-[50%] md:h-[60%] bg-gradient-to-tl from-amber-400/[0.2] via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="aurora-blob-1 absolute -top-[10%] -left-[5%] w-[50%] h-[50%] rounded-full blur-[100px] bg-rose-500 opacity-30" />
+          <div className="aurora-blob-2 absolute -bottom-[10%] -right-[5%] w-[45%] h-[45%] rounded-full blur-[100px] bg-amber-500 opacity-25" />
         </div>
         <div className="max-w-6xl mx-auto px-6 py-20 relative z-10">
           <ScrollReveal>
@@ -228,8 +228,8 @@ export default function TVPage() {
 
       {/* Rewards Section */}
       <section id="rewards" className="bg-neutral-950 text-white py-16 scroll-mt-16 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="aurora-blob-3 absolute top-[-20%] left-[20%] w-[40%] h-[60%] bg-gradient-to-br from-amber-400/[0.2] via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="aurora-blob-3 absolute -top-[10%] left-[20%] w-[40%] h-[50%] rounded-full blur-[100px] bg-amber-500 opacity-25" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <ScrollReveal>
