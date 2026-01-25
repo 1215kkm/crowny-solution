@@ -10,9 +10,9 @@ export default function AboutPage() {
       <Navbar />
       {/* Hero */}
       <section className="bg-neutral-950 text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="aurora-blob-1 absolute top-[-10%] right-[-5%] md:top-[-30%] md:right-[-10%] w-[70%] md:w-[50%] h-[70%] md:h-[80%] bg-gradient-to-bl from-purple-500/[0.35] md:from-purple-500/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="aurora-blob-2 absolute bottom-[-10%] left-[-5%] md:bottom-[-20%] md:left-[-5%] w-[70%] md:w-[40%] h-[60%] md:h-[70%] bg-gradient-to-tr from-cyan-400/[0.35] md:from-cyan-400/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="aurora-blob-1 absolute -top-[10%] -right-[5%] w-[50%] h-[60%] rounded-full blur-[100px] bg-purple-500 opacity-30" />
+          <div className="aurora-blob-2 absolute -bottom-[10%] -left-[5%] w-[40%] h-[50%] rounded-full blur-[100px] bg-cyan-500 opacity-30" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <ScrollReveal delay={0.1}>
@@ -215,9 +215,9 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="bg-neutral-900 py-16 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="aurora-blob-2 absolute top-[-10%] left-[10%] md:top-[-30%] md:left-[20%] w-[60%] md:w-[40%] h-[70%] md:h-[80%] bg-gradient-to-br from-purple-500/[0.35] md:from-purple-500/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
-          <div className="aurora-blob-1 absolute bottom-[-10%] right-[5%] md:bottom-[-20%] md:right-[10%] w-[60%] md:w-[35%] h-[60%] md:h-[70%] bg-gradient-to-tl from-cyan-400/[0.35] md:from-cyan-400/[0.3] via-transparent to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="aurora-blob-2 absolute -top-[10%] left-[10%] w-[45%] h-[60%] rounded-full blur-[100px] bg-purple-500 opacity-25" />
+          <div className="aurora-blob-1 absolute -bottom-[10%] right-[5%] w-[40%] h-[50%] rounded-full blur-[100px] bg-cyan-500 opacity-25" />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center text-white relative z-10">
           <ScrollReveal>
