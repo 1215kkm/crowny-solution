@@ -10,12 +10,12 @@ interface MarketLayoutProps {
 
 export default function MarketLayout({ children }: MarketLayoutProps) {
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="min-h-screen bg-neutral-50">
       {/* 헤더 (PC에서만 표시) */}
       <MarketHeader />
 
       {/* 메인 콘텐츠 */}
-      <main className="market-main">
+      <main className="pb-20 md:pb-8">
         {children}
       </main>
 

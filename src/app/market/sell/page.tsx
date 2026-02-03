@@ -1,20 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import {
+  PhoneIcon,
+  StyleIcon,
+  HomeIcon,
+  CarIcon,
+  BookIcon,
+  GamepadIcon,
+  ChildIcon,
+  SportsIcon,
+  PetsIcon,
+  GiftIcon,
+} from '@/components/Icons';
 
-const categories = [
-  { id: 'digital', name: '디지털/가전', icon: '📱' },
-  { id: 'fashion', name: '패션/의류', icon: '👗' },
-  { id: 'furniture', name: '가구/인테리어', icon: '🏠' },
-  { id: 'car', name: '자동차/오토바이', icon: '🚗' },
-  { id: 'book', name: '도서/티켓/문구', icon: '📚' },
-  { id: 'game', name: '게임/취미', icon: '🎮' },
-  { id: 'baby', name: '유아동', icon: '👶' },
-  { id: 'sports', name: '스포츠/레저', icon: '🏃' },
-  { id: 'pet', name: '반려동물', icon: '🐕' },
-  { id: 'etc', name: '기타', icon: '🎁' },
+const categories: { id: string; name: string; icon: ReactNode }[] = [
+  { id: 'digital', name: '디지털/가전', icon: <PhoneIcon className="w-5 h-5" /> },
+  { id: 'fashion', name: '패션/의류', icon: <StyleIcon className="w-5 h-5" /> },
+  { id: 'furniture', name: '가구/인테리어', icon: <HomeIcon className="w-5 h-5" /> },
+  { id: 'car', name: '자동차/오토바이', icon: <CarIcon className="w-5 h-5" /> },
+  { id: 'book', name: '도서/티켓/문구', icon: <BookIcon className="w-5 h-5" /> },
+  { id: 'game', name: '게임/취미', icon: <GamepadIcon className="w-5 h-5" /> },
+  { id: 'baby', name: '유아동', icon: <ChildIcon className="w-5 h-5" /> },
+  { id: 'sports', name: '스포츠/레저', icon: <SportsIcon className="w-5 h-5" /> },
+  { id: 'pet', name: '반려동물', icon: <PetsIcon className="w-5 h-5" /> },
+  { id: 'etc', name: '기타', icon: <GiftIcon className="w-5 h-5" /> },
 ];
 
 const conditions = [
@@ -289,7 +301,7 @@ export default function SellPage() {
                       : 'border-[var(--border-color)] hover:border-[var(--border-color-strong)]'
                   }`}
                 >
-                  <span className="text-2xl mb-2 block">{c.icon}</span>
+                  <span className="mb-2 block text-[var(--foreground-secondary)]">{c.icon}</span>
                   <span className="text-[var(--text-body-sm)]">{c.name}</span>
                 </button>
               ))}

@@ -1,7 +1,18 @@
 'use client';
 
+import { ReactNode } from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ShoppingCartIcon,
+  MoneyIcon,
+  SparkleIcon,
+  SwapIcon,
+  LockIcon,
+  LockOpenIcon,
+} from '@/components/Icons';
 
 type TransactionType = 'DEPOSIT' | 'WITHDRAW' | 'PURCHASE' | 'SALE' | 'COMMISSION' | 'TRANSFER' | 'ESCROW_LOCK' | 'ESCROW_RELEASE';
 
@@ -78,15 +89,15 @@ const mockTransactions: Transaction[] = [
   },
 ];
 
-const transactionTypeLabels: Record<TransactionType, { label: string; icon: string; color: string }> = {
-  DEPOSIT: { label: '충전', icon: '↓', color: 'text-[var(--success)]' },
-  WITHDRAW: { label: '출금', icon: '↑', color: 'text-[var(--error)]' },
-  PURCHASE: { label: '구매', icon: '🛒', color: 'text-[var(--error)]' },
-  SALE: { label: '판매', icon: '💰', color: 'text-[var(--success)]' },
-  COMMISSION: { label: '수수료', icon: '✨', color: 'text-[var(--accent)]' },
-  TRANSFER: { label: '송금', icon: '↔', color: 'text-[var(--info)]' },
-  ESCROW_LOCK: { label: '에스크로', icon: '🔒', color: 'text-[var(--warning)]' },
-  ESCROW_RELEASE: { label: '에스크로 해제', icon: '🔓', color: 'text-[var(--success)]' },
+const transactionTypeLabels: Record<TransactionType, { label: string; icon: ReactNode; color: string }> = {
+  DEPOSIT: { label: '충전', icon: <ArrowDownIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
+  WITHDRAW: { label: '출금', icon: <ArrowUpIcon className="w-5 h-5" />, color: 'text-[var(--error)]' },
+  PURCHASE: { label: '구매', icon: <ShoppingCartIcon className="w-5 h-5" />, color: 'text-[var(--error)]' },
+  SALE: { label: '판매', icon: <MoneyIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
+  COMMISSION: { label: '수수료', icon: <SparkleIcon className="w-5 h-5" />, color: 'text-[var(--accent)]' },
+  TRANSFER: { label: '송금', icon: <SwapIcon className="w-5 h-5" />, color: 'text-[var(--info)]' },
+  ESCROW_LOCK: { label: '에스크로', icon: <LockIcon className="w-5 h-5" />, color: 'text-[var(--warning)]' },
+  ESCROW_RELEASE: { label: '에스크로 해제', icon: <LockOpenIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
 };
 
 const tabs = [
@@ -250,7 +261,7 @@ export default function WalletPage() {
                   key={tx.id}
                   className="flex items-center gap-3 p-[var(--spacing-md)] hover:bg-[var(--background-secondary)] rounded-[var(--border-radius)] transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[var(--background-secondary)] flex items-center justify-center text-lg">
+                  <div className={`w-10 h-10 rounded-full bg-[var(--background-secondary)] flex items-center justify-center ${typeInfo.color}`}>
                     {typeInfo.icon}
                   </div>
                   <div className="flex-1 min-w-0">
