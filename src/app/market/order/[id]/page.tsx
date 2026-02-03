@@ -19,7 +19,7 @@ const mockOrder = {
     name: '크라운셀러',
     grade: 'GOLD' as const,
   },
-  shippingType: 'BOTH' as const,
+  shippingType: 'BOTH' as 'DIRECT' | 'DELIVERY' | 'BOTH',
   shippingFee: 30,
 };
 
