@@ -1,21 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import ProductCard, { Product } from '@/components/market/ProductCard';
 import Link from 'next/link';
+import {
+  HomeIcon,
+  PhoneIcon,
+  StyleIcon,
+  ChairIcon,
+  CarIcon,
+  BookIcon,
+  GamepadIcon,
+  ChildIcon,
+  SportsIcon,
+  PetsIcon,
+} from '@/components/Icons';
 
 // 카테고리 목록
-const categories = [
-  { id: 'all', name: '전체', icon: '🏠' },
-  { id: 'digital', name: '디지털', icon: '📱' },
-  { id: 'fashion', name: '패션', icon: '👗' },
-  { id: 'furniture', name: '가구', icon: '🛋️' },
-  { id: 'car', name: '자동차', icon: '🚗' },
-  { id: 'book', name: '도서', icon: '📚' },
-  { id: 'game', name: '게임', icon: '🎮' },
-  { id: 'baby', name: '유아동', icon: '👶' },
-  { id: 'sports', name: '스포츠', icon: '🏃' },
-  { id: 'pet', name: '반려동물', icon: '🐕' },
+const categories: { id: string; name: string; icon: ReactNode }[] = [
+  { id: 'all', name: '전체', icon: <HomeIcon className="w-4 h-4" /> },
+  { id: 'digital', name: '디지털', icon: <PhoneIcon className="w-4 h-4" /> },
+  { id: 'fashion', name: '패션', icon: <StyleIcon className="w-4 h-4" /> },
+  { id: 'furniture', name: '가구', icon: <ChairIcon className="w-4 h-4" /> },
+  { id: 'car', name: '자동차', icon: <CarIcon className="w-4 h-4" /> },
+  { id: 'book', name: '도서', icon: <BookIcon className="w-4 h-4" /> },
+  { id: 'game', name: '게임', icon: <GamepadIcon className="w-4 h-4" /> },
+  { id: 'baby', name: '유아동', icon: <ChildIcon className="w-4 h-4" /> },
+  { id: 'sports', name: '스포츠', icon: <SportsIcon className="w-4 h-4" /> },
+  { id: 'pet', name: '반려동물', icon: <PetsIcon className="w-4 h-4" /> },
 ];
 
 // 임시 상품 데이터
@@ -136,13 +148,13 @@ export default function MarketHomePage() {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center gap-1 px-4 py-2 text-sm font-medium whitespace-nowrap rounded-[3px] transition ${
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium whitespace-nowrap rounded-[3px] transition ${
                   selectedCategory === category.id
                     ? 'bg-neutral-900 text-white'
                     : 'text-neutral-600 hover:bg-neutral-100'
                 }`}
               >
-                <span>{category.icon}</span>
+                {category.icon}
                 {category.name}
               </button>
             ))}

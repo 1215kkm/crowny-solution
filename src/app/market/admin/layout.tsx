@@ -1,8 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import {
+  DashboardIcon,
+  SecurityIcon,
+  GroupIcon,
+  BadgeIcon,
+  PaymentIcon,
+  MoneyIcon,
+  ReportIcon,
+  InventoryIcon,
+  SettingsIcon,
+  MenuIcon,
+} from '@/components/Icons';
 
 // 현재 로그인한 관리자 (임시)
 const currentAdmin = {
@@ -21,16 +33,16 @@ const GRADE_PERMISSIONS = {
   BRONZE: ['reports'],
 };
 
-const MENU_ITEMS = [
-  { href: '/market/admin', label: '대시보드', icon: '📊', permission: 'all' },
-  { href: '/market/admin/permissions', label: '등급/권한 설정', icon: '🔐', permission: 'all' },
-  { href: '/market/admin/users', label: '회원 관리', icon: '👥', permission: 'users' },
-  { href: '/market/admin/sub-admins', label: '하위 관리자', icon: '👔', permission: 'sub_admins' },
-  { href: '/market/admin/transactions', label: '거래 관리', icon: '💳', permission: 'transactions' },
-  { href: '/market/admin/commissions', label: '수수료/정산', icon: '💰', permission: 'commissions' },
-  { href: '/market/admin/reports', label: '신고/분쟁', icon: '🚨', permission: 'reports' },
-  { href: '/market/admin/products', label: '상품 관리', icon: '📦', permission: 'all' },
-  { href: '/market/admin/settings', label: '시스템 설정', icon: '⚙️', permission: 'all' },
+const MENU_ITEMS: { href: string; label: string; icon: ReactNode; permission: string }[] = [
+  { href: '/market/admin', label: '대시보드', icon: <DashboardIcon className="w-5 h-5" />, permission: 'all' },
+  { href: '/market/admin/permissions', label: '등급/권한 설정', icon: <SecurityIcon className="w-5 h-5" />, permission: 'all' },
+  { href: '/market/admin/users', label: '회원 관리', icon: <GroupIcon className="w-5 h-5" />, permission: 'users' },
+  { href: '/market/admin/sub-admins', label: '하위 관리자', icon: <BadgeIcon className="w-5 h-5" />, permission: 'sub_admins' },
+  { href: '/market/admin/transactions', label: '거래 관리', icon: <PaymentIcon className="w-5 h-5" />, permission: 'transactions' },
+  { href: '/market/admin/commissions', label: '수수료/정산', icon: <MoneyIcon className="w-5 h-5" />, permission: 'commissions' },
+  { href: '/market/admin/reports', label: '신고/분쟁', icon: <ReportIcon className="w-5 h-5" />, permission: 'reports' },
+  { href: '/market/admin/products', label: '상품 관리', icon: <InventoryIcon className="w-5 h-5" />, permission: 'all' },
+  { href: '/market/admin/settings', label: '시스템 설정', icon: <SettingsIcon className="w-5 h-5" />, permission: 'all' },
 ];
 
 const GRADE_COLORS: Record<string, string> = {
@@ -72,7 +84,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 hover:bg-white/10 rounded-[var(--border-radius)] mr-4"
         >
-          <span className="text-xl">☰</span>
+          <MenuIcon className="w-5 h-5" />
         </button>
         <Link href="/market/admin" className="flex items-center gap-2">
           <span className="font-bold text-lg">CROWNY</span>
@@ -117,7 +129,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                           : 'hover:bg-[var(--background-secondary)]'
                       }`}
                     >
-                      <span className="text-lg">{item.icon}</span>
+                      <span>{item.icon}</span>
                       <span className="text-sm font-medium">{item.label}</span>
                     </Link>
                   </li>

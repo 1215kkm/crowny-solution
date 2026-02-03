@@ -1,7 +1,19 @@
 'use client';
 
+import { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import {
+  PackageIcon,
+  ShoppingCartIcon,
+  FavoriteIcon,
+  MoneyIcon,
+  GroupIcon,
+  EditIcon,
+  NotificationsIcon,
+  SupportIcon,
+  SettingsIcon,
+} from '@/components/Icons';
 
 // 임시 사용자 데이터
 const mockUser = {
@@ -33,29 +45,29 @@ const gradeInfo = {
   BRONZE: { label: '브론즈', color: 'bg-orange-600', textColor: 'text-white' },
 };
 
-const menuItems = [
+const menuItems: { title: string; items: { label: string; href: string; icon: ReactNode }[] }[] = [
   {
     title: '거래',
     items: [
-      { label: '판매 내역', href: '/market/my/sales', icon: '📦' },
-      { label: '구매 내역', href: '/market/my/purchases', icon: '🛒' },
-      { label: '관심 목록', href: '/market/my/likes', icon: '❤️' },
+      { label: '판매 내역', href: '/market/my/sales', icon: <PackageIcon className="w-5 h-5" /> },
+      { label: '구매 내역', href: '/market/my/purchases', icon: <ShoppingCartIcon className="w-5 h-5" /> },
+      { label: '관심 목록', href: '/market/my/likes', icon: <FavoriteIcon className="w-5 h-5" /> },
     ],
   },
   {
     title: '수익',
     items: [
-      { label: '수수료 내역', href: '/market/my/commissions', icon: '💰' },
-      { label: '내 추천 회원', href: '/market/my/referrals', icon: '👥' },
+      { label: '수수료 내역', href: '/market/my/commissions', icon: <MoneyIcon className="w-5 h-5" /> },
+      { label: '내 추천 회원', href: '/market/my/referrals', icon: <GroupIcon className="w-5 h-5" /> },
     ],
   },
   {
     title: '설정',
     items: [
-      { label: '프로필 수정', href: '/market/my/profile', icon: '✏️' },
-      { label: '알림 설정', href: '/market/my/notifications', icon: '🔔' },
-      { label: '고객센터', href: '/market/my/support', icon: '💬' },
-      { label: '설정', href: '/market/my/settings', icon: '⚙️' },
+      { label: '프로필 수정', href: '/market/my/profile', icon: <EditIcon className="w-5 h-5" /> },
+      { label: '알림 설정', href: '/market/my/notifications', icon: <NotificationsIcon className="w-5 h-5" /> },
+      { label: '고객센터', href: '/market/my/support', icon: <SupportIcon className="w-5 h-5" /> },
+      { label: '설정', href: '/market/my/settings', icon: <SettingsIcon className="w-5 h-5" /> },
     ],
   },
 ];
@@ -232,7 +244,7 @@ export default function MyPage() {
                     index !== section.items.length - 1 ? 'border-b border-neutral-100' : ''
                   }`}
                 >
-                  <span className="text-lg">{item.icon}</span>
+                  <span className="text-neutral-500">{item.icon}</span>
                   <span className="flex-1 text-sm text-neutral-700">{item.label}</span>
                   <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
