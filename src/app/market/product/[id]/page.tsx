@@ -24,7 +24,7 @@ const mockProduct = {
   likeCount: 12,
   chatCount: 3,
   status: 'ACTIVE' as const,
-  shippingType: 'BOTH' as const,
+  shippingType: 'BOTH' as 'DIRECT' | 'DELIVERY' | 'BOTH',
   negotiable: true,
   seller: {
     id: 'user1',
