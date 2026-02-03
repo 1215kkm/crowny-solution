@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: "/about", label: "소개" },
   { href: "/enterprises", label: "기업" },
   { href: "/tv", label: "TV" },
+  { href: "/market", label: "마켓" },
   { href: "/dashboard", label: "대시보드" },
 ];
 
