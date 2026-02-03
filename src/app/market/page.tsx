@@ -9,7 +9,7 @@ const categories = [
   { id: 'all', name: '전체', icon: '🏠' },
   { id: 'digital', name: '디지털', icon: '📱' },
   { id: 'fashion', name: '패션', icon: '👗' },
-  { id: 'furniture', name: '가구', icon: '🏠' },
+  { id: 'furniture', name: '가구', icon: '🛋️' },
   { id: 'car', name: '자동차', icon: '🚗' },
   { id: 'book', name: '도서', icon: '📚' },
   { id: 'game', name: '게임', icon: '🎮' },
@@ -94,27 +94,33 @@ export default function MarketHomePage() {
   return (
     <div>
       {/* 모바일 헤더 */}
-      <header className="md:hidden sticky top-0 z-30 bg-[var(--background)] border-b border-[var(--border-color)]">
-        <div className="px-[var(--spacing-md)] py-[var(--spacing-sm)]">
+      <header className="md:hidden sticky top-0 z-30 bg-neutral-950 border-b border-neutral-800">
+        <div className="px-4 py-3">
           {/* 로고 & 아이콘 */}
-          <div className="flex items-center justify-between mb-[var(--spacing-sm)]">
-            <h1 className="text-[var(--text-h3)] font-bold">CROWNY</h1>
-            <div className="flex items-center gap-2">
-              <button className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground)]">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-col items-start leading-none">
+              <span className="text-base font-black text-white tracking-tight">CROWNY</span>
+              <span className="text-[8px] font-medium text-amber-400 tracking-[0.2em]">MARKET</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <button className="p-2 text-neutral-400 hover:text-white transition">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                 </svg>
               </button>
+              <Link href="/" className="px-2 py-1 text-xs text-neutral-500 hover:text-neutral-300 transition">
+                메인
+              </Link>
             </div>
           </div>
 
           {/* 검색바 */}
           <Link href="/market/search" className="block">
-            <div className="flex items-center gap-2 px-[var(--spacing-md)] py-[var(--spacing-sm)] bg-[var(--background-secondary)] rounded-[var(--border-radius)]">
-              <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-900 border border-neutral-800 rounded-[3px]">
+              <svg className="w-4 h-4 text-neutral-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
-              <span className="text-[var(--text-body-sm)] text-[var(--foreground-muted)]">
+              <span className="text-sm text-neutral-500">
                 상품명, 지역명으로 검색
               </span>
             </div>
@@ -123,16 +129,20 @@ export default function MarketHomePage() {
       </header>
 
       {/* 카테고리 */}
-      <div className="sticky top-[104px] md:top-[var(--header-height)] z-20 bg-[var(--background)] border-b border-[var(--border-color)]">
-        <div className="market-container">
-          <div className="tabs py-1">
+      <div className="sticky top-[104px] md:top-14 z-20 bg-white border-b border-neutral-200">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <div className="flex gap-1 py-2 overflow-x-auto scrollbar-hide">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`tab ${selectedCategory === category.id ? 'active' : ''}`}
+                className={`flex items-center gap-1 px-4 py-2 text-sm font-medium whitespace-nowrap rounded-[3px] transition ${
+                  selectedCategory === category.id
+                    ? 'bg-neutral-900 text-white'
+                    : 'text-neutral-600 hover:bg-neutral-100'
+                }`}
               >
-                <span className="mr-1">{category.icon}</span>
+                <span>{category.icon}</span>
                 {category.name}
               </button>
             ))}
@@ -140,31 +150,38 @@ export default function MarketHomePage() {
         </div>
       </div>
 
-      {/* 지갑 잔액 배너 */}
-      <div className="market-container py-[var(--spacing-md)]">
+      {/* 지갑 잔액 배너 - Aurora 스타일 */}
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-4">
         <Link href="/market/my/wallet" className="block">
-          <div className="card p-[var(--spacing-md)] flex items-center justify-between bg-[var(--primary)] text-white">
-            <div>
-              <p className="text-[var(--text-caption)] opacity-80">내 지갑</p>
-              <p className="text-[var(--text-h3)] font-bold">12,500 CROWNY</p>
+          <div className="relative overflow-hidden bg-neutral-950 rounded-[3px] p-5">
+            {/* Aurora 효과 */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              <div className="aurora-blob-1 absolute -top-[20%] -left-[10%] w-[50%] h-[100%] rounded-full blur-[60px] bg-amber-500 opacity-20" />
+              <div className="aurora-blob-2 absolute -bottom-[20%] -right-[10%] w-[40%] h-[80%] rounded-full blur-[60px] bg-cyan-500 opacity-15" />
             </div>
-            <div className="flex items-center gap-2">
-              <button className="btn btn-sm bg-white/20 hover:bg-white/30 text-white border-0">
-                충전
-              </button>
-              <svg className="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
+            <div className="relative z-10 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-neutral-400 mb-1">내 지갑</p>
+                <p className="text-2xl font-bold text-white">12,500 <span className="text-sm text-amber-400">CROWNY</span></p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-[3px] transition">
+                  충전
+                </button>
+                <svg className="w-5 h-5 text-neutral-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </div>
             </div>
           </div>
         </Link>
       </div>
 
       {/* 상품 그리드 */}
-      <div className="market-container pb-[var(--spacing-md)]">
-        <div className="flex items-center justify-between mb-[var(--spacing-md)]">
-          <h2 className="text-[var(--text-h4)] font-semibold">최신 상품</h2>
-          <button className="text-[var(--text-body-sm)] text-[var(--foreground-secondary)] flex items-center gap-1">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 pb-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-neutral-900">최신 상품</h2>
+          <button className="text-sm text-neutral-500 flex items-center gap-1 hover:text-neutral-700 transition">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
             </svg>
@@ -172,22 +189,25 @@ export default function MarketHomePage() {
           </button>
         </div>
 
-        <div className="product-grid">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {mockProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
         {/* 더보기 버튼 */}
-        <div className="mt-[var(--spacing-lg)] text-center">
-          <button className="btn btn-outline">
+        <div className="mt-8 text-center">
+          <button className="px-8 py-3 border border-neutral-300 text-neutral-700 font-medium rounded-[3px] hover:bg-neutral-100 transition">
             더 많은 상품 보기
           </button>
         </div>
       </div>
 
-      {/* FAB - 판매하기 (모바일에서는 하단 네비로 대체되므로 숨김) */}
-      <Link href="/market/sell" className="fab hidden md:flex">
+      {/* FAB - 판매하기 (PC에서만 표시) */}
+      <Link
+        href="/market/sell"
+        className="hidden md:flex fixed bottom-8 right-8 w-14 h-14 bg-neutral-900 text-white items-center justify-center rounded-[3px] shadow-lg hover:bg-neutral-800 transition z-40"
+      >
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>

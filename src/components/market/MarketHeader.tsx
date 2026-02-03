@@ -21,13 +21,15 @@ export default function MarketHeader() {
   };
 
   return (
-    <header className="hidden md:block sticky top-0 z-40 bg-[var(--background)] border-b border-[var(--border-color)]">
-      <div className="market-container">
-        <div className="h-[var(--header-height)] flex items-center justify-between">
+    <header className="hidden md:block sticky top-0 z-40 bg-neutral-950 border-b border-neutral-800">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="h-14 flex items-center justify-between">
           {/* 로고 */}
           <Link href="/market" className="flex items-center gap-2">
-            <span className="text-[var(--text-h3)] font-bold">CROWNY</span>
-            <span className="text-[var(--text-caption)] text-[var(--foreground-muted)]">MARKET</span>
+            <div className="flex flex-col items-start leading-none">
+              <span className="text-base font-black text-white tracking-tight">CROWNY</span>
+              <span className="text-[8px] font-medium text-amber-400 tracking-[0.2em]">MARKET</span>
+            </div>
           </Link>
 
           {/* 검색바 */}
@@ -36,10 +38,10 @@ export default function MarketHeader() {
               <input
                 type="text"
                 placeholder="상품명, 지역명으로 검색"
-                className="input pl-10 bg-[var(--background-secondary)] border-transparent focus:border-[var(--primary)] focus:bg-[var(--background)]"
+                className="w-full px-4 py-2 pl-10 bg-neutral-900 border border-neutral-800 rounded-[3px] text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600 transition"
               />
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--foreground-muted)]"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -57,10 +59,10 @@ export default function MarketHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-4 py-2 text-[var(--text-body-sm)] font-medium rounded-[var(--border-radius)] transition-colors ${
+                className={`px-4 py-2 text-sm font-medium rounded-[3px] transition ${
                   isActive(item.href)
-                    ? 'text-[var(--foreground)] bg-[var(--background-secondary)]'
-                    : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-secondary)]'
+                    ? 'text-white bg-neutral-800'
+                    : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50'
                 }`}
               >
                 {item.label}
@@ -68,9 +70,15 @@ export default function MarketHeader() {
             ))}
             <Link
               href="/market/sell"
-              className="btn btn-primary ml-2"
+              className="ml-2 px-4 py-2 bg-white text-neutral-900 text-sm font-semibold rounded-[3px] hover:bg-neutral-100 transition"
             >
               판매하기
+            </Link>
+            <Link
+              href="/"
+              className="ml-2 px-3 py-2 text-sm text-neutral-500 hover:text-neutral-300 transition"
+            >
+              메인으로
             </Link>
           </nav>
         </div>

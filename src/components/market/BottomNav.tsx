@@ -26,7 +26,7 @@ const navItems = [
     href: '/market/sell',
     label: '판매',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
       </svg>
     ),
@@ -63,23 +63,29 @@ export default function BottomNav() {
   };
 
   return (
-    <nav className="bottom-nav">
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-neutral-950 border-t border-neutral-800 flex items-center justify-around z-50 md:hidden safe-area-bottom">
       {navItems.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`bottom-nav-item ${isActive(item.href) ? 'active' : ''} ${
+          className={`flex flex-col items-center justify-center gap-0.5 px-4 py-2 transition ${
             item.isCenter ? 'relative' : ''
+          } ${
+            isActive(item.href)
+              ? 'text-white'
+              : 'text-neutral-500'
           }`}
         >
           {item.isCenter ? (
-            <div className="w-12 h-12 rounded-[var(--border-radius-full)] bg-[var(--primary)] text-white flex items-center justify-center -mt-4 shadow-md">
-              {item.icon}
+            <div className="w-12 h-12 rounded-[3px] bg-white text-neutral-900 flex items-center justify-center -mt-5 shadow-lg shadow-black/30">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </div>
           ) : (
             <>
-              {item.icon}
-              <span>{item.label}</span>
+              <span className="w-6 h-6">{item.icon}</span>
+              <span className="text-[10px] font-medium">{item.label}</span>
             </>
           )}
         </Link>

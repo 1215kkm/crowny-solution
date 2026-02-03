@@ -40,10 +40,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link href={`/market/product/${product.id}`} className="card card-hover block">
+    <Link
+      href={`/market/product/${product.id}`}
+      className="block bg-white border border-neutral-200 rounded-[3px] overflow-hidden hover:border-neutral-400 hover:shadow-md transition-all"
+    >
       {/* 이미지 */}
       <div className="relative">
-        <div className="product-image relative">
+        <div className="aspect-square relative bg-neutral-100">
           {product.images[0] ? (
             <Image
               src={product.images[0]}
@@ -53,9 +56,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-[var(--background-secondary)]">
+            <div className="w-full h-full flex items-center justify-center">
               <svg
-                className="w-12 h-12 text-[var(--foreground-muted)]"
+                className="w-12 h-12 text-neutral-300"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -70,8 +73,10 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* 상태 뱃지 */}
         {product.status !== 'ACTIVE' && (
-          <div className={`absolute top-2 left-2 badge ${
-            product.status === 'RESERVED' ? 'badge-warning' : 'badge-info'
+          <div className={`absolute top-2 left-2 px-2 py-0.5 text-[10px] font-medium rounded-[3px] ${
+            product.status === 'RESERVED'
+              ? 'bg-amber-100 text-amber-700'
+              : 'bg-neutral-900 text-white'
           }`}>
             {product.status === 'RESERVED' ? '예약중' : '거래완료'}
           </div>
@@ -79,32 +84,32 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* 정보 */}
-      <div className="p-[var(--spacing-sm)]">
-        <h3 className="text-[var(--text-body-sm)] font-medium line-clamp-2 mb-1">
+      <div className="p-3">
+        <h3 className="text-sm font-medium text-neutral-800 line-clamp-2 mb-1 leading-snug">
           {product.title}
         </h3>
-        <p className="price text-[var(--text-body)]">
+        <p className="text-base font-bold text-neutral-900">
           {formatPrice(product.price)}
-          <span className="price-currency">CROWNY</span>
+          <span className="text-xs font-medium text-neutral-500 ml-1">CROWNY</span>
         </p>
-        <div className="flex items-center gap-1 mt-2 text-[var(--text-caption)] text-[var(--foreground-muted)]">
+        <div className="flex items-center gap-1 mt-2 text-xs text-neutral-500">
           <span>{product.location}</span>
           <span>·</span>
           <span>{formatTime(product.createdAt)}</span>
         </div>
         {(product.likeCount > 0 || product.chatCount > 0) && (
-          <div className="flex items-center gap-2 mt-1 text-[var(--text-caption)] text-[var(--foreground-muted)]">
+          <div className="flex items-center gap-3 mt-1.5 text-xs text-neutral-400">
             {product.likeCount > 0 && (
-              <span className="flex items-center gap-0.5">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <span className="flex items-center gap-1">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                 </svg>
                 {product.likeCount}
               </span>
             )}
             {product.chatCount > 0 && (
-              <span className="flex items-center gap-0.5">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <span className="flex items-center gap-1">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
                 </svg>
                 {product.chatCount}
