@@ -21,7 +21,7 @@ const mockResults: Product[] = [
     id: '1',
     title: '아이폰 15 Pro 256GB 블랙 풀박스',
     price: 15000,
-    images: [],
+    images: ['https://picsum.photos/seed/iphone15/400/400'],
     location: '서울 강남구',
     createdAt: new Date(Date.now() - 3600000).toISOString(),
     likeCount: 12,
@@ -32,7 +32,7 @@ const mockResults: Product[] = [
     id: '2',
     title: '아이폰 14 Pro 128GB 실버',
     price: 11000,
-    images: [],
+    images: ['https://picsum.photos/seed/iphone14/400/400'],
     location: '서울 서초구',
     createdAt: new Date(Date.now() - 7200000).toISOString(),
     likeCount: 8,
@@ -73,11 +73,11 @@ export default function SearchPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="상품명, 지역명으로 검색"
-              className="input pl-10 bg-[var(--background-secondary)] border-transparent focus:border-[var(--primary)] focus:bg-[var(--background)]"
+              className="w-full py-2 pl-10 pr-4 text-sm bg-neutral-100 border border-transparent rounded-[3px] focus:border-neutral-900 focus:bg-white outline-none transition"
               autoFocus
             />
             <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--foreground-muted)]"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
