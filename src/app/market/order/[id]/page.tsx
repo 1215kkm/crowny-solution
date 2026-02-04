@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
+
+const LOCALE_MAP: Record<string, string> = { ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH' };
 
 // 임시 주문 데이터
 const mockOrder = {
@@ -29,13 +32,14 @@ const mockWallet = {
 };
 
 export default function OrderPage() {
+  const { t, locale } = useTranslation();
   const [shippingMethod, setShippingMethod] = useState<'DIRECT' | 'DELIVERY'>('DIRECT');
   const [address, setAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(LOCALE_MAP[locale] || 'en-US').format(price);
   };
 
   const totalPrice = shippingMethod === 'DELIVERY'
@@ -68,7 +72,7 @@ export default function OrderPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </Link>
-          <h1 className="text-[var(--text-body)] font-semibold">결제하기</h1>
+          <h1 className="text-[var(--text-body)] font-semibold">{t('market.payment')}</h1>
           <div className="w-10" />
         </div>
       </header>
@@ -76,7 +80,7 @@ export default function OrderPage() {
       <div className="market-container py-[var(--spacing-md)]">
         {/* 상품 정보 */}
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-md)]">
-          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">주문 상품</h2>
+          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">{t('market.orderProduct')}</h2>
           <div className="flex gap-3">
             <div className="w-20 h-20 rounded-[var(--border-radius)] bg-[var(--background-secondary)] flex-shrink-0 overflow-hidden">
               {mockOrder.product.image ? (
@@ -107,7 +111,7 @@ export default function OrderPage() {
 
         {/* 판매자 정보 */}
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-md)]">
-          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">판매자</h2>
+          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">{t('market.seller')}</h2>
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-[var(--background-secondary)] flex items-center justify-center">
               <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="currentColor" viewBox="0 0 20 20">
@@ -116,14 +120,14 @@ export default function OrderPage() {
             </div>
             <div>
               <p className="text-[var(--text-body-sm)] font-medium">{mockOrder.seller.name}</p>
-              <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)]">{mockOrder.seller.grade} 등급</p>
+              <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)]">{t('market.grade_level', { grade: mockOrder.seller.grade })}</p>
             </div>
           </div>
         </div>
 
         {/* 거래 방법 */}
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-md)]">
-          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">거래 방법</h2>
+          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">{t('market.shippingType')}</h2>
           <div className="flex gap-2">
             {mockOrder.shippingType !== 'DELIVERY' && (
               <button
@@ -134,8 +138,8 @@ export default function OrderPage() {
                     : 'border-[var(--border-color)]'
                 }`}
               >
-                <p className="text-[var(--text-body-sm)] font-medium">직거래</p>
-                <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">배송비 없음</p>
+                <p className="text-[var(--text-body-sm)] font-medium">{t('market.shipping_direct')}</p>
+                <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">{t('market.noShippingFee')}</p>
               </button>
             )}
             {mockOrder.shippingType !== 'DIRECT' && (
@@ -147,7 +151,7 @@ export default function OrderPage() {
                     : 'border-[var(--border-color)]'
                 }`}
               >
-                <p className="text-[var(--text-body-sm)] font-medium">배송</p>
+                <p className="text-[var(--text-body-sm)] font-medium">{t('market.shipping_delivery')}</p>
                 <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">
                   +{formatPrice(mockOrder.shippingFee)} CROWNY
                 </p>
@@ -159,12 +163,12 @@ export default function OrderPage() {
           {shippingMethod === 'DELIVERY' && (
             <div className="mt-[var(--spacing-md)]">
               <label className="block text-[var(--text-caption)] text-[var(--foreground-secondary)] mb-1">
-                배송지
+                {t('market.shippingAddress')}
               </label>
               <textarea
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="배송받으실 주소를 입력하세요"
+                placeholder={t('market.enterAddress')}
                 className="input min-h-[80px] resize-none"
               />
             </div>
@@ -173,22 +177,22 @@ export default function OrderPage() {
 
         {/* 결제 정보 */}
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-md)]">
-          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">결제 정보</h2>
+          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">{t('market.paymentInfo')}</h2>
 
           <div className="space-y-2 text-[var(--text-body-sm)]">
             <div className="flex justify-between">
-              <span className="text-[var(--foreground-secondary)]">상품 금액</span>
+              <span className="text-[var(--foreground-secondary)]">{t('market.productPrice')}</span>
               <span>{formatPrice(mockOrder.product.price)} CROWNY</span>
             </div>
             {shippingMethod === 'DELIVERY' && (
               <div className="flex justify-between">
-                <span className="text-[var(--foreground-secondary)]">배송비</span>
+                <span className="text-[var(--foreground-secondary)]">{t('market.shippingFee')}</span>
                 <span>{formatPrice(mockOrder.shippingFee)} CROWNY</span>
               </div>
             )}
             <div className="divider" />
             <div className="flex justify-between text-[var(--text-body)] font-bold">
-              <span>총 결제 금액</span>
+              <span>{t('market.totalPayment')}</span>
               <span className="text-[var(--primary)]">{formatPrice(totalPrice)} CROWNY</span>
             </div>
           </div>
@@ -198,7 +202,7 @@ export default function OrderPage() {
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-md)]">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-[var(--text-body-sm)] font-semibold mb-1">내 지갑</h2>
+              <h2 className="text-[var(--text-body-sm)] font-semibold mb-1">{t('market.myWallet')}</h2>
               <p className="text-[var(--text-h4)] font-bold">
                 {formatPrice(mockWallet.balance)}
                 <span className="text-[var(--text-caption)] text-[var(--foreground-secondary)] ml-1">CROWNY</span>
@@ -206,13 +210,13 @@ export default function OrderPage() {
             </div>
             {!hasEnoughBalance && (
               <Link href="/market/my/wallet" className="btn btn-primary btn-sm">
-                충전하기
+                {t('market.goDeposit')}
               </Link>
             )}
           </div>
           {!hasEnoughBalance && (
             <p className="text-[var(--text-caption)] text-[var(--error)] mt-2">
-              잔액이 부족합니다. {formatPrice(totalPrice - mockWallet.balance)} CROWNY가 더 필요합니다.
+              {t('market.insufficientBalance', { amount: formatPrice(totalPrice - mockWallet.balance) })}
             </p>
           )}
         </div>
@@ -223,12 +227,12 @@ export default function OrderPage() {
             <svg className="w-4 h-4 text-[var(--info)]" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
-            안전거래 안내
+            {t('market.escrowGuide')}
           </h3>
           <ul className="text-[var(--text-caption)] text-[var(--foreground-secondary)] space-y-1">
-            <li>• 결제 금액은 거래 완료 전까지 에스크로 계정에 안전하게 보관됩니다.</li>
-            <li>• 구매 확정 시 판매자에게 대금이 지급됩니다.</li>
-            <li>• 거래 중 문제 발생 시 고객센터로 문의해주세요.</li>
+            <li>{t('market.escrowGuide1')}</li>
+            <li>{t('market.escrowGuide2')}</li>
+            <li>{t('market.escrowGuide3')}</li>
           </ul>
         </div>
       </div>
@@ -240,7 +244,7 @@ export default function OrderPage() {
           disabled={!hasEnoughBalance || (shippingMethod === 'DELIVERY' && !address)}
           className="btn btn-primary btn-lg btn-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {formatPrice(totalPrice)} CROWNY 결제하기
+          {t('market.payAmount', { amount: formatPrice(totalPrice) })}
         </button>
       </div>
 
@@ -257,9 +261,9 @@ export default function OrderPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                     </svg>
                   </div>
-                  <h2 className="text-[var(--text-h4)] font-bold mb-2">결제를 진행하시겠습니까?</h2>
+                  <h2 className="text-[var(--text-h4)] font-bold mb-2">{t('market.confirmPaymentTitle')}</h2>
                   <p className="text-[var(--text-body-sm)] text-[var(--foreground-secondary)]">
-                    {formatPrice(totalPrice)} CROWNY가 에스크로 계정으로 이체됩니다.
+                    {t('market.escrowTransfer', { amount: formatPrice(totalPrice) })}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -267,21 +271,21 @@ export default function OrderPage() {
                     onClick={() => setShowConfirmModal(false)}
                     className="btn btn-outline flex-1"
                   >
-                    취소
+                    {t('cancel')}
                   </button>
                   <button
                     onClick={confirmPayment}
                     className="btn btn-primary flex-1"
                   >
-                    결제하기
+                    {t('market.payment')}
                   </button>
                 </div>
               </>
             ) : (
               <div className="text-center py-8">
                 <div className="w-12 h-12 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <p className="text-[var(--text-body)] font-medium">결제 처리 중...</p>
-                <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">잠시만 기다려주세요</p>
+                <p className="text-[var(--text-body)] font-medium">{t('market.processingPayment')}</p>
+                <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">{t('market.pleaseWait')}</p>
               </div>
             )}
           </div>

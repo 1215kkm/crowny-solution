@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
 
 type ProductStatus = 'DRAFT' | 'ACTIVE' | 'RESERVED' | 'SOLD' | 'HIDDEN';
 type OrderStatus = 'PENDING' | 'PAID' | 'SHIPPING' | 'DELIVERED' | 'CONFIRMED' | 'CANCELLED' | 'REFUNDED';
@@ -106,36 +107,42 @@ const mockSales: SaleItem[] = [
   },
 ];
 
-const productStatusLabels: Record<ProductStatus, { label: string; color: string }> = {
-  DRAFT: { label: '임시저장', color: 'bg-[var(--foreground-muted)] text-white' },
-  ACTIVE: { label: '판매중', color: 'badge-success' },
-  RESERVED: { label: '예약중', color: 'badge-warning' },
-  SOLD: { label: '판매완료', color: 'badge-info' },
-  HIDDEN: { label: '숨김', color: 'bg-[var(--foreground-muted)] text-white' },
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
 };
-
-const orderStatusLabels: Record<OrderStatus, string> = {
-  PENDING: '결제 대기',
-  PAID: '결제 완료',
-  SHIPPING: '배송중',
-  DELIVERED: '배송 완료',
-  CONFIRMED: '거래 완료',
-  CANCELLED: '취소됨',
-  REFUNDED: '환불됨',
-};
-
-const tabs = [
-  { id: 'all', label: '전체' },
-  { id: 'active', label: '판매중' },
-  { id: 'reserved', label: '거래중' },
-  { id: 'sold', label: '판매완료' },
-];
 
 export default function SalesPage() {
+  const { t, locale } = useTranslation();
   const [activeTab, setActiveTab] = useState('all');
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
+  const productStatusLabels: Record<ProductStatus, { label: string; color: string }> = {
+    DRAFT: { label: t('market.productStatus_draft'), color: 'bg-[var(--foreground-muted)] text-white' },
+    ACTIVE: { label: t('market.productStatus_active'), color: 'badge-success' },
+    RESERVED: { label: t('market.productStatus_reserved'), color: 'badge-warning' },
+    SOLD: { label: t('market.productStatus_sold'), color: 'badge-info' },
+    HIDDEN: { label: t('market.productStatus_hidden'), color: 'bg-[var(--foreground-muted)] text-white' },
+  };
+
+  const orderStatusLabels: Record<OrderStatus, string> = {
+    PENDING: t('market.orderStatus_pending'),
+    PAID: t('market.orderStatus_paid'),
+    SHIPPING: t('market.orderStatus_shipping'),
+    DELIVERED: t('market.orderStatus_delivered'),
+    CONFIRMED: t('market.orderStatus_confirmed'),
+    CANCELLED: t('market.orderStatus_cancelled'),
+    REFUNDED: t('market.orderStatus_refunded'),
+  };
+
+  const tabs = [
+    { id: 'all', label: t('all') },
+    { id: 'active', label: t('market.selling') },
+    { id: 'reserved', label: t('market.trading') },
+    { id: 'sold', label: t('market.soldOut') },
+  ];
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
 
   const formatDate = (dateString: string) => {
@@ -144,9 +151,9 @@ export default function SalesPage() {
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / 86400000);
 
-    if (days < 1) return '오늘';
-    if (days < 7) return `${days}일 전`;
-    return date.toLocaleDateString('ko-KR');
+    if (days < 1) return t('market.time_today');
+    if (days < 7) return t('market.time_daysAgo', { count: days });
+    return date.toLocaleDateString(intlLocale);
   };
 
   const filteredSales = mockSales.filter((sale) => {
@@ -176,10 +183,10 @@ export default function SalesPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </Link>
-            <h1 className="text-[var(--text-body)] font-semibold ml-2">판매 내역</h1>
+            <h1 className="text-[var(--text-body)] font-semibold ml-2">{t('market.salesHistory')}</h1>
           </div>
           <Link href="/market/sell" className="btn btn-primary btn-sm">
-            + 판매하기
+            {t('market.sellBtn')}
           </Link>
         </div>
 
@@ -231,7 +238,7 @@ export default function SalesPage() {
                       {/* 상태 오버레이 */}
                       {sale.product.status === 'SOLD' && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                          <span className="text-white text-[var(--text-caption)] font-medium">판매완료</span>
+                          <span className="text-white text-[var(--text-caption)] font-medium">{t('market.productStatus_sold')}</span>
                         </div>
                       )}
                     </div>
@@ -246,9 +253,9 @@ export default function SalesPage() {
                         {formatPrice(sale.product.price)} CROWNY
                       </p>
                       <div className="flex items-center gap-3 text-[var(--text-caption)] text-[var(--foreground-muted)]">
-                        <span>조회 {sale.viewCount}</span>
-                        <span>찜 {sale.likeCount}</span>
-                        <span>채팅 {sale.chatCount}</span>
+                        <span>{t('market.views')} {sale.viewCount}</span>
+                        <span>{t('market.likes')} {sale.likeCount}</span>
+                        <span>{t('market.chats')} {sale.chatCount}</span>
                       </div>
                     </div>
                   </div>
@@ -259,7 +266,7 @@ export default function SalesPage() {
                   <div className="mx-[var(--spacing-md)] mb-[var(--spacing-md)] p-[var(--spacing-sm)] bg-[var(--background-secondary)] rounded-[var(--border-radius)]">
                     <div className="flex items-center justify-between text-[var(--text-caption)]">
                       <span className="text-[var(--foreground-secondary)]">
-                        구매자: {sale.order.buyer.name}
+                        {t('market.buyer')}: {sale.order.buyer.name}
                       </span>
                       <span className="font-medium text-[var(--info)]">
                         {orderStatusLabels[sale.order.status]}
@@ -273,13 +280,13 @@ export default function SalesPage() {
                   {sale.product.status === 'ACTIVE' && (
                     <>
                       <Link href={`/market/product/${sale.product.id}/edit`} className="btn btn-outline btn-sm flex-1">
-                        수정
+                        {t('edit')}
                       </Link>
                       <button className="btn btn-outline btn-sm flex-1">
-                        끌어올리기
+                        {t('market.bumpUp')}
                       </button>
                       <button className="btn btn-outline btn-sm flex-1 text-[var(--foreground-muted)]">
-                        숨기기
+                        {t('market.hide')}
                       </button>
                     </>
                   )}
@@ -287,22 +294,22 @@ export default function SalesPage() {
                     <>
                       {sale.order.status === 'PAID' && (
                         <button className="btn btn-primary btn-sm flex-1">
-                          발송하기
+                          {t('market.ship')}
                         </button>
                       )}
                       <Link href={`/market/chat/${sale.order.id}`} className="btn btn-outline btn-sm flex-1">
-                        채팅하기
+                        {t('market.chatWithSeller')}
                       </Link>
                     </>
                   )}
                   {sale.product.status === 'SOLD' && (
                     <Link href={`/market/my/sales/${sale.id}`} className="btn btn-outline btn-sm flex-1">
-                      거래 상세
+                      {t('market.transactionDetail')}
                     </Link>
                   )}
                   {sale.product.status === 'HIDDEN' && (
                     <button className="btn btn-outline btn-sm flex-1">
-                      다시 판매하기
+                      {t('market.resell')}
                     </button>
                   )}
                 </div>
@@ -314,9 +321,9 @@ export default function SalesPage() {
             <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
             </svg>
-            <p className="text-[var(--text-body)]">판매 중인 상품이 없습니다</p>
+            <p className="text-[var(--text-body)]">{t('market.noSalesProducts')}</p>
             <Link href="/market/sell" className="btn btn-primary mt-4">
-              상품 등록하기
+              {t('market.registerProduct')}
             </Link>
           </div>
         )}

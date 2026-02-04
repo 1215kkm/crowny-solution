@@ -53,5 +53,7 @@
   "follower": "팔로워",
   "review": "리뷰",
   "sellerInfo": "판매자 정보",
-  "deleteAll": "전체 삭제"
+  "deleteAll": "전체 삭제",
+  "profile": "프로필",
+  "required": "*"
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/i18n';
 
 type Grade = 'CROWN' | 'DIAMOND' | 'GOLD' | 'SILVER' | 'BRONZE';
 type AdminStatus = 'ACTIVE' | 'INACTIVE';
@@ -33,14 +34,19 @@ const GRADE_INFO: Record<Grade, { name: string; color: string; level: number }> 
   BRONZE: { name: 'BRONZE', color: 'var(--grade-bronze)', level: 1 },
 };
 
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
+};
+
 export default function SubAdminsPage() {
+  const { t, locale } = useTranslation();
   const [subAdmins, setSubAdmins] = useState(mockSubAdmins);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<SubAdmin | null>(null);
   const [newAdmin, setNewAdmin] = useState({ name: '', email: '', grade: 'GOLD' as Grade });
 
-  const formatNumber = (num: number) => new Intl.NumberFormat('ko-KR').format(num);
+  const formatNumber = (num: number) => new Intl.NumberFormat(LOCALE_MAP[locale] || 'ko-KR').format(num);
 
   const handleCreate = () => {
     const admin: SubAdmin = {
@@ -50,7 +56,7 @@ export default function SubAdminsPage() {
       grade: newAdmin.grade,
       status: 'ACTIVE',
       createdAt: new Date().toISOString().split('T')[0],
-      createdBy: '슈퍼관리자',
+      createdBy: t('admin.superAdmin'),
       lastLoginAt: '-',
       managedUsers: 0,
       managedTransactions: 0,
@@ -80,26 +86,25 @@ export default function SubAdminsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">하위 관리자 관리</h1>
-          <p className="text-[var(--foreground-muted)]">등급별 관리자를 생성하고 관리합니다</p>
+          <h1 className="text-2xl font-bold">{t('admin.subAdminManagement')}</h1>
+          <p className="text-[var(--foreground-muted)]">{t('admin.subAdminManagementDesc')}</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
           className="px-4 py-2 bg-[var(--primary)] text-white rounded-[var(--border-radius)] hover:opacity-90"
         >
-          + 관리자 추가
+          {t('admin.addAdmin')}
         </button>
       </div>
 
-      {/* 관리자 계층 구조 */}
+      {/* Admin Hierarchy */}
       <div className="card p-4 mb-6">
-        <h2 className="font-semibold mb-4">관리자 계층 구조</h2>
+        <h2 className="font-semibold mb-4">{t('admin.adminHierarchy')}</h2>
         <div className="flex items-center gap-2 text-sm overflow-x-auto pb-2">
           <div className="flex items-center gap-1 px-3 py-2 bg-[var(--grade-super-admin)] text-white rounded-[var(--border-radius)] whitespace-nowrap">
-            <span>👑</span>
-            <span>슈퍼관리자</span>
+            <span>{t('admin.superAdmin')}</span>
           </div>
-          <span className="text-[var(--foreground-muted)]">→</span>
+          <span className="text-[var(--foreground-muted)]">&rarr;</span>
           {(Object.keys(GRADE_INFO) as Grade[]).map((grade, index) => (
             <div key={grade} className="flex items-center gap-2">
               <div
@@ -112,30 +117,30 @@ export default function SubAdminsPage() {
                 </span>
               </div>
               {index < Object.keys(GRADE_INFO).length - 1 && (
-                <span className="text-[var(--foreground-muted)]">→</span>
+                <span className="text-[var(--foreground-muted)]">&rarr;</span>
               )}
             </div>
           ))}
         </div>
         <p className="text-xs text-[var(--foreground-muted)] mt-3">
-          * 상위 등급은 자신보다 낮은 등급의 관리자만 생성/관리할 수 있습니다
+          {t('admin.hierarchyNote')}
         </p>
       </div>
 
-      {/* 관리자 목록 */}
+      {/* Admin List */}
       <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[var(--background-secondary)]">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium">관리자</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">등급</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">상태</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">생성자</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">관리 회원</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">관리 거래</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">마지막 로그인</th>
-                <th className="px-4 py-3 text-center text-sm font-medium">작업</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_admin')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_grade')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_status')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_creator')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_managedUsers')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_managedTx')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_lastLogin')}</th>
+                <th className="px-4 py-3 text-center text-sm font-medium">{t('admin.col_action')}</th>
               </tr>
             </thead>
             <tbody>
@@ -162,12 +167,12 @@ export default function SubAdminsPage() {
                         ? 'bg-green-100 text-green-700'
                         : 'bg-gray-100 text-gray-700'
                     }`}>
-                      {admin.status === 'ACTIVE' ? '활성' : '비활성'}
+                      {admin.status === 'ACTIVE' ? t('admin.active') : t('admin.inactive')}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-sm">{admin.createdBy}</td>
-                  <td className="px-4 py-3 text-sm">{formatNumber(admin.managedUsers)}명</td>
-                  <td className="px-4 py-3 text-sm">{formatNumber(admin.managedTransactions)}건</td>
+                  <td className="px-4 py-3 text-sm">{t('admin.memberCount', { count: String(admin.managedUsers) })}</td>
+                  <td className="px-4 py-3 text-sm">{t('admin.txCount', { count: String(admin.managedTransactions) })}</td>
                   <td className="px-4 py-3 text-sm text-[var(--foreground-muted)]">{admin.lastLoginAt}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-1">
@@ -179,13 +184,13 @@ export default function SubAdminsPage() {
                             : 'bg-green-100 text-green-700 hover:bg-green-200'
                         }`}
                       >
-                        {admin.status === 'ACTIVE' ? '비활성화' : '활성화'}
+                        {admin.status === 'ACTIVE' ? t('admin.deactivate') : t('admin.activate')}
                       </button>
                       <button
                         onClick={() => { setSelectedAdmin(admin); setShowDeleteModal(true); }}
                         className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-[var(--border-radius)] hover:bg-red-200"
                       >
-                        삭제
+                        {t('delete')}
                       </button>
                     </div>
                   </td>
@@ -197,29 +202,29 @@ export default function SubAdminsPage() {
 
         {subAdmins.length === 0 && (
           <div className="p-8 text-center text-[var(--foreground-muted)]">
-            등록된 하위 관리자가 없습니다
+            {t('admin.noSubAdmins')}
           </div>
         )}
       </div>
 
-      {/* 관리자 생성 모달 */}
+      {/* Create Admin Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">하위 관리자 추가</h3>
+            <h3 className="text-lg font-bold mb-4">{t('admin.addSubAdmin')}</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">이름</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.name')}</label>
                 <input
                   type="text"
                   value={newAdmin.name}
                   onChange={(e) => setNewAdmin({ ...newAdmin, name: e.target.value })}
                   className="w-full px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
-                  placeholder="관리자 이름"
+                  placeholder={t('admin.adminName')}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">이메일</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.email')}</label>
                 <input
                   type="email"
                   value={newAdmin.email}
@@ -229,7 +234,7 @@ export default function SubAdminsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">등급</label>
+                <label className="block text-sm font-medium mb-1">{t('admin.col_grade')}</label>
                 <div className="space-y-2">
                   {(Object.keys(GRADE_INFO) as Grade[]).map(grade => (
                     <label
@@ -260,43 +265,43 @@ export default function SubAdminsPage() {
                 onClick={() => setShowCreateModal(false)}
                 className="flex-1 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
               >
-                취소
+                {t('cancel')}
               </button>
               <button
                 onClick={handleCreate}
                 disabled={!newAdmin.name || !newAdmin.email}
                 className="flex-1 py-2 bg-[var(--primary)] text-white rounded-[var(--border-radius)] disabled:opacity-50"
               >
-                추가
+                {t('admin.add')}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 삭제 확인 모달 */}
+      {/* Delete Confirmation Modal */}
       {showDeleteModal && selectedAdmin && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">관리자 삭제</h3>
+            <h3 className="text-lg font-bold mb-4">{t('admin.deleteAdmin')}</h3>
             <p className="text-[var(--foreground-muted)] mb-6">
               <span className="font-medium text-[var(--foreground)]">{selectedAdmin.name}</span>
-              ({selectedAdmin.email}) 관리자를 삭제하시겠습니까?
+              {' '}{t('admin.deleteAdminConfirm', { email: selectedAdmin.email })}
               <br />
-              <span className="text-red-600 text-sm">이 작업은 되돌릴 수 없습니다.</span>
+              <span className="text-red-600 text-sm">{t('admin.irreversible')}</span>
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
                 className="flex-1 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
               >
-                취소
+                {t('cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 className="flex-1 py-2 bg-red-600 text-white rounded-[var(--border-radius)]"
               >
-                삭제
+                {t('delete')}
               </button>
             </div>
           </div>

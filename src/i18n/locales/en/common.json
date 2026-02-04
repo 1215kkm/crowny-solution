@@ -53,5 +53,7 @@
   "follower": "Followers",
   "review": "Reviews",
   "sellerInfo": "Seller Info",
-  "deleteAll": "Clear All"
+  "deleteAll": "Clear All",
+  "profile": "Profile",
+  "required": "*"
 }

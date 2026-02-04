@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
 
 export default function ProfileEditPage() {
+  const { t } = useTranslation();
   const [profileImage, setProfileImage] = useState('');
   const [name, setName] = useState('김크라운');
   const [email, setEmail] = useState('crown@example.com');
@@ -37,13 +39,13 @@ export default function ProfileEditPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </Link>
-          <h1 className="text-[var(--text-body)] font-semibold">프로필 수정</h1>
+          <h1 className="text-[var(--text-body)] font-semibold">{t('market.editProfile')}</h1>
           <button
             onClick={handleSave}
             disabled={isSaving}
             className="text-[var(--text-body-sm)] font-medium text-[var(--primary)] disabled:opacity-50"
           >
-            {isSaving ? '저장 중...' : '저장'}
+            {isSaving ? t('market.saving') : t('save')}
           </button>
         </div>
       </header>
@@ -56,7 +58,7 @@ export default function ProfileEditPage() {
               {profileImage ? (
                 <Image
                   src={profileImage}
-                  alt="프로필"
+                  alt={t('profile')}
                   width={96}
                   height={96}
                   className="object-cover"
@@ -81,7 +83,7 @@ export default function ProfileEditPage() {
             onClick={handleImageChange}
             className="text-[var(--text-body-sm)] text-[var(--primary)]"
           >
-            사진 변경
+            {t('market.changePhoto')}
           </button>
         </div>
 
@@ -90,54 +92,54 @@ export default function ProfileEditPage() {
           {/* 닉네임 */}
           <div>
             <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-              닉네임 <span className="text-[var(--error)]">*</span>
+              {t('market.nickname')} <span className="text-[var(--error)]">*</span>
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="닉네임을 입력하세요"
+              placeholder={t('market.nicknamePlaceholder')}
               className="input"
               maxLength={20}
             />
             <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mt-1">
-              2~20자 이내로 입력해주세요
+              {t('market.nicknameHint')}
             </p>
           </div>
 
           {/* 이메일 */}
           <div>
             <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-              이메일
+              {t('market.email')}
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="이메일을 입력하세요"
+              placeholder={t('market.emailPlaceholder')}
               className="input"
               disabled
             />
             <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mt-1">
-              이메일은 변경할 수 없습니다
+              {t('market.emailHint')}
             </p>
           </div>
 
           {/* 휴대폰 */}
           <div>
             <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-              휴대폰 번호
+              {t('market.phone')}
             </label>
             <div className="flex gap-2">
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="휴대폰 번호"
+                placeholder={t('market.phone')}
                 className="input flex-1"
               />
               <button className="btn btn-outline">
-                인증
+                {t('market.verify')}
               </button>
             </div>
           </div>
@@ -145,12 +147,12 @@ export default function ProfileEditPage() {
           {/* 소개 */}
           <div>
             <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-              소개
+              {t('market.introduction')}
             </label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="자기소개를 입력하세요"
+              placeholder={t('market.introPlaceholder')}
               className="input min-h-[100px] resize-none"
               maxLength={200}
             />
@@ -162,10 +164,10 @@ export default function ProfileEditPage() {
           {/* 위치 */}
           <div>
             <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-              거래 희망 지역
+              {t('market.location')}
             </label>
             <button className="input text-left flex items-center justify-between w-full">
-              <span>{location || '지역을 선택하세요'}</span>
+              <span>{location || t('market.selectLocation')}</span>
               <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -176,13 +178,13 @@ export default function ProfileEditPage() {
 
         {/* 계정 관리 */}
         <div className="mt-[var(--spacing-2xl)] pt-[var(--spacing-lg)] border-t border-[var(--border-color)]">
-          <h3 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-md)]">계정 관리</h3>
+          <h3 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-md)]">{t('market.accountManagement')}</h3>
           <div className="space-y-[var(--spacing-sm)]">
             <button className="w-full text-left p-[var(--spacing-md)] hover:bg-[var(--background-secondary)] rounded-[var(--border-radius)] transition-colors">
-              <span className="text-[var(--text-body-sm)]">비밀번호 변경</span>
+              <span className="text-[var(--text-body-sm)]">{t('market.changePassword')}</span>
             </button>
             <button className="w-full text-left p-[var(--spacing-md)] hover:bg-[var(--background-secondary)] rounded-[var(--border-radius)] transition-colors">
-              <span className="text-[var(--text-body-sm)] text-[var(--error)]">회원 탈퇴</span>
+              <span className="text-[var(--text-body-sm)] text-[var(--error)]">{t('market.deleteAccount')}</span>
             </button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/i18n';
 
 type Grade = 'SUPER_ADMIN' | 'CROWN' | 'DIAMOND' | 'GOLD' | 'SILVER' | 'BRONZE';
 type UserStatus = 'ACTIVE' | 'SUSPENDED' | 'BANNED';
@@ -29,22 +30,27 @@ const mockUsers: User[] = [
   { id: 'u7', name: '한정지', email: 'banned@example.com', grade: 'BRONZE', status: 'BANNED', joinedAt: '2024-01-10', lastLoginAt: '2024-01-15', totalTransactions: 5, totalVolume: 50000, referrer: null, referralCount: 1 },
 ];
 
-const GRADE_INFO: Record<Grade, { name: string; color: string }> = {
-  SUPER_ADMIN: { name: '슈퍼관리자', color: 'var(--grade-super-admin)' },
-  CROWN: { name: 'CROWN', color: 'var(--grade-crown)' },
-  DIAMOND: { name: 'DIAMOND', color: 'var(--grade-diamond)' },
-  GOLD: { name: 'GOLD', color: 'var(--grade-gold)' },
-  SILVER: { name: 'SILVER', color: 'var(--grade-silver)' },
-  BRONZE: { name: 'BRONZE', color: 'var(--grade-bronze)' },
+const GRADE_COLORS: Record<Grade, string> = {
+  SUPER_ADMIN: 'var(--grade-super-admin)',
+  CROWN: 'var(--grade-crown)',
+  DIAMOND: 'var(--grade-diamond)',
+  GOLD: 'var(--grade-gold)',
+  SILVER: 'var(--grade-silver)',
+  BRONZE: 'var(--grade-bronze)',
 };
 
-const STATUS_INFO: Record<UserStatus, { name: string; color: string }> = {
-  ACTIVE: { name: '활성', color: 'bg-green-100 text-green-700' },
-  SUSPENDED: { name: '정지', color: 'bg-yellow-100 text-yellow-700' },
-  BANNED: { name: '차단', color: 'bg-red-100 text-red-700' },
+const STATUS_COLORS: Record<UserStatus, string> = {
+  ACTIVE: 'bg-green-100 text-green-700',
+  SUSPENDED: 'bg-yellow-100 text-yellow-700',
+  BANNED: 'bg-red-100 text-red-700',
+};
+
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
 };
 
 export default function UsersPage() {
+  const { t, locale } = useTranslation();
   const [users] = useState(mockUsers);
   const [search, setSearch] = useState('');
   const [filterGrade, setFilterGrade] = useState<Grade | 'ALL'>('ALL');
@@ -53,7 +59,22 @@ export default function UsersPage() {
   const [showGradeModal, setShowGradeModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
 
-  const formatNumber = (num: number) => new Intl.NumberFormat('ko-KR').format(num);
+  const GRADE_INFO: Record<Grade, { name: string; color: string }> = {
+    SUPER_ADMIN: { name: t('grade_super_admin'), color: GRADE_COLORS.SUPER_ADMIN },
+    CROWN: { name: t('grade_crown'), color: GRADE_COLORS.CROWN },
+    DIAMOND: { name: t('grade_diamond'), color: GRADE_COLORS.DIAMOND },
+    GOLD: { name: t('grade_gold'), color: GRADE_COLORS.GOLD },
+    SILVER: { name: t('grade_silver'), color: GRADE_COLORS.SILVER },
+    BRONZE: { name: t('grade_bronze'), color: GRADE_COLORS.BRONZE },
+  };
+
+  const STATUS_INFO: Record<UserStatus, { name: string; color: string }> = {
+    ACTIVE: { name: t('admin.user_active'), color: STATUS_COLORS.ACTIVE },
+    SUSPENDED: { name: t('admin.user_suspended'), color: STATUS_COLORS.SUSPENDED },
+    BANNED: { name: t('admin.user_banned'), color: STATUS_COLORS.BANNED },
+  };
+
+  const formatNumber = (num: number) => new Intl.NumberFormat(LOCALE_MAP[locale] || 'ko-KR').format(num);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.includes(search) || user.email.includes(search);
@@ -65,8 +86,8 @@ export default function UsersPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">회원 관리</h1>
-        <p className="text-[var(--foreground-muted)]">전체 회원을 조회하고 관리합니다</p>
+        <h1 className="text-2xl font-bold">{t('admin.userManagement')}</h1>
+        <p className="text-[var(--foreground-muted)]">{t('admin.userManagementDesc')}</p>
       </div>
 
       {/* 필터 */}
@@ -75,7 +96,7 @@ export default function UsersPage() {
           <div className="flex-1 min-w-[200px]">
             <input
               type="text"
-              placeholder="이름 또는 이메일 검색..."
+              placeholder={t('admin.searchNameEmail')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
@@ -86,7 +107,7 @@ export default function UsersPage() {
             onChange={(e) => setFilterGrade(e.target.value as Grade | 'ALL')}
             className="px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
           >
-            <option value="ALL">전체 등급</option>
+            <option value="ALL">{t('admin.allGrades')}</option>
             {(Object.keys(GRADE_INFO) as Grade[]).map(grade => (
               <option key={grade} value={grade}>{GRADE_INFO[grade].name}</option>
             ))}
@@ -96,7 +117,7 @@ export default function UsersPage() {
             onChange={(e) => setFilterStatus(e.target.value as UserStatus | 'ALL')}
             className="px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
           >
-            <option value="ALL">전체 상태</option>
+            <option value="ALL">{t('admin.allStatuses')}</option>
             {(Object.keys(STATUS_INFO) as UserStatus[]).map(status => (
               <option key={status} value={status}>{STATUS_INFO[status].name}</option>
             ))}
@@ -110,14 +131,14 @@ export default function UsersPage() {
           <table className="w-full">
             <thead className="bg-[var(--background-secondary)]">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium">회원</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">등급</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">상태</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">거래</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">거래량</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">추천인</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">가입일</th>
-                <th className="px-4 py-3 text-center text-sm font-medium">관리</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_member')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_grade')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_status')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_transactions')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_volume')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_referrer')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_joinDate')}</th>
+                <th className="px-4 py-3 text-center text-sm font-medium">{t('admin.col_manage')}</th>
               </tr>
             </thead>
             <tbody>
@@ -143,7 +164,7 @@ export default function UsersPage() {
                       {STATUS_INFO[user.status].name}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm">{user.totalTransactions}건</td>
+                  <td className="px-4 py-3 text-sm">{t('admin.txCount', { count: String(user.totalTransactions) })}</td>
                   <td className="px-4 py-3 text-sm">{formatNumber(user.totalVolume)}</td>
                   <td className="px-4 py-3 text-sm">
                     {user.referrer ? (
@@ -160,16 +181,16 @@ export default function UsersPage() {
                       <button
                         onClick={() => { setSelectedUser(user); setShowGradeModal(true); }}
                         className="px-2 py-1 text-xs bg-[var(--background-secondary)] rounded-[var(--border-radius)] hover:bg-[var(--border-color)]"
-                        title="등급 변경"
+                        title={t('admin.changeGrade')}
                       >
-                        등급
+                        {t('admin.gradeBtn')}
                       </button>
                       <button
                         onClick={() => { setSelectedUser(user); setShowStatusModal(true); }}
                         className="px-2 py-1 text-xs bg-[var(--background-secondary)] rounded-[var(--border-radius)] hover:bg-[var(--border-color)]"
-                        title="상태 변경"
+                        title={t('admin.changeStatus')}
                       >
-                        상태
+                        {t('admin.statusBtn')}
                       </button>
                     </div>
                   </td>
@@ -181,7 +202,7 @@ export default function UsersPage() {
 
         {filteredUsers.length === 0 && (
           <div className="p-8 text-center text-[var(--foreground-muted)]">
-            검색 결과가 없습니다
+            {t('admin.noResults')}
           </div>
         )}
       </div>
@@ -190,9 +211,9 @@ export default function UsersPage() {
       {showGradeModal && selectedUser && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">등급 변경</h3>
+            <h3 className="text-lg font-bold mb-4">{t('admin.changeGrade')}</h3>
             <p className="text-sm text-[var(--foreground-muted)] mb-4">
-              <span className="font-medium text-[var(--foreground)]">{selectedUser.name}</span>님의 등급을 변경합니다
+              {t('admin.changeGradeDesc', { name: selectedUser.name })}
             </p>
             <div className="space-y-2 mb-6">
               {(Object.keys(GRADE_INFO) as Grade[]).filter(g => g !== 'SUPER_ADMIN').map(grade => (
@@ -221,13 +242,13 @@ export default function UsersPage() {
                 onClick={() => setShowGradeModal(false)}
                 className="flex-1 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
               >
-                취소
+                {t('cancel')}
               </button>
               <button
                 onClick={() => setShowGradeModal(false)}
                 className="flex-1 py-2 bg-[var(--primary)] text-white rounded-[var(--border-radius)]"
               >
-                변경
+                {t('admin.change')}
               </button>
             </div>
           </div>
@@ -238,9 +259,9 @@ export default function UsersPage() {
       {showStatusModal && selectedUser && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">상태 변경</h3>
+            <h3 className="text-lg font-bold mb-4">{t('admin.changeStatus')}</h3>
             <p className="text-sm text-[var(--foreground-muted)] mb-4">
-              <span className="font-medium text-[var(--foreground)]">{selectedUser.name}</span>님의 상태를 변경합니다
+              {t('admin.changeStatusDesc', { name: selectedUser.name })}
             </p>
             <div className="space-y-2 mb-4">
               {(Object.keys(STATUS_INFO) as UserStatus[]).map(status => (
@@ -263,11 +284,11 @@ export default function UsersPage() {
               ))}
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">사유 (선택)</label>
+              <label className="block text-sm font-medium mb-1">{t('admin.reasonOptional')}</label>
               <textarea
                 className="w-full px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)] text-sm"
                 rows={3}
-                placeholder="상태 변경 사유를 입력하세요..."
+                placeholder={t('admin.enterReason')}
               />
             </div>
             <div className="flex gap-3">
@@ -275,13 +296,13 @@ export default function UsersPage() {
                 onClick={() => setShowStatusModal(false)}
                 className="flex-1 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
               >
-                취소
+                {t('cancel')}
               </button>
               <button
                 onClick={() => setShowStatusModal(false)}
                 className="flex-1 py-2 bg-[var(--primary)] text-white rounded-[var(--border-radius)]"
               >
-                변경
+                {t('admin.change')}
               </button>
             </div>
           </div>

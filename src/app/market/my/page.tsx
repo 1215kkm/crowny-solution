@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
 import {
   PackageIcon,
   ShoppingCartIcon,
@@ -36,46 +37,53 @@ const mockUser = {
   thisMonthCommission: 150,
 };
 
-const gradeInfo = {
-  SUPER_ADMIN: { label: '슈퍼관리자', color: 'bg-purple-600', textColor: 'text-white' },
-  CROWN: { label: '크라운', color: 'bg-amber-400', textColor: 'text-neutral-900' },
-  DIAMOND: { label: '다이아몬드', color: 'bg-cyan-500', textColor: 'text-white' },
-  GOLD: { label: '골드', color: 'bg-amber-500', textColor: 'text-neutral-900' },
-  SILVER: { label: '실버', color: 'bg-neutral-400', textColor: 'text-white' },
-  BRONZE: { label: '브론즈', color: 'bg-orange-600', textColor: 'text-white' },
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
 };
 
-const menuItems: { title: string; items: { label: string; href: string; icon: ReactNode }[] }[] = [
-  {
-    title: '거래',
-    items: [
-      { label: '판매 내역', href: '/market/my/sales', icon: <PackageIcon className="w-5 h-5" /> },
-      { label: '구매 내역', href: '/market/my/purchases', icon: <ShoppingCartIcon className="w-5 h-5" /> },
-      { label: '관심 목록', href: '/market/my/likes', icon: <FavoriteIcon className="w-5 h-5" /> },
-    ],
-  },
-  {
-    title: '수익',
-    items: [
-      { label: '수수료 내역', href: '/market/my/commissions', icon: <MoneyIcon className="w-5 h-5" /> },
-      { label: '내 추천 회원', href: '/market/my/referrals', icon: <GroupIcon className="w-5 h-5" /> },
-    ],
-  },
-  {
-    title: '설정',
-    items: [
-      { label: '프로필 수정', href: '/market/my/profile', icon: <EditIcon className="w-5 h-5" /> },
-      { label: '알림 설정', href: '/market/my/notifications', icon: <NotificationsIcon className="w-5 h-5" /> },
-      { label: '고객센터', href: '/market/my/support', icon: <SupportIcon className="w-5 h-5" /> },
-      { label: '설정', href: '/market/my/settings', icon: <SettingsIcon className="w-5 h-5" /> },
-    ],
-  },
-];
-
 export default function MyPage() {
+  const { t, locale } = useTranslation();
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
+
+  const gradeInfo = {
+    SUPER_ADMIN: { label: t('grade_super_admin'), color: 'bg-purple-600', textColor: 'text-white' },
+    CROWN: { label: t('grade_crown'), color: 'bg-amber-400', textColor: 'text-neutral-900' },
+    DIAMOND: { label: t('grade_diamond'), color: 'bg-cyan-500', textColor: 'text-white' },
+    GOLD: { label: t('grade_gold'), color: 'bg-amber-500', textColor: 'text-neutral-900' },
+    SILVER: { label: t('grade_silver'), color: 'bg-neutral-400', textColor: 'text-white' },
+    BRONZE: { label: t('grade_bronze'), color: 'bg-orange-600', textColor: 'text-white' },
+  };
+
+  const menuItems: { title: string; items: { label: string; href: string; icon: ReactNode }[] }[] = [
+    {
+      title: t('market.tradeSection'),
+      items: [
+        { label: t('market.salesHistory'), href: '/market/my/sales', icon: <PackageIcon className="w-5 h-5" /> },
+        { label: t('market.purchaseHistory'), href: '/market/my/purchases', icon: <ShoppingCartIcon className="w-5 h-5" /> },
+        { label: t('market.wishlist'), href: '/market/my/likes', icon: <FavoriteIcon className="w-5 h-5" /> },
+      ],
+    },
+    {
+      title: t('market.earningsSection'),
+      items: [
+        { label: t('market.commissionHistory'), href: '/market/my/commissions', icon: <MoneyIcon className="w-5 h-5" /> },
+        { label: t('market.myReferralMembers'), href: '/market/my/referrals', icon: <GroupIcon className="w-5 h-5" /> },
+      ],
+    },
+    {
+      title: t('market.settingsSection'),
+      items: [
+        { label: t('market.editProfile'), href: '/market/my/profile', icon: <EditIcon className="w-5 h-5" /> },
+        { label: t('market.notificationSettings'), href: '/market/my/notifications', icon: <NotificationsIcon className="w-5 h-5" /> },
+        { label: t('market.customerService'), href: '/market/my/support', icon: <SupportIcon className="w-5 h-5" /> },
+        { label: t('settings'), href: '/market/my/settings', icon: <SettingsIcon className="w-5 h-5" /> },
+      ],
+    },
+  ];
 
   const currentGrade = gradeInfo[mockUser.grade];
 
@@ -84,7 +92,7 @@ export default function MyPage() {
       {/* 헤더 - 다크 테마 */}
       <header className="sticky top-0 z-30 bg-neutral-950 border-b border-neutral-800 md:hidden">
         <div className="flex items-center justify-between px-4 h-14">
-          <h1 className="text-lg font-bold text-white">MY</h1>
+          <h1 className="text-lg font-bold text-white">{t('my')}</h1>
           <button className="p-2 text-neutral-400 hover:text-white transition">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
@@ -127,22 +135,22 @@ export default function MyPage() {
                   </svg>
                   <span>{mockUser.rating}</span>
                 </div>
-                <span>·</span>
-                <span>리뷰 {mockUser.reviewCount}</span>
+                <span>&middot;</span>
+                <span>{t('review')} {mockUser.reviewCount}</span>
               </div>
             </div>
             <Link
               href="/market/my/profile"
               className="px-3 py-1.5 text-sm border border-neutral-300 rounded-[3px] hover:bg-neutral-100 transition"
             >
-              편집
+              {t('market.editBtn')}
             </Link>
           </div>
 
           {/* 추천인 정보 */}
           <div className="mt-4 p-3 bg-neutral-100 rounded-[3px] text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-neutral-500">내 추천인</span>
+              <span className="text-neutral-500">{t('market.mySponsor')}</span>
               <span className="font-medium text-neutral-700">
                 {mockUser.sponsor.name}
                 <span className={`ml-1.5 px-1.5 py-0.5 text-[10px] rounded-[3px] ${gradeInfo[mockUser.sponsor.grade].color} ${gradeInfo[mockUser.sponsor.grade].textColor}`}>
@@ -167,14 +175,14 @@ export default function MyPage() {
                   <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
                   </svg>
-                  <span className="text-white font-medium">내 지갑</span>
+                  <span className="text-white font-medium">{t('market.myWallet')}</span>
                 </div>
                 <svg className="w-5 h-5 text-neutral-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
               </div>
               <div className="mb-4">
-                <p className="text-xs text-neutral-400 mb-1">사용 가능</p>
+                <p className="text-xs text-neutral-400 mb-1">{t('market.available')}</p>
                 <p className="text-3xl font-bold text-white">
                   {formatPrice(mockUser.wallet.balance)}
                   <span className="text-sm text-amber-400 ml-2">CROWNY</span>
@@ -182,18 +190,18 @@ export default function MyPage() {
               </div>
               {mockUser.wallet.pendingBalance > 0 && (
                 <p className="text-xs text-neutral-400 mb-4">
-                  거래 중: {formatPrice(mockUser.wallet.pendingBalance)} CROWNY
+                  {t('market.inTransaction')}: {formatPrice(mockUser.wallet.pendingBalance)} CROWNY
                 </p>
               )}
               <div className="flex gap-2">
                 <button className="flex-1 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-[3px] transition">
-                  충전
+                  {t('market.deposit')}
                 </button>
                 <button className="flex-1 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-[3px] transition">
-                  출금
+                  {t('market.withdraw')}
                 </button>
                 <button className="flex-1 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-[3px] transition">
-                  송금
+                  {t('market.transfer')}
                 </button>
               </div>
             </div>
@@ -204,7 +212,7 @@ export default function MyPage() {
         <div className="bg-white border border-neutral-200 rounded-[3px] p-4 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-neutral-500 mb-1">이번 달 수수료 수익</p>
+              <p className="text-xs text-neutral-500 mb-1">{t('market.monthlyCommission')}</p>
               <p className="text-xl font-bold text-neutral-900">
                 {formatPrice(mockUser.thisMonthCommission)}
                 <span className="text-sm text-neutral-500 ml-1">CROWNY</span>
@@ -214,14 +222,14 @@ export default function MyPage() {
               href="/market/my/commissions"
               className="px-3 py-1.5 text-sm border border-neutral-300 rounded-[3px] hover:bg-neutral-100 transition"
             >
-              상세보기
+              {t('market.detail')}
             </Link>
           </div>
           <div className="h-px bg-neutral-200 my-3" />
           <div className="flex items-center justify-between text-sm">
-            <span className="text-neutral-500">내 추천 회원</span>
+            <span className="text-neutral-500">{t('market.myReferralMembers')}</span>
             <Link href="/market/my/referrals" className="flex items-center gap-1 font-medium text-neutral-700 hover:text-neutral-900">
-              {mockUser.subordinateCount}명
+              {t('market.members', { count: String(mockUser.subordinateCount) })}
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
@@ -257,7 +265,7 @@ export default function MyPage() {
 
         {/* 로그아웃 */}
         <button className="w-full py-3 border border-neutral-300 text-red-600 font-medium rounded-[3px] hover:bg-red-50 transition">
-          로그아웃
+          {t('logout')}
         </button>
       </div>
     </div>

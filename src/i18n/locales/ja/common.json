@@ -37,11 +37,11 @@
   "coin": "コイン",
   "won": "ウォン",
   "grade_super_admin": "スーパー管理者",
-  "grade_crown": "クラウン",
-  "grade_diamond": "ダイヤモンド",
-  "grade_gold": "ゴールド",
-  "grade_silver": "シルバー",
-  "grade_bronze": "ブロンズ",
+  "grade_crown": "CROWN",
+  "grade_diamond": "DIAMOND",
+  "grade_gold": "GOLD",
+  "grade_silver": "SILVER",
+  "grade_bronze": "BRONZE",
   "status_active": "販売中",
   "status_reserved": "予約中",
   "status_sold": "売却済み",
@@ -53,5 +53,7 @@
   "follower": "フォロワー",
   "review": "レビュー",
   "sellerInfo": "販売者情報",
-  "deleteAll": "すべて削除"
+  "deleteAll": "すべて削除",
+  "profile": "プロフィール",
+  "required": "*"
 }

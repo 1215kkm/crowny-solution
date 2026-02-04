@@ -3,6 +3,7 @@
 import { useState, ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
 import {
   PhoneIcon,
   StyleIcon,
@@ -16,27 +17,34 @@ import {
   GiftIcon,
 } from '@/components/Icons';
 
-const categories: { id: string; name: string; icon: ReactNode }[] = [
-  { id: 'digital', name: '디지털/가전', icon: <PhoneIcon className="w-5 h-5" /> },
-  { id: 'fashion', name: '패션/의류', icon: <StyleIcon className="w-5 h-5" /> },
-  { id: 'furniture', name: '가구/인테리어', icon: <HomeIcon className="w-5 h-5" /> },
-  { id: 'car', name: '자동차/오토바이', icon: <CarIcon className="w-5 h-5" /> },
-  { id: 'book', name: '도서/티켓/문구', icon: <BookIcon className="w-5 h-5" /> },
-  { id: 'game', name: '게임/취미', icon: <GamepadIcon className="w-5 h-5" /> },
-  { id: 'baby', name: '유아동', icon: <ChildIcon className="w-5 h-5" /> },
-  { id: 'sports', name: '스포츠/레저', icon: <SportsIcon className="w-5 h-5" /> },
-  { id: 'pet', name: '반려동물', icon: <PetsIcon className="w-5 h-5" /> },
-  { id: 'etc', name: '기타', icon: <GiftIcon className="w-5 h-5" /> },
+const categories: { id: string; labelKey: string; icon: ReactNode }[] = [
+  { id: 'digital', labelKey: 'market.cat_digital_full', icon: <PhoneIcon className="w-5 h-5" /> },
+  { id: 'fashion', labelKey: 'market.cat_fashion_full', icon: <StyleIcon className="w-5 h-5" /> },
+  { id: 'furniture', labelKey: 'market.cat_furniture_full', icon: <HomeIcon className="w-5 h-5" /> },
+  { id: 'car', labelKey: 'market.cat_car_full', icon: <CarIcon className="w-5 h-5" /> },
+  { id: 'book', labelKey: 'market.cat_book_full', icon: <BookIcon className="w-5 h-5" /> },
+  { id: 'game', labelKey: 'market.cat_game_full', icon: <GamepadIcon className="w-5 h-5" /> },
+  { id: 'baby', labelKey: 'market.cat_baby_full', icon: <ChildIcon className="w-5 h-5" /> },
+  { id: 'sports', labelKey: 'market.cat_sports_full', icon: <SportsIcon className="w-5 h-5" /> },
+  { id: 'pet', labelKey: 'market.cat_pet_full', icon: <PetsIcon className="w-5 h-5" /> },
+  { id: 'etc', labelKey: 'market.cat_etc_full', icon: <GiftIcon className="w-5 h-5" /> },
 ];
 
 const conditions = [
-  { id: 'NEW', label: '새상품', desc: '사용하지 않은 새 상품' },
-  { id: 'LIKE_NEW', label: '거의 새것', desc: '사용감 거의 없음' },
-  { id: 'GOOD', label: '양호', desc: '사용감 있으나 하자 없음' },
-  { id: 'FAIR', label: '사용감 있음', desc: '사용감 많거나 하자 있음' },
+  { id: 'NEW', labelKey: 'market.condition_new', descKey: 'market.condition_new_desc' },
+  { id: 'LIKE_NEW', labelKey: 'market.condition_likeNew', descKey: 'market.condition_likeNew_desc' },
+  { id: 'GOOD', labelKey: 'market.condition_good', descKey: 'market.condition_good_desc' },
+  { id: 'FAIR', labelKey: 'market.condition_fair', descKey: 'market.condition_fair_desc' },
+];
+
+const shippingOptions = [
+  { id: 'DIRECT', labelKey: 'market.shipping_direct' },
+  { id: 'DELIVERY', labelKey: 'market.shipping_delivery' },
+  { id: 'BOTH', labelKey: 'market.shipping_both' },
 ];
 
 export default function SellPage() {
+  const { t } = useTranslation();
   const [images, setImages] = useState<string[]>([]);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -71,9 +79,9 @@ export default function SellPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </Link>
-          <h1 className="text-[var(--text-body)] font-semibold">상품 등록</h1>
+          <h1 className="text-[var(--text-body)] font-semibold">{t('market.sellProduct')}</h1>
           <button className="text-[var(--text-body-sm)] text-[var(--foreground-muted)]">
-            임시저장
+            {t('market.draftSave')}
           </button>
         </div>
       </header>
@@ -82,7 +90,7 @@ export default function SellPage() {
         {/* 이미지 업로드 */}
         <div className="mb-[var(--spacing-lg)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            상품 이미지 ({images.length}/10)
+            {t('market.productImages')} ({images.length}/10)
           </label>
           <div className="flex gap-2 overflow-x-auto pb-2">
             {/* 업로드 버튼 */}
@@ -94,7 +102,7 @@ export default function SellPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
               </svg>
-              <span className="text-[var(--text-tiny)]">사진</span>
+              <span className="text-[var(--text-tiny)]">{t('market.photos')}</span>
             </button>
 
             {/* 업로드된 이미지 */}
@@ -121,7 +129,7 @@ export default function SellPage() {
                 </button>
                 {index === 0 && (
                   <span className="absolute bottom-1 left-1 text-[var(--text-tiny)] bg-[var(--primary)] text-white px-1.5 py-0.5 rounded-[var(--border-radius)]">
-                    대표
+                    {t('market.mainPhoto')}
                   </span>
                 )}
               </div>
@@ -132,13 +140,13 @@ export default function SellPage() {
         {/* 제목 */}
         <div className="mb-[var(--spacing-md)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            제목 <span className="text-[var(--error)]">*</span>
+            {t('market.productTitle')} <span className="text-[var(--error)]">*</span>
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="상품 제목을 입력하세요"
+            placeholder={t('market.productTitlePlaceholder')}
             className="input"
             maxLength={100}
           />
@@ -150,7 +158,7 @@ export default function SellPage() {
         {/* 카테고리 */}
         <div className="mb-[var(--spacing-md)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            카테고리 <span className="text-[var(--error)]">*</span>
+            {t('market.category')} <span className="text-[var(--error)]">*</span>
           </label>
           <button
             onClick={() => setShowCategoryModal(true)}
@@ -158,10 +166,10 @@ export default function SellPage() {
           >
             {selectedCategory ? (
               <span>
-                {selectedCategory.icon} {selectedCategory.name}
+                {selectedCategory.icon} {t(selectedCategory.labelKey)}
               </span>
             ) : (
-              <span className="text-[var(--foreground-muted)]">카테고리 선택</span>
+              <span className="text-[var(--foreground-muted)]">{t('market.selectCategory')}</span>
             )}
             <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -172,7 +180,7 @@ export default function SellPage() {
         {/* 상품 상태 */}
         <div className="mb-[var(--spacing-md)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            상품 상태 <span className="text-[var(--error)]">*</span>
+            {t('market.condition')} <span className="text-[var(--error)]">*</span>
           </label>
           <div className="grid grid-cols-2 gap-2">
             {conditions.map((c) => (
@@ -185,8 +193,8 @@ export default function SellPage() {
                     : 'border-[var(--border-color)] hover:border-[var(--border-color-strong)]'
                 }`}
               >
-                <p className="text-[var(--text-body-sm)] font-medium">{c.label}</p>
-                <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">{c.desc}</p>
+                <p className="text-[var(--text-body-sm)] font-medium">{t(c.labelKey)}</p>
+                <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">{t(c.descKey)}</p>
               </button>
             ))}
           </div>
@@ -195,7 +203,7 @@ export default function SellPage() {
         {/* 가격 */}
         <div className="mb-[var(--spacing-md)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            가격 <span className="text-[var(--error)]">*</span>
+            {t('market.price')} <span className="text-[var(--error)]">*</span>
           </label>
           <div className="relative">
             <input
@@ -216,19 +224,19 @@ export default function SellPage() {
               onChange={(e) => setNegotiable(e.target.checked)}
               className="w-4 h-4 rounded-[var(--border-radius)] border-[var(--border-color)]"
             />
-            <span className="text-[var(--text-body-sm)]">가격 제안 받기</span>
+            <span className="text-[var(--text-body-sm)]">{t('market.acceptOffers')}</span>
           </label>
         </div>
 
         {/* 설명 */}
         <div className="mb-[var(--spacing-md)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            상품 설명
+            {t('market.description')}
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="상품에 대한 자세한 설명을 입력해주세요.&#10;구매시기, 사용기간, 하자 유무 등"
+            placeholder={t('market.descriptionPlaceholder')}
             className="input min-h-[150px] resize-none"
             maxLength={5000}
           />
@@ -240,14 +248,10 @@ export default function SellPage() {
         {/* 거래 방법 */}
         <div className="mb-[var(--spacing-md)]">
           <label className="block text-[var(--text-body-sm)] font-medium mb-2">
-            거래 방법 <span className="text-[var(--error)]">*</span>
+            {t('market.shippingType')} <span className="text-[var(--error)]">*</span>
           </label>
           <div className="flex gap-2">
-            {[
-              { id: 'DIRECT', label: '직거래' },
-              { id: 'DELIVERY', label: '배송' },
-              { id: 'BOTH', label: '직거래 + 배송' },
-            ].map((option) => (
+            {shippingOptions.map((option) => (
               <button
                 key={option.id}
                 onClick={() => setShippingType(option.id)}
@@ -257,7 +261,7 @@ export default function SellPage() {
                     : 'border-[var(--border-color)] hover:border-[var(--border-color-strong)]'
                 }`}
               >
-                {option.label}
+                {t(option.labelKey)}
               </button>
             ))}
           </div>
@@ -270,7 +274,7 @@ export default function SellPage() {
           className="btn btn-primary btn-lg btn-full"
           disabled={!title || !category || !condition || !price}
         >
-          등록하기
+          {t('market.register')}
         </button>
       </div>
 
@@ -280,7 +284,7 @@ export default function SellPage() {
           <div className="overlay" onClick={() => setShowCategoryModal(false)} />
           <div className="modal p-[var(--spacing-md)]">
             <div className="flex items-center justify-between mb-[var(--spacing-md)]">
-              <h2 className="text-[var(--text-h4)] font-bold">카테고리 선택</h2>
+              <h2 className="text-[var(--text-h4)] font-bold">{t('market.selectCategory')}</h2>
               <button onClick={() => setShowCategoryModal(false)} className="p-2">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -302,7 +306,7 @@ export default function SellPage() {
                   }`}
                 >
                   <span className="mb-2 block text-[var(--foreground-secondary)]">{c.icon}</span>
-                  <span className="text-[var(--text-body-sm)]">{c.name}</span>
+                  <span className="text-[var(--text-body-sm)]">{t(c.labelKey)}</span>
                 </button>
               ))}
             </div>

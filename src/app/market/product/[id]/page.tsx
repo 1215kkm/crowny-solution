@@ -3,6 +3,16 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
+
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR',
+  en: 'en-US',
+  zh: 'zh-CN',
+  ja: 'ja-JP',
+  vi: 'vi-VN',
+  th: 'th-TH',
+};
 
 // 임시 상품 데이터
 const mockProduct = {
@@ -40,13 +50,6 @@ const mockProduct = {
   },
 };
 
-const conditionLabels = {
-  NEW: '새상품',
-  LIKE_NEW: '거의 새것',
-  GOOD: '양호',
-  FAIR: '사용감 있음',
-};
-
 const gradeColors = {
   SUPER_ADMIN: 'bg-[var(--grade-super-admin)]',
   CROWN: 'bg-[var(--grade-crown)] text-[var(--foreground)]',
@@ -57,11 +60,21 @@ const gradeColors = {
 };
 
 export default function ProductDetailPage() {
+  const { t, locale } = useTranslation();
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const intlLocale = LOCALE_MAP[locale] || 'ko-KR';
+
+  const conditionLabels: Record<string, string> = {
+    NEW: t('market.condition_new'),
+    LIKE_NEW: t('market.condition_likeNew'),
+    GOOD: t('market.condition_good'),
+    FAIR: t('market.condition_fair'),
+  };
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
 
   const formatTime = (dateString: string) => {
@@ -70,8 +83,8 @@ export default function ProductDetailPage() {
     const diff = now.getTime() - date.getTime();
     const hours = Math.floor(diff / 3600000);
 
-    if (hours < 24) return `${hours}시간 전`;
-    return date.toLocaleDateString('ko-KR');
+    if (hours < 24) return t('market.time_hoursAgo', { count: String(hours) });
+    return date.toLocaleDateString(intlLocale);
   };
 
   return (
@@ -170,8 +183,8 @@ export default function ProductDetailPage() {
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
               <span>{mockProduct.seller.rating}</span>
-              <span>·</span>
-              <span>리뷰 {mockProduct.seller.reviewCount}</span>
+              <span>&middot;</span>
+              <span>{t('review')} {mockProduct.seller.reviewCount}</span>
             </div>
           </div>
           <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -197,7 +210,7 @@ export default function ProductDetailPage() {
         </p>
         {mockProduct.negotiable && (
           <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)] mt-1">
-            가격 제안 가능
+            {t('market.negotiable')}
           </p>
         )}
 
@@ -206,24 +219,24 @@ export default function ProductDetailPage() {
         {/* 상품 상태 */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">상품 상태</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.condition')}</p>
             <p className="text-[var(--text-body-sm)] font-medium">{conditionLabels[mockProduct.condition]}</p>
           </div>
           <div>
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">거래 방법</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.shippingType')}</p>
             <p className="text-[var(--text-body-sm)] font-medium">
-              {mockProduct.shippingType === 'DIRECT' ? '직거래' : mockProduct.shippingType === 'DELIVERY' ? '배송' : '직거래, 배송'}
+              {mockProduct.shippingType === 'DIRECT' ? t('market.shipping_direct') : mockProduct.shippingType === 'DELIVERY' ? t('market.shipping_delivery') : t('market.shipping_directAndDelivery')}
             </p>
           </div>
           <div>
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">거래 희망 지역</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.location')}</p>
             <p className="text-[var(--text-body-sm)] font-medium">{mockProduct.location}</p>
           </div>
         </div>
 
         {/* 상품 설명 */}
         <div>
-          <h2 className="text-[var(--text-body)] font-semibold mb-2">상품 설명</h2>
+          <h2 className="text-[var(--text-body)] font-semibold mb-2">{t('market.description')}</h2>
           <p className="text-[var(--text-body-sm)] text-[var(--foreground-secondary)] whitespace-pre-line">
             {mockProduct.description}
           </p>
@@ -233,11 +246,11 @@ export default function ProductDetailPage() {
 
         {/* 통계 */}
         <div className="flex items-center gap-4 text-[var(--text-caption)] text-[var(--foreground-muted)]">
-          <span>조회 {mockProduct.viewCount}</span>
-          <span>·</span>
-          <span>찜 {mockProduct.likeCount}</span>
-          <span>·</span>
-          <span>채팅 {mockProduct.chatCount}</span>
+          <span>{t('market.views')} {mockProduct.viewCount}</span>
+          <span>&middot;</span>
+          <span>{t('market.likes')} {mockProduct.likeCount}</span>
+          <span>&middot;</span>
+          <span>{t('market.chats')} {mockProduct.chatCount}</span>
         </div>
       </div>
 
@@ -262,13 +275,13 @@ export default function ProductDetailPage() {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
             </svg>
-            채팅하기
+            {t('market.chatWithSeller')}
           </button>
           <button className="btn btn-primary flex-1">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
             </svg>
-            구매하기
+            {t('market.buyNow')}
           </button>
         </div>
       </div>

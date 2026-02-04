@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/i18n';
 
 type TxStatus = 'ESCROW' | 'COMPLETED' | 'DISPUTE' | 'CANCELLED' | 'REFUNDED';
 
@@ -24,12 +25,8 @@ const mockTransactions: Transaction[] = [
   { id: 'tx5', productTitle: '닌텐도 스위치 OLED', buyer: { name: '임유저', grade: 'BRONZE' }, seller: { name: '신판매', grade: 'DIAMOND' }, amount: 4000, fee: 160, status: 'REFUNDED', createdAt: '2024-02-01 15:45', completedAt: '2024-02-02 10:00' },
 ];
 
-const STATUS_INFO: Record<TxStatus, { name: string; color: string }> = {
-  ESCROW: { name: '에스크로', color: 'bg-blue-100 text-blue-700' },
-  COMPLETED: { name: '완료', color: 'bg-green-100 text-green-700' },
-  DISPUTE: { name: '분쟁', color: 'bg-red-100 text-red-700' },
-  CANCELLED: { name: '취소', color: 'bg-gray-100 text-gray-700' },
-  REFUNDED: { name: '환불', color: 'bg-orange-100 text-orange-700' },
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
 };
 
 const GRADE_COLORS: Record<string, string> = {
@@ -41,6 +38,7 @@ const GRADE_COLORS: Record<string, string> = {
 };
 
 export default function TransactionsPage() {
+  const { t, locale } = useTranslation();
   const [transactions] = useState(mockTransactions);
   const [filterStatus, setFilterStatus] = useState<TxStatus | 'ALL'>('ALL');
   const [search, setSearch] = useState('');
@@ -48,7 +46,15 @@ export default function TransactionsPage() {
   const [showActionModal, setShowActionModal] = useState(false);
   const [actionType, setActionType] = useState<'release' | 'refund' | 'cancel' | null>(null);
 
-  const formatNumber = (num: number) => new Intl.NumberFormat('ko-KR').format(num);
+  const STATUS_INFO: Record<TxStatus, { name: string; color: string }> = {
+    ESCROW: { name: t('admin.status_escrow'), color: 'bg-blue-100 text-blue-700' },
+    COMPLETED: { name: t('admin.status_completed'), color: 'bg-green-100 text-green-700' },
+    DISPUTE: { name: t('admin.status_dispute'), color: 'bg-red-100 text-red-700' },
+    CANCELLED: { name: t('admin.status_cancelled'), color: 'bg-gray-100 text-gray-700' },
+    REFUNDED: { name: t('admin.status_refunded'), color: 'bg-orange-100 text-orange-700' },
+  };
+
+  const formatNumber = (num: number) => new Intl.NumberFormat(LOCALE_MAP[locale] || 'ko-KR').format(num);
 
   const filteredTransactions = transactions.filter(tx => {
     const matchesSearch = tx.productTitle.includes(search) ||
@@ -74,8 +80,8 @@ export default function TransactionsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">거래 관리</h1>
-        <p className="text-[var(--foreground-muted)]">모든 거래를 조회하고 관리합니다</p>
+        <h1 className="text-2xl font-bold">{t('admin.transactionMgmt')}</h1>
+        <p className="text-[var(--foreground-muted)]">{t('admin.transactionMgmtDesc')}</p>
       </div>
 
       {/* 통계 카드 */}
@@ -105,7 +111,7 @@ export default function TransactionsPage() {
           <div className="flex-1 min-w-[200px]">
             <input
               type="text"
-              placeholder="상품명, 구매자, 판매자 검색..."
+              placeholder={t('admin.searchTx')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
@@ -119,7 +125,7 @@ export default function TransactionsPage() {
                 : 'border border-[var(--border-color)]'
             }`}
           >
-            전체
+            {t('admin.all')}
           </button>
         </div>
       </div>
@@ -130,15 +136,15 @@ export default function TransactionsPage() {
           <table className="w-full">
             <thead className="bg-[var(--background-secondary)]">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium">거래 ID</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">상품</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">구매자</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">판매자</th>
-                <th className="px-4 py-3 text-right text-sm font-medium">금액</th>
-                <th className="px-4 py-3 text-right text-sm font-medium">수수료</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">상태</th>
-                <th className="px-4 py-3 text-left text-sm font-medium">일시</th>
-                <th className="px-4 py-3 text-center text-sm font-medium">작업</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_txId')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_product')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_buyer')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_seller')}</th>
+                <th className="px-4 py-3 text-right text-sm font-medium">{t('admin.col_amount')}</th>
+                <th className="px-4 py-3 text-right text-sm font-medium">{t('admin.col_fee')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_status')}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_datetime')}</th>
+                <th className="px-4 py-3 text-center text-sm font-medium">{t('admin.col_action')}</th>
               </tr>
             </thead>
             <tbody>
@@ -182,13 +188,13 @@ export default function TransactionsPage() {
                             onClick={() => handleAction(tx, 'release')}
                             className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-[var(--border-radius)] hover:bg-green-200"
                           >
-                            해제
+                            {t('admin.release')}
                           </button>
                           <button
                             onClick={() => handleAction(tx, 'refund')}
                             className="px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded-[var(--border-radius)] hover:bg-orange-200"
                           >
-                            환불
+                            {t('admin.refund')}
                           </button>
                         </>
                       )}
@@ -198,13 +204,13 @@ export default function TransactionsPage() {
                             onClick={() => handleAction(tx, 'release')}
                             className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-[var(--border-radius)] hover:bg-green-200"
                           >
-                            판매자승
+                            {t('admin.sellerWins')}
                           </button>
                           <button
                             onClick={() => handleAction(tx, 'refund')}
                             className="px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded-[var(--border-radius)] hover:bg-orange-200"
                           >
-                            구매자승
+                            {t('admin.buyerWins')}
                           </button>
                         </>
                       )}
@@ -221,7 +227,7 @@ export default function TransactionsPage() {
 
         {filteredTransactions.length === 0 && (
           <div className="p-8 text-center text-[var(--foreground-muted)]">
-            검색 결과가 없습니다
+            {t('admin.noResults')}
           </div>
         )}
       </div>
@@ -231,9 +237,9 @@ export default function TransactionsPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] w-full max-w-md">
             <h3 className="text-lg font-bold mb-4">
-              {actionType === 'release' && '에스크로 해제'}
-              {actionType === 'refund' && '환불 처리'}
-              {actionType === 'cancel' && '거래 취소'}
+              {actionType === 'release' && t('admin.escrowRelease')}
+              {actionType === 'refund' && t('admin.refundProcess')}
+              {actionType === 'cancel' && t('admin.cancelTransaction')}
             </h3>
             <div className="bg-[var(--background-secondary)] p-4 rounded-[var(--border-radius)] mb-4">
               <p className="text-sm font-medium">{selectedTx.productTitle}</p>
@@ -243,16 +249,16 @@ export default function TransactionsPage() {
               <p className="text-lg font-bold mt-2">{formatNumber(selectedTx.amount)} CROWNY</p>
             </div>
             <p className="text-sm text-[var(--foreground-muted)] mb-4">
-              {actionType === 'release' && '판매자에게 대금이 지급됩니다. 이 작업은 되돌릴 수 없습니다.'}
-              {actionType === 'refund' && '구매자에게 대금이 환불됩니다. 이 작업은 되돌릴 수 없습니다.'}
-              {actionType === 'cancel' && '거래가 취소되고 구매자에게 대금이 반환됩니다.'}
+              {actionType === 'release' && t('admin.releaseDesc')}
+              {actionType === 'refund' && t('admin.refundDesc')}
+              {actionType === 'cancel' && t('admin.cancelDesc')}
             </p>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">처리 사유</label>
+              <label className="block text-sm font-medium mb-1">{t('admin.processReason')}</label>
               <textarea
                 className="w-full px-3 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)] text-sm"
                 rows={3}
-                placeholder="처리 사유를 입력하세요..."
+                placeholder={t('admin.enterProcessReason')}
               />
             </div>
             <div className="flex gap-3">
@@ -260,7 +266,7 @@ export default function TransactionsPage() {
                 onClick={() => setShowActionModal(false)}
                 className="flex-1 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
               >
-                취소
+                {t('cancel')}
               </button>
               <button
                 onClick={confirmAction}
@@ -269,7 +275,7 @@ export default function TransactionsPage() {
                   actionType === 'refund' ? 'bg-orange-600' : 'bg-gray-600'
                 }`}
               >
-                확인
+                {t('confirm')}
               </button>
             </div>
           </div>

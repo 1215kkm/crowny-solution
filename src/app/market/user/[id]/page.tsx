@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard, { Product } from '@/components/market/ProductCard';
+import { useTranslation } from '@/i18n';
 
 // 임시 사용자 데이터
 const mockUser = {
@@ -57,16 +58,18 @@ const mockProducts: Product[] = [
   },
 ];
 
-const gradeInfo = {
-  SUPER_ADMIN: { label: '슈퍼관리자', color: 'bg-purple-600', textColor: 'text-white' },
-  CROWN: { label: '크라운', color: 'bg-amber-400', textColor: 'text-neutral-900' },
-  DIAMOND: { label: '다이아몬드', color: 'bg-cyan-500', textColor: 'text-white' },
-  GOLD: { label: '골드', color: 'bg-amber-500', textColor: 'text-neutral-900' },
-  SILVER: { label: '실버', color: 'bg-neutral-400', textColor: 'text-white' },
-  BRONZE: { label: '브론즈', color: 'bg-orange-600', textColor: 'text-white' },
-};
-
 export default function UserProfilePage() {
+  const { t } = useTranslation();
+
+  const gradeInfo = {
+    SUPER_ADMIN: { label: t('grade_super_admin'), color: 'bg-purple-600', textColor: 'text-white' },
+    CROWN: { label: t('grade_crown'), color: 'bg-amber-400', textColor: 'text-neutral-900' },
+    DIAMOND: { label: t('grade_diamond'), color: 'bg-cyan-500', textColor: 'text-white' },
+    GOLD: { label: t('grade_gold'), color: 'bg-amber-500', textColor: 'text-neutral-900' },
+    SILVER: { label: t('grade_silver'), color: 'bg-neutral-400', textColor: 'text-white' },
+    BRONZE: { label: t('grade_bronze'), color: 'bg-orange-600', textColor: 'text-white' },
+  };
+
   const currentGrade = gradeInfo[mockUser.grade];
 
   return (
@@ -79,7 +82,7 @@ export default function UserProfilePage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </Link>
-          <h1 className="text-base font-semibold">판매자 정보</h1>
+          <h1 className="text-base font-semibold">{t('sellerInfo')}</h1>
           <button className="p-2">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
@@ -122,11 +125,11 @@ export default function UserProfilePage() {
                   <span className="font-medium">{mockUser.rating}</span>
                 </div>
                 <span>·</span>
-                <span>리뷰 {mockUser.reviewCount}</span>
+                <span>{t('review')} {mockUser.reviewCount}</span>
                 <span>·</span>
-                <span>팔로워 {mockUser.followerCount}</span>
+                <span>{t('follower')} {mockUser.followerCount}</span>
               </div>
-              <p className="text-xs text-neutral-400">{mockUser.location} · 가입일 {mockUser.createdAt}</p>
+              <p className="text-xs text-neutral-400">{mockUser.location} · {t('joinDate')} {mockUser.createdAt}</p>
             </div>
           </div>
 
@@ -140,11 +143,11 @@ export default function UserProfilePage() {
           {/* 응답률 */}
           <div className="mt-4 flex gap-4 text-xs">
             <div className="flex items-center gap-1.5">
-              <span className="text-neutral-400">응답률</span>
+              <span className="text-neutral-400">{t('responseRate')}</span>
               <span className="font-medium text-neutral-700">{mockUser.responseRate}%</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-neutral-400">응답시간</span>
+              <span className="text-neutral-400">{t('responseTime')}</span>
               <span className="font-medium text-neutral-700">{mockUser.responseTime}</span>
             </div>
           </div>
@@ -152,10 +155,10 @@ export default function UserProfilePage() {
           {/* 액션 버튼 */}
           <div className="mt-4 flex gap-2">
             <button className="flex-1 py-2.5 border border-neutral-300 rounded-[3px] text-sm font-medium hover:bg-neutral-50 transition">
-              팔로우
+              {t('follow')}
             </button>
             <button className="flex-1 py-2.5 bg-neutral-900 text-white rounded-[3px] text-sm font-medium hover:bg-neutral-800 transition">
-              문의하기
+              {t('inquiry')}
             </button>
           </div>
         </div>
@@ -164,10 +167,10 @@ export default function UserProfilePage() {
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-semibold text-neutral-900">
-              판매 상품 <span className="text-neutral-400 font-normal">{mockProducts.length}</span>
+              {t('market.sellingProducts')} <span className="text-neutral-400 font-normal">{mockProducts.length}</span>
             </h3>
             <button className="text-sm text-neutral-500">
-              최신순
+              {t('latest')}
             </button>
           </div>
 
@@ -182,7 +185,7 @@ export default function UserProfilePage() {
               <svg className="w-12 h-12 mx-auto text-neutral-300 mb-3" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
-              <p className="text-sm text-neutral-500">판매 중인 상품이 없습니다</p>
+              <p className="text-sm text-neutral-500">{t('market.noProducts')}</p>
             </div>
           )}
         </div>

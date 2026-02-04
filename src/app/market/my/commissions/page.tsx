@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation, type Locale } from '@/i18n';
 
 type MarketGrade = 'SUPER_ADMIN' | 'CROWN' | 'DIAMOND' | 'GOLD' | 'SILVER' | 'BRONZE';
 
@@ -78,24 +79,34 @@ const mockStats = {
   rate: 0.25,
 };
 
-const gradeInfo: Record<MarketGrade, { label: string; color: string; rate: string }> = {
-  SUPER_ADMIN: { label: '슈퍼관리자', color: 'bg-[var(--grade-super-admin)]', rate: '0.5%' },
-  CROWN: { label: '크라운', color: 'bg-[var(--grade-crown)] text-[var(--foreground)]', rate: '1.5%' },
-  DIAMOND: { label: '다이아몬드', color: 'bg-[var(--grade-diamond)]', rate: '1.0%' },
-  GOLD: { label: '골드', color: 'bg-[var(--grade-gold)] text-[var(--foreground)]', rate: '0.75%' },
-  SILVER: { label: '실버', color: 'bg-[var(--grade-silver)]', rate: '0.25%' },
-  BRONZE: { label: '브론즈', color: 'bg-[var(--grade-bronze)]', rate: '0%' },
+const LOCALE_MAP: Record<Locale, string> = {
+  ko: 'ko-KR',
+  en: 'en-US',
+  zh: 'zh-CN',
+  ja: 'ja-JP',
+  vi: 'vi-VN',
+  th: 'th-TH',
 };
 
 export default function CommissionsPage() {
+  const { t, locale } = useTranslation();
   const [period, setPeriod] = useState<'all' | 'month' | 'week'>('all');
 
+  const gradeInfo: Record<MarketGrade, { label: string; color: string; rate: string }> = {
+    SUPER_ADMIN: { label: t('grade_super_admin'), color: 'bg-[var(--grade-super-admin)]', rate: '0.5%' },
+    CROWN: { label: t('grade_crown'), color: 'bg-[var(--grade-crown)] text-[var(--foreground)]', rate: '1.5%' },
+    DIAMOND: { label: t('grade_diamond'), color: 'bg-[var(--grade-diamond)]', rate: '1.0%' },
+    GOLD: { label: t('grade_gold'), color: 'bg-[var(--grade-gold)] text-[var(--foreground)]', rate: '0.75%' },
+    SILVER: { label: t('grade_silver'), color: 'bg-[var(--grade-silver)]', rate: '0.25%' },
+    BRONZE: { label: t('grade_bronze'), color: 'bg-[var(--grade-bronze)]', rate: '0%' },
+  };
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(LOCALE_MAP[locale]).format(price);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
+    return new Date(dateString).toLocaleDateString(LOCALE_MAP[locale], {
       month: 'long',
       day: 'numeric',
     });
@@ -113,7 +124,7 @@ export default function CommissionsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </Link>
-          <h1 className="text-[var(--text-body)] font-semibold ml-2">수수료 내역</h1>
+          <h1 className="text-[var(--text-body)] font-semibold ml-2">{t('market.commissionHistory')}</h1>
         </div>
       </header>
 
@@ -123,31 +134,31 @@ export default function CommissionsPage() {
           <span className={`badge ${currentGrade.color} text-white mb-2`}>
             {currentGrade.label}
           </span>
-          <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)] mb-1">내 수수료율</p>
+          <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)] mb-1">{t('market.myCommissionRate')}</p>
           <p className="text-[var(--text-display)] font-bold text-[var(--accent)]">
             {currentGrade.rate}
           </p>
           <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mt-2">
-            산하 회원의 거래에서 발생하는 수수료를 받습니다
+            {t('market.commissionDesc')}
           </p>
         </div>
 
         {/* 수익 통계 */}
         <div className="grid grid-cols-3 gap-[var(--spacing-sm)] mb-[var(--spacing-lg)]">
           <div className="card p-[var(--spacing-md)] text-center">
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">이번달</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.thisMonth')}</p>
             <p className="text-[var(--text-h4)] font-bold text-[var(--success)]">
               +{formatPrice(mockStats.thisMonth)}
             </p>
           </div>
           <div className="card p-[var(--spacing-md)] text-center">
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">지난달</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.lastMonth')}</p>
             <p className="text-[var(--text-h4)] font-bold">
               +{formatPrice(mockStats.lastMonth)}
             </p>
           </div>
           <div className="card p-[var(--spacing-md)] text-center">
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">누적</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.cumulative')}</p>
             <p className="text-[var(--text-h4)] font-bold">
               +{formatPrice(mockStats.total)}
             </p>
@@ -156,7 +167,7 @@ export default function CommissionsPage() {
 
         {/* 등급별 수수료율 안내 */}
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-lg)]">
-          <h3 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">등급별 수수료율</h3>
+          <h3 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">{t('market.gradeCommissionRates')}</h3>
           <div className="space-y-2">
             {Object.entries(gradeInfo).map(([grade, info]) => (
               <div
@@ -170,7 +181,7 @@ export default function CommissionsPage() {
                     {info.label}
                   </span>
                   {grade === mockStats.grade && (
-                    <span className="text-[var(--text-tiny)] text-[var(--accent)]">현재</span>
+                    <span className="text-[var(--text-tiny)] text-[var(--accent)]">{t('market.current')}</span>
                   )}
                 </div>
                 <span className="text-[var(--text-body-sm)]">{info.rate}</span>
@@ -182,12 +193,12 @@ export default function CommissionsPage() {
         {/* 수수료 내역 */}
         <div className="mb-[var(--spacing-md)]">
           <div className="flex items-center justify-between mb-[var(--spacing-sm)]">
-            <h2 className="text-[var(--text-body-sm)] font-semibold">상세 내역</h2>
+            <h2 className="text-[var(--text-body-sm)] font-semibold">{t('market.detailedHistory')}</h2>
             <div className="flex gap-1">
               {[
-                { id: 'all', label: '전체' },
-                { id: 'month', label: '이번달' },
-                { id: 'week', label: '이번주' },
+                { id: 'all', label: t('all') },
+                { id: 'month', label: t('market.thisMonth') },
+                { id: 'week', label: t('market.thisWeek') },
               ].map((option) => (
                 <button
                   key={option.id}
@@ -228,9 +239,9 @@ export default function CommissionsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-[var(--text-caption)] text-[var(--foreground-secondary)]">
-                  <span>거래금액: {formatPrice(commission.orderAmount)}</span>
+                  <span>{t('market.transactionAmount')}: {formatPrice(commission.orderAmount)}</span>
                   <span>·</span>
-                  <span>수수료율: {commission.rate}%</span>
+                  <span>{t('market.commissionRate')}: {commission.rate}%</span>
                 </div>
               </div>
             ))}
@@ -240,7 +251,7 @@ export default function CommissionsPage() {
             <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p className="text-[var(--text-body-sm)]">수수료 내역이 없습니다</p>
+            <p className="text-[var(--text-body-sm)]">{t('market.noCommissions')}</p>
           </div>
         )}
       </div>

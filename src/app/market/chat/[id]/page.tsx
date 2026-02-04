@@ -3,6 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
+
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
+};
 
 interface Message {
   id: string;
@@ -85,6 +90,9 @@ const mockMessages: Message[] = [
 ];
 
 export default function ChatRoomPage() {
+  const { t, locale } = useTranslation();
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
   const [messages, setMessages] = useState(mockMessages);
   const [newMessage, setNewMessage] = useState('');
   const [showProductAction, setShowProductAction] = useState(false);
@@ -92,11 +100,11 @@ export default function ChatRoomPage() {
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString(intlLocale, { hour: '2-digit', minute: '2-digit' });
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
 
   const scrollToBottom = () => {
@@ -188,7 +196,7 @@ export default function ChatRoomPage() {
                 }}
                 className="btn btn-primary btn-sm"
               >
-                구매하기
+                {t('market.buyNow')}
               </button>
             )}
           </div>
@@ -222,7 +230,7 @@ export default function ChatRoomPage() {
                   {showTime && (
                     <p className={`text-[var(--text-tiny)] text-[var(--foreground-muted)] mt-1 ${isMe ? 'text-right' : ''}`}>
                       {formatTime(message.createdAt)}
-                      {isMe && message.isRead && <span className="ml-1">읽음</span>}
+                      {isMe && message.isRead && <span className="ml-1">{t('market.messageRead')}</span>}
                     </p>
                   )}
                 </div>
@@ -246,7 +254,7 @@ export default function ChatRoomPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="메시지를 입력하세요"
+              placeholder={t('market.enterMessage')}
               className="input resize-none min-h-[40px] max-h-[120px] py-2"
               rows={1}
             />
@@ -268,22 +276,22 @@ export default function ChatRoomPage() {
         <>
           <div className="overlay" onClick={() => setShowProductAction(false)} />
           <div className="modal p-[var(--spacing-lg)]">
-            <h2 className="text-[var(--text-h4)] font-bold mb-[var(--spacing-md)]">거래 방법 선택</h2>
+            <h2 className="text-[var(--text-h4)] font-bold mb-[var(--spacing-md)]">{t('market.selectShippingMethod')}</h2>
             <div className="space-y-2">
               <Link
                 href={`/market/order/${mockChatRoom.product.id}`}
                 className="btn btn-primary btn-lg btn-full"
               >
-                바로 구매하기
+                {t('market.buyNowDirect')}
               </Link>
               <button
                 onClick={() => {
                   setShowProductAction(false);
-                  setNewMessage('가격 제안: ');
+                  setNewMessage(t('market.priceOffer'));
                 }}
                 className="btn btn-outline btn-lg btn-full"
               >
-                가격 제안하기
+                {t('market.makeOffer')}
               </button>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslation } from '@/i18n';
 
 export interface Product {
   id: string;
@@ -19,9 +20,16 @@ interface ProductCardProps {
   product: Product;
 }
 
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
+};
+
 export default function ProductCard({ product }: ProductCardProps) {
+  const { t, locale } = useTranslation();
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
 
   const formatTime = (dateString: string) => {
@@ -32,11 +40,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (minutes < 1) return '방금 전';
-    if (minutes < 60) return `${minutes}분 전`;
-    if (hours < 24) return `${hours}시간 전`;
-    if (days < 7) return `${days}일 전`;
-    return date.toLocaleDateString('ko-KR');
+    if (minutes < 1) return t('market.time_justNow');
+    if (minutes < 60) return t('market.time_minutesAgo', { count: String(minutes) });
+    if (hours < 24) return t('market.time_hoursAgo', { count: String(hours) });
+    if (days < 7) return t('market.time_daysAgo', { count: String(days) });
+    return date.toLocaleDateString(intlLocale);
   };
 
   return (
@@ -44,7 +52,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       href={`/market/product/${product.id}`}
       className="block bg-white border border-neutral-200 rounded-[3px] overflow-hidden hover:border-neutral-400 hover:shadow-md transition-all"
     >
-      {/* 이미지 */}
       <div className="relative">
         <div className="aspect-square relative bg-neutral-100">
           {product.images[0] ? (
@@ -71,19 +78,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {/* 상태 뱃지 */}
         {product.status !== 'ACTIVE' && (
           <div className={`absolute top-2 left-2 px-2 py-0.5 text-[10px] font-medium rounded-[3px] ${
             product.status === 'RESERVED'
               ? 'bg-amber-100 text-amber-700'
               : 'bg-neutral-900 text-white'
           }`}>
-            {product.status === 'RESERVED' ? '예약중' : '거래완료'}
+            {product.status === 'RESERVED' ? t('status_reserved') : t('status_sold')}
           </div>
         )}
       </div>
 
-      {/* 정보 */}
       <div className="p-3">
         <h3 className="text-sm font-medium text-neutral-800 line-clamp-2 mb-1 leading-snug">
           {product.title}

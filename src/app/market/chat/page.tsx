@@ -2,6 +2,11 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
+
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
+};
 
 // 임시 채팅방 데이터
 const mockChatRooms = [
@@ -68,6 +73,9 @@ const mockChatRooms = [
 ];
 
 export default function ChatListPage() {
+  const { t, locale } = useTranslation();
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -76,15 +84,15 @@ export default function ChatListPage() {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (minutes < 1) return '방금';
-    if (minutes < 60) return `${minutes}분 전`;
-    if (hours < 24) return `${hours}시간 전`;
-    if (days < 7) return `${days}일 전`;
-    return date.toLocaleDateString('ko-KR');
+    if (minutes < 1) return t('market.time_just');
+    if (minutes < 60) return t('market.time_minutesAgo', { count: String(minutes) });
+    if (hours < 24) return t('market.time_hoursAgo', { count: String(hours) });
+    if (days < 7) return t('market.time_daysAgo', { count: String(days) });
+    return date.toLocaleDateString(intlLocale);
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
 
   return (
@@ -92,7 +100,7 @@ export default function ChatListPage() {
       {/* 헤더 */}
       <header className="sticky top-0 z-30 bg-[var(--background)] border-b border-[var(--border-color)]">
         <div className="flex items-center justify-between px-[var(--spacing-md)] h-[var(--header-height)]">
-          <h1 className="text-[var(--text-h4)] font-bold">채팅</h1>
+          <h1 className="text-[var(--text-h4)] font-bold">{t('chat')}</h1>
           <button className="p-2">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
@@ -162,9 +170,9 @@ export default function ChatListPage() {
             <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
             </svg>
-            <p className="text-[var(--text-body)] mb-1">채팅 내역이 없습니다</p>
+            <p className="text-[var(--text-body)] mb-1">{t('market.noChatHistory')}</p>
             <p className="text-[var(--text-body-sm)] text-[var(--foreground-muted)]">
-              관심있는 상품에 채팅을 보내보세요
+              {t('market.trySendChat')}
             </p>
           </div>
         )}
