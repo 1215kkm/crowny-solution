@@ -55,5 +55,10 @@
   "sellerInfo": "ข้อมูลผู้ขาย",
   "deleteAll": "ลบทั้งหมด",
   "profile": "โปรไฟล์",
-  "required": "*"
+  "required": "*",
+  "nav_about": "เกี่ยวกับ",
+  "nav_enterprises": "องค์กร",
+  "nav_market": "ตลาด",
+  "nav_dashboard": "แดชบอร์ด",
+  "nav_companySite": "เว็บไซต์บริษัท"
 }

@@ -55,5 +55,10 @@
   "sellerInfo": "Seller Info",
   "deleteAll": "Clear All",
   "profile": "Profile",
-  "required": "*"
+  "required": "*",
+  "nav_about": "About",
+  "nav_enterprises": "Enterprises",
+  "nav_market": "Market",
+  "nav_dashboard": "Dashboard",
+  "nav_companySite": "Company Site"
 }

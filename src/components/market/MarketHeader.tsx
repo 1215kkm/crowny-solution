@@ -28,12 +28,20 @@ export default function MarketHeader() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="h-14 flex items-center justify-between">
           {/* 로고 */}
-          <Link href="/market" className="flex items-center gap-2">
-            <div className="flex flex-col items-start leading-none">
-              <span className="text-base font-black text-white tracking-tight">CROWNY</span>
-              <span className="text-[8px] font-medium text-amber-400 tracking-[0.2em]">MARKET</span>
-            </div>
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/market" className="flex items-center gap-2">
+              <div className="flex flex-col items-start leading-none">
+                <span className="text-base font-black text-white tracking-tight">CROWNY</span>
+                <span className="text-[8px] font-medium text-amber-400 tracking-[0.2em]">MARKET</span>
+              </div>
+            </Link>
+            <Link
+              href="/"
+              className="px-2 py-1 text-[11px] font-medium text-neutral-400 border border-neutral-700 rounded-[3px] hover:text-white hover:border-neutral-500 transition"
+            >
+              {t('nav_companySite')}
+            </Link>
+          </div>
 
           {/* 검색바 */}
           <div className="flex-1 max-w-md mx-8">

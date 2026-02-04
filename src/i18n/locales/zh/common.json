@@ -55,5 +55,10 @@
   "sellerInfo": "卖家信息",
   "deleteAll": "全部删除",
   "profile": "个人主页",
-  "required": "*"
+  "required": "*",
+  "nav_about": "介绍",
+  "nav_enterprises": "企业",
+  "nav_market": "商城",
+  "nav_dashboard": "仪表盘",
+  "nav_companySite": "公司官网"
 }

@@ -2,17 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
-const NAV_LINKS = [
-  { href: "/about", label: "소개" },
-  { href: "/enterprises", label: "기업" },
-  { href: "/tv", label: "TV" },
-  { href: "/market", label: "마켓" },
-  { href: "/dashboard", label: "대시보드" },
-];
+import { useTranslation } from "@/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
+
+  const NAV_LINKS = [
+    { href: "/about", label: t('nav_about') },
+    { href: "/enterprises", label: t('nav_enterprises') },
+    { href: "/tv", label: "TV" },
+    { href: "/market", label: t('nav_market') },
+    { href: "/dashboard", label: t('nav_dashboard') },
+  ];
 
   return (
     <nav className="bg-white/80 backdrop-blur-md border-b border-neutral-200 sticky top-0 z-50">
@@ -37,20 +40,26 @@ export function Navbar() {
             href="/login"
             className="ml-2 px-4 py-2 text-sm font-medium text-white bg-neutral-900 rounded-[3px] hover:bg-neutral-800 transition-all"
           >
-            로그인
+            {t('login')}
           </Link>
+          <div className="ml-2">
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* Mobile Hamburger Button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="sm:hidden flex flex-col justify-center items-center w-10 h-10 rounded-[3px] hover:bg-neutral-100 transition-all"
-          aria-label="메뉴 열기"
-        >
-          <span className={`block w-5 h-0.5 bg-neutral-700 transition-all duration-300 ${isOpen ? "rotate-45 translate-y-1" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-neutral-700 my-1 transition-all duration-300 ${isOpen ? "opacity-0" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-neutral-700 transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-1" : ""}`} />
-        </button>
+        <div className="flex items-center gap-2 sm:hidden">
+          <LanguageSwitcher />
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex flex-col justify-center items-center w-10 h-10 rounded-[3px] hover:bg-neutral-100 transition-all"
+            aria-label="Menu"
+          >
+            <span className={`block w-5 h-0.5 bg-neutral-700 transition-all duration-300 ${isOpen ? "rotate-45 translate-y-1" : ""}`} />
+            <span className={`block w-5 h-0.5 bg-neutral-700 my-1 transition-all duration-300 ${isOpen ? "opacity-0" : ""}`} />
+            <span className={`block w-5 h-0.5 bg-neutral-700 transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-1" : ""}`} />
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
@@ -75,7 +84,7 @@ export function Navbar() {
             onClick={() => setIsOpen(false)}
             className="block mt-2 px-4 py-3 text-sm font-medium text-center text-white bg-neutral-900 rounded-[3px] hover:bg-neutral-800 transition-all"
           >
-            로그인
+            {t('login')}
           </Link>
         </div>
       </div>

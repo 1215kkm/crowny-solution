@@ -55,5 +55,10 @@
   "sellerInfo": "販売者情報",
   "deleteAll": "すべて削除",
   "profile": "プロフィール",
-  "required": "*"
+  "required": "*",
+  "nav_about": "紹介",
+  "nav_enterprises": "企業",
+  "nav_market": "マーケット",
+  "nav_dashboard": "ダッシュボード",
+  "nav_companySite": "会社サイト"
 }

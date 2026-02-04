@@ -55,5 +55,10 @@
   "sellerInfo": "Thông tin người bán",
   "deleteAll": "Xóa tất cả",
   "profile": "Hồ sơ",
-  "required": "*"
+  "required": "*",
+  "nav_about": "Giới thiệu",
+  "nav_enterprises": "Doanh nghiệp",
+  "nav_market": "Chợ",
+  "nav_dashboard": "Bảng điều khiển",
+  "nav_companySite": "Trang công ty"
 }
