@@ -3,6 +3,8 @@
 import { useState, ReactNode } from 'react';
 import ProductCard, { Product } from '@/components/market/ProductCard';
 import Link from 'next/link';
+import { useTranslation } from '@/i18n';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import {
   HomeIcon,
   PhoneIcon,
@@ -16,18 +18,18 @@ import {
   PetsIcon,
 } from '@/components/Icons';
 
-// 카테고리 목록
-const categories: { id: string; name: string; icon: ReactNode }[] = [
-  { id: 'all', name: '전체', icon: <HomeIcon className="w-4 h-4" /> },
-  { id: 'digital', name: '디지털', icon: <PhoneIcon className="w-4 h-4" /> },
-  { id: 'fashion', name: '패션', icon: <StyleIcon className="w-4 h-4" /> },
-  { id: 'furniture', name: '가구', icon: <ChairIcon className="w-4 h-4" /> },
-  { id: 'car', name: '자동차', icon: <CarIcon className="w-4 h-4" /> },
-  { id: 'book', name: '도서', icon: <BookIcon className="w-4 h-4" /> },
-  { id: 'game', name: '게임', icon: <GamepadIcon className="w-4 h-4" /> },
-  { id: 'baby', name: '유아동', icon: <ChildIcon className="w-4 h-4" /> },
-  { id: 'sports', name: '스포츠', icon: <SportsIcon className="w-4 h-4" /> },
-  { id: 'pet', name: '반려동물', icon: <PetsIcon className="w-4 h-4" /> },
+// 카테고리 목록 (labelKey로 번역 키 참조)
+const categories: { id: string; labelKey: string; icon: ReactNode }[] = [
+  { id: 'all', labelKey: 'market.cat_all', icon: <HomeIcon className="w-4 h-4" /> },
+  { id: 'digital', labelKey: 'market.cat_digital', icon: <PhoneIcon className="w-4 h-4" /> },
+  { id: 'fashion', labelKey: 'market.cat_fashion', icon: <StyleIcon className="w-4 h-4" /> },
+  { id: 'furniture', labelKey: 'market.cat_furniture', icon: <ChairIcon className="w-4 h-4" /> },
+  { id: 'car', labelKey: 'market.cat_car', icon: <CarIcon className="w-4 h-4" /> },
+  { id: 'book', labelKey: 'market.cat_book', icon: <BookIcon className="w-4 h-4" /> },
+  { id: 'game', labelKey: 'market.cat_game', icon: <GamepadIcon className="w-4 h-4" /> },
+  { id: 'baby', labelKey: 'market.cat_baby', icon: <ChildIcon className="w-4 h-4" /> },
+  { id: 'sports', labelKey: 'market.cat_sports', icon: <SportsIcon className="w-4 h-4" /> },
+  { id: 'pet', labelKey: 'market.cat_pet', icon: <PetsIcon className="w-4 h-4" /> },
 ];
 
 // 임시 상품 데이터
@@ -102,6 +104,7 @@ const mockProducts: Product[] = [
 
 export default function MarketHomePage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -115,14 +118,12 @@ export default function MarketHomePage() {
               <span className="text-[8px] font-medium text-amber-400 tracking-[0.2em]">MARKET</span>
             </div>
             <div className="flex items-center gap-1">
+              <LanguageSwitcher />
               <button className="p-2 text-neutral-400 hover:text-white transition">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                 </svg>
               </button>
-              <Link href="/" className="px-2 py-1 text-xs text-neutral-500 hover:text-neutral-300 transition">
-                메인
-              </Link>
             </div>
           </div>
 
@@ -133,7 +134,7 @@ export default function MarketHomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
               <span className="text-sm text-neutral-500">
-                상품명, 지역명으로 검색
+                {t('market.searchPlaceholder')}
               </span>
             </div>
           </Link>
@@ -155,7 +156,7 @@ export default function MarketHomePage() {
                 }`}
               >
                 {category.icon}
-                {category.name}
+                {t(category.labelKey)}
               </button>
             ))}
           </div>
@@ -173,12 +174,12 @@ export default function MarketHomePage() {
             </div>
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs text-neutral-400 mb-1">내 지갑</p>
+                <p className="text-xs text-neutral-400 mb-1">{t('market.wallet')}</p>
                 <p className="text-2xl font-bold text-white">12,500 <span className="text-sm text-amber-400">CROWNY</span></p>
               </div>
               <div className="flex items-center gap-2">
                 <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-[3px] transition">
-                  충전
+                  {t('market.deposit')}
                 </button>
                 <svg className="w-5 h-5 text-neutral-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -192,12 +193,12 @@ export default function MarketHomePage() {
       {/* 상품 그리드 */}
       <div className="max-w-6xl mx-auto px-4 md:px-6 pb-4">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-neutral-900">최신 상품</h2>
+          <h2 className="text-lg font-bold text-neutral-900">{t('market.nearbyProducts')}</h2>
           <button className="text-sm text-neutral-500 flex items-center gap-1 hover:text-neutral-700 transition">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
             </svg>
-            필터
+            {t('filter')}
           </button>
         </div>
 
@@ -210,7 +211,7 @@ export default function MarketHomePage() {
         {/* 더보기 버튼 */}
         <div className="mt-8 text-center">
           <button className="px-8 py-3 border border-neutral-300 text-neutral-700 font-medium rounded-[3px] hover:bg-neutral-100 transition">
-            더 많은 상품 보기
+            {t('more')}
           </button>
         </div>
       </div>
