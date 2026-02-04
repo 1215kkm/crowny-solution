@@ -55,5 +55,10 @@
   "sellerInfo": "판매자 정보",
   "deleteAll": "전체 삭제",
   "profile": "프로필",
-  "required": "*"
+  "required": "*",
+  "nav_about": "소개",
+  "nav_enterprises": "기업",
+  "nav_market": "마켓",
+  "nav_dashboard": "대시보드",
+  "nav_companySite": "회사 사이트"
 }

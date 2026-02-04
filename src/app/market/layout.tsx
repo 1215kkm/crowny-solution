@@ -3,6 +3,7 @@
 import { ReactNode, useMemo } from 'react';
 import BottomNav from '@/components/market/BottomNav';
 import MarketHeader from '@/components/market/MarketHeader';
+import MobileMarketTopBar from '@/components/market/MobileMarketTopBar';
 import { I18nProvider, Namespace } from '@/i18n';
 
 interface MarketLayoutProps {
@@ -15,6 +16,9 @@ export default function MarketLayout({ children }: MarketLayoutProps) {
   return (
     <I18nProvider namespaces={namespaces}>
       <div className="min-h-screen bg-neutral-50">
+        {/* 모바일 상단 바 (회사 사이트 링크 + 언어선택) */}
+        <MobileMarketTopBar />
+
         {/* 헤더 (PC에서만 표시) */}
         <MarketHeader />
 
