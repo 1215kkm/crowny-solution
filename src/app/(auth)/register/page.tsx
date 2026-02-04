@@ -3,15 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-const ROLES = [
-  { value: "GLOBAL_ADMIN", label: "관리자 (Admin)" },
-  { value: "BUSINESSMAN", label: "사업자 (Business)" },
-  { value: "INVESTOR", label: "투자자 (Investor)" },
-];
+import { useTranslation } from "@/i18n";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -20,6 +16,12 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const ROLES = [
+    { value: "GLOBAL_ADMIN", label: t("site.register_roleAdmin") },
+    { value: "BUSINESSMAN", label: t("site.register_roleBusiness") },
+    { value: "INVESTOR", label: t("site.register_roleInvestor") },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +45,7 @@ export default function RegisterPage() {
 
       router.push("/login");
     } catch {
-      setError("회원가입 중 오류가 발생했습니다.");
+      setError(t("site.register_error"));
       setLoading(false);
     }
   };
@@ -61,8 +63,8 @@ export default function RegisterPage() {
 
         {/* Form Card */}
         <div className="bg-white p-8 rounded-[3px] border border-neutral-200">
-          <h1 className="text-2xl font-bold text-neutral-900 text-center mb-2">회원가입</h1>
-          <p className="text-sm text-neutral-500 text-center mb-6">CROWNY 파트너로 등록하세요</p>
+          <h1 className="text-2xl font-bold text-neutral-900 text-center mb-2">{t("site.register_title")}</h1>
+          <p className="text-sm text-neutral-500 text-center mb-6">{t("site.register_desc")}</p>
 
           {error && (
             <div className="bg-neutral-50 text-neutral-700 p-3 rounded-[3px] mb-4 text-sm border border-neutral-300">
@@ -72,19 +74,19 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">이름</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">{t("site.register_name")}</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full px-4 py-2.5 border border-neutral-200 rounded-[3px] focus:ring-2 focus:ring-neutral-400 focus:border-transparent outline-none transition text-sm"
-                placeholder="홍길동"
+                placeholder={t("site.register_namePlaceholder")}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">이메일</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">{t("site.register_email")}</label>
               <input
                 type="email"
                 value={form.email}
@@ -96,20 +98,20 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">비밀번호</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">{t("site.register_password")}</label>
               <input
                 type="password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="w-full px-4 py-2.5 border border-neutral-200 rounded-[3px] focus:ring-2 focus:ring-neutral-400 focus:border-transparent outline-none transition text-sm"
-                placeholder="6자 이상 입력"
+                placeholder={t("site.register_passwordPlaceholder")}
                 minLength={6}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">역할 선택</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">{t("site.register_role")}</label>
               <select
                 value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
@@ -128,15 +130,15 @@ export default function RegisterPage() {
               disabled={loading}
               className="w-full py-2.5 bg-neutral-900 text-white font-medium rounded-[3px] hover:bg-neutral-800 disabled:opacity-50 transition text-sm"
             >
-              {loading ? "가입 중..." : "회원가입"}
+              {loading ? t("site.register_loading") : t("site.register_submit")}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-neutral-500">
-              이미 계정이 있으신가요?{" "}
+              {t("site.register_hasAccount")}{" "}
               <Link href="/login" className="text-neutral-900 font-medium hover:underline">
-                로그인
+                {t("site.register_login")}
               </Link>
             </p>
           </div>

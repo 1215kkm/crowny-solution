@@ -6,13 +6,7 @@ import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { CountUp } from "@/components/CountUp";
-
-const CATEGORIES = [
-  { id: "business", name: "Business & Wealth", desc: "매출 직접 견인형", color: "from-amber-400/[0.3]" },
-  { id: "tech", name: "Tech & Innovation", desc: "기술 브랜딩형", color: "from-cyan-400/[0.3]" },
-  { id: "art", name: "Art & Culture", desc: "팬덤/감성 브랜딩형", color: "from-purple-400/[0.3]" },
-  { id: "global", name: "Global & Social Impact", desc: "사회공헌/확장형", color: "from-emerald-400/[0.3]" },
-];
+import { useTranslation } from "@/i18n";
 
 const PROJECTS = [
   // Category A: Business & Wealth
@@ -52,7 +46,15 @@ const EVENT_PHOTOS = [
 ];
 
 export default function TVPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("business");
+
+  const CATEGORIES = [
+    { id: "business", name: "Business & Wealth", desc: t("site.tv_catBusinessDesc"), color: "from-amber-400/[0.3]" },
+    { id: "tech", name: "Tech & Innovation", desc: t("site.tv_catTechDesc"), color: "from-cyan-400/[0.3]" },
+    { id: "art", name: "Art & Culture", desc: t("site.tv_catArtDesc"), color: "from-purple-400/[0.3]" },
+    { id: "global", name: "Global & Social Impact", desc: t("site.tv_catGlobalDesc"), color: "from-emerald-400/[0.3]" },
+  ];
 
   const filteredProjects = PROJECTS.filter((p) => p.category === activeTab);
 
@@ -71,7 +73,7 @@ export default function TVPage() {
             <div className="text-center mb-8">
               <div className="inline-block px-3 py-1 bg-neutral-800/80 border border-neutral-700 rounded-[3px] text-sm text-rose-300 mb-4">2026 - 2027</div>
               <h1 className="text-4xl md:text-5xl font-bold mb-3">CROWNY TV</h1>
-              <p className="text-neutral-400 text-lg">&ldquo;전문성을 넘어, 가치를 증명하는 사람들&rdquo;</p>
+              <p className="text-neutral-400 text-lg">&ldquo;{t("site.tv_heroSubtitle")}&rdquo;</p>
             </div>
           </ScrollReveal>
 
@@ -80,19 +82,19 @@ export default function TVPage() {
             <ScrollReveal delay={0.1}>
               <div className="text-center">
                 <p className="text-3xl md:text-4xl font-bold"><CountUp end={12} duration={1.5} /></p>
-                <p className="text-xs text-neutral-400 mt-1">프로젝트</p>
+                <p className="text-xs text-neutral-400 mt-1">{t("site.tv_projects")}</p>
               </div>
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
               <div className="text-center">
                 <p className="text-3xl md:text-4xl font-bold"><CountUp end={84} duration={2} /></p>
-                <p className="text-xs text-neutral-400 mt-1">에피소드</p>
+                <p className="text-xs text-neutral-400 mt-1">{t("site.tv_episodes")}</p>
               </div>
             </ScrollReveal>
             <ScrollReveal delay={0.3}>
               <div className="text-center">
                 <p className="text-3xl md:text-4xl font-bold text-rose-300">5%+</p>
-                <p className="text-xs text-neutral-400 mt-1">수익 목표</p>
+                <p className="text-xs text-neutral-400 mt-1">{t("site.tv_revenueGoal")}</p>
               </div>
             </ScrollReveal>
           </div>
@@ -100,11 +102,11 @@ export default function TVPage() {
           {/* Quick Links */}
           <ScrollReveal delay={0.4}>
             <div className="flex flex-wrap justify-center gap-2">
-              <a href="#projects" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">프로젝트</a>
-              <a href="#matthew" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">매튜쇼</a>
-              <a href="#benefits" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">기대효과</a>
-              <a href="#rewards" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">참여혜택</a>
-              <a href="#events" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">최근 행사</a>
+              <a href="#projects" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">{t("site.tv_linkProjects")}</a>
+              <a href="#matthew" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">{t("site.tv_linkMatthew")}</a>
+              <a href="#benefits" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">{t("site.tv_linkBenefits")}</a>
+              <a href="#rewards" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">{t("site.tv_linkRewards")}</a>
+              <a href="#events" className="px-4 py-2 bg-neutral-800/60 border border-neutral-700 rounded-[3px] text-sm hover:bg-neutral-700 transition">{t("site.tv_linkEvents")}</a>
             </div>
           </ScrollReveal>
         </div>
@@ -115,8 +117,8 @@ export default function TVPage() {
         <div className="max-w-6xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-2">4 Pillars</h2>
-              <p className="text-neutral-500">전략적 콘텐츠 분류</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-2">{t("site.tv_pillarsTitle")}</h2>
+              <p className="text-neutral-500">{t("site.tv_pillarsDesc")}</p>
             </div>
           </ScrollReveal>
 
@@ -165,7 +167,7 @@ export default function TVPage() {
                   </div>
                   <p className="text-sm text-neutral-600 mb-4">{project.desc}</p>
                   <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="px-2 py-1 bg-neutral-100 text-neutral-600 rounded-[3px]">담당: {project.manager}</span>
+                    <span className="px-2 py-1 bg-neutral-100 text-neutral-600 rounded-[3px]">{t("site.tv_manager")} {project.manager}</span>
                     <span className="px-2 py-1 bg-neutral-100 text-neutral-600 rounded-[3px]">{project.value}</span>
                   </div>
                 </div>
@@ -180,9 +182,9 @@ export default function TVPage() {
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-10">
-              <span className="text-xs font-mono text-neutral-400">FEATURED PROJECT</span>
-              <h2 className="text-3xl font-bold text-neutral-900 mb-2">매튜쇼: The Outliers</h2>
-              <p className="text-neutral-500">기술·금융·업무 관련 전문 인터뷰쇼</p>
+              <span className="text-xs font-mono text-neutral-400">{t("site.tv_featuredProject")}</span>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-2">{t("site.tv_matthewTitle")}</h2>
+              <p className="text-neutral-500">{t("site.tv_matthewDesc")}</p>
             </div>
           </ScrollReveal>
 
@@ -199,7 +201,7 @@ export default function TVPage() {
 
           <ScrollReveal delay={0.5}>
             <p className="text-center text-xs text-neutral-400 mt-6">
-              전문적 이미지 유지 · 아웃라이어 컨텐츠 · 7회 초과 시 몰입도 상승
+              {t("site.tv_matthewNote")}
             </p>
           </ScrollReveal>
         </div>
@@ -210,18 +212,18 @@ export default function TVPage() {
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-2">기대 효과</h2>
-              <p className="text-neutral-500">CROWNY TV가 만들어갈 가치</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-2">{t("site.tv_benefitsTitle")}</h2>
+              <p className="text-neutral-500">{t("site.tv_benefitsDesc")}</p>
             </div>
           </ScrollReveal>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { title: "브랜드 자산 가치 상승", desc: "단순 채널을 넘어 하나의 '미디어 하우스'로 등극", icon: "B" },
-              { title: "수익 구조 다각화", desc: "제조(인터엠), 뷰티(크라우니), 콘텐츠(유튜브), 금융의 융합 수익", icon: "R" },
-              { title: "글로벌 네트워크 형성", desc: "실리콘밸리부터 개발도상국까지 아우르는 글로벌 벨트 구축", icon: "G" },
+              { title: t("site.tv_benefit1Title"), desc: t("site.tv_benefit1Desc"), icon: "B" },
+              { title: t("site.tv_benefit2Title"), desc: t("site.tv_benefit2Desc"), icon: "R" },
+              { title: t("site.tv_benefit3Title"), desc: t("site.tv_benefit3Desc"), icon: "G" },
             ].map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.15}>
+              <ScrollReveal key={item.icon} delay={i * 0.15}>
                 <div className="bg-neutral-50 rounded-[3px] p-6 border border-neutral-200 h-full">
                   <div className="w-10 h-10 rounded-[3px] bg-gradient-to-br from-rose-400/[0.3] via-neutral-900 to-neutral-900 flex items-center justify-center text-sm font-bold text-white mb-4 aurora-icon">
                     {item.icon}
@@ -242,18 +244,18 @@ export default function TVPage() {
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <ScrollReveal>
-            <h2 className="text-2xl font-bold mb-3">참여 혜택</h2>
-            <p className="text-neutral-400 mb-6">시청자 참여 시 특별 선물을 드립니다</p>
+            <h2 className="text-2xl font-bold mb-3">{t("site.tv_rewardsTitle")}</h2>
+            <p className="text-neutral-400 mb-6">{t("site.tv_rewardsDesc")}</p>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <div className="inline-flex flex-wrap justify-center gap-3">
-              <span className="px-4 py-2 bg-neutral-800/80 border border-neutral-700 rounded-[3px] text-sm">인터랙트 제품</span>
-              <span className="px-4 py-2 bg-neutral-800/80 border border-neutral-700 rounded-[3px] text-sm">크라우니 마스크팩</span>
+              <span className="px-4 py-2 bg-neutral-800/80 border border-neutral-700 rounded-[3px] text-sm">{t("site.tv_reward1")}</span>
+              <span className="px-4 py-2 bg-neutral-800/80 border border-neutral-700 rounded-[3px] text-sm">{t("site.tv_reward2")}</span>
             </div>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <p className="text-xs text-neutral-500 mt-6">
-              2027년 9월 30일까지 · 프로젝트별 7회 방영 목표
+              {t("site.tv_rewardsNote")}
             </p>
           </ScrollReveal>
         </div>
@@ -264,15 +266,15 @@ export default function TVPage() {
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-2">최근 행사</h2>
-              <p className="text-neutral-500">CROWNY의 오프라인 행사 현장</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-2">{t("site.tv_eventsTitle")}</h2>
+              <p className="text-neutral-500">{t("site.tv_eventsDesc")}</p>
             </div>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
             <div className="mb-4">
               <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-[3px]">
-                2026.01.25 킥오프 세미나
+                {t("site.tv_eventDate")}
               </span>
             </div>
           </ScrollReveal>
@@ -295,7 +297,7 @@ export default function TVPage() {
 
           <ScrollReveal delay={0.5}>
             <p className="text-center text-xs text-neutral-400 mt-6">
-              크라우니 TV 프로젝트 킥오프 세미나 현장
+              {t("site.tv_eventCaption")}
             </p>
           </ScrollReveal>
         </div>
@@ -310,9 +312,9 @@ export default function TVPage() {
               <span className="text-[8px] font-medium text-neutral-600 tracking-[0.3em]">PRESENT</span>
             </div>
             <div className="flex gap-6 text-sm">
-              <Link href="/" className="hover:text-white transition">홈</Link>
-              <Link href="/about" className="hover:text-white transition">소개</Link>
-              <Link href="/enterprises" className="hover:text-white transition">기업</Link>
+              <Link href="/" className="hover:text-white transition">{t("site.footer_home")}</Link>
+              <Link href="/about" className="hover:text-white transition">{t("site.footer_about")}</Link>
+              <Link href="/enterprises" className="hover:text-white transition">{t("site.footer_enterprises")}</Link>
             </div>
             <p className="text-sm">&copy; 2026 CROWNY. All rights reserved.</p>
           </div>

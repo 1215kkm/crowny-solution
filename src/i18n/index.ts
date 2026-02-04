@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useCallback, useEffect, ReactNode 
 import React from 'react';
 
 export type Locale = 'ko' | 'en' | 'zh' | 'ja' | 'vi' | 'th';
-export type Namespace = 'common' | 'market' | 'admin';
+export type Namespace = 'common' | 'market' | 'admin' | 'site';
 
 export const LOCALES: { code: Locale; label: string; flag: string }[] = [
   { code: 'ko', label: '한국어', flag: '🇰🇷' },
@@ -121,7 +121,7 @@ export function I18nProvider({
       const dotIndex = key.indexOf('.');
       if (dotIndex !== -1) {
         const prefix = key.substring(0, dotIndex) as Namespace;
-        if (['common', 'market', 'admin'].includes(prefix)) {
+        if (['common', 'market', 'admin', 'site'].includes(prefix)) {
           ns = prefix;
           actualKey = key.substring(dotIndex + 1);
         }

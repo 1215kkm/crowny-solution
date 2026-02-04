@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslation } from '@/i18n';
 
 export default function MarketplacePlanPage() {
+  const { t } = useTranslation();
+
   useEffect(() => {
     // 인쇄 스타일 적용
-    document.title = 'CROWNY 코인 마켓플레이스 기획서';
-  }, []);
+    document.title = t('site.docs_marketplacePlanTitle');
+  }, [t]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -19,13 +22,13 @@ export default function MarketplacePlanPage() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          PDF 다운로드
+          {t('site.docs_pdfDownload')}
         </button>
         <button
           onClick={() => window.history.back()}
           className="bg-neutral-200 text-neutral-900 px-6 py-3 rounded-lg hover:bg-neutral-300 transition-colors"
         >
-          뒤로가기
+          {t('site.docs_goBack')}
         </button>
       </div>
 

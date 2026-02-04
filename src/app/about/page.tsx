@@ -2,9 +2,36 @@
 
 import { Navbar } from "@/components/Navbar";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { useTranslation } from "@/i18n";
 import Link from "next/link";
 
 export default function AboutPage() {
+  const { t } = useTranslation();
+
+  const coreValues = [
+    { title: t('site.about_transparency'), desc: t('site.about_transparencyDesc'), icon: "T", aurora: "from-cyan-400/[0.3] via-neutral-900 to-neutral-900" },
+    { title: t('site.about_sustainability'), desc: t('site.about_sustainabilityDesc'), icon: "S", aurora: "from-emerald-400/[0.3] via-neutral-900 to-neutral-900" },
+    { title: t('site.about_globalCoop'), desc: t('site.about_globalCoopDesc'), icon: "G", aurora: "from-purple-400/[0.3] via-neutral-900 to-neutral-900" },
+  ];
+
+  const roadmapItems = [
+    { phase: "Phase 1", period: t('site.about_phase1Period'), title: t('site.about_phase1Title'), desc: t('site.about_phase1Desc'), status: t('site.about_phase1Status') },
+    { phase: "Phase 2", period: t('site.about_phase2Period'), title: t('site.about_phase2Title'), desc: t('site.about_phase2Desc'), status: t('site.about_phaseScheduled') },
+    { phase: "Phase 3", period: t('site.about_phase3Period'), title: t('site.about_phase3Title'), desc: t('site.about_phase3Desc'), status: t('site.about_phaseScheduled') },
+    { phase: "Phase 4", period: t('site.about_phase4Period'), title: t('site.about_phase4Title'), desc: t('site.about_phase4Desc'), status: t('site.about_phaseScheduled') },
+    { phase: "Phase 5", period: t('site.about_phase5Period'), title: t('site.about_phase5Title'), desc: t('site.about_phase5Desc'), status: t('site.about_phaseScheduled') },
+  ];
+
+  const orgItems = [
+    { level: "L0", role: t('site.about_orgL0'), desc: t('site.about_orgL0Desc') },
+    { level: "L1", role: t('site.about_orgL1'), desc: t('site.about_orgL1Desc') },
+    { level: "L2", role: t('site.about_orgL2'), desc: t('site.about_orgL2Desc') },
+    { level: "L3", role: t('site.about_orgL3'), desc: t('site.about_orgL3Desc') },
+    { level: "L4", role: t('site.about_orgL4'), desc: t('site.about_orgL4Desc') },
+    { level: "L5", role: t('site.about_orgL5'), desc: t('site.about_orgL5Desc') },
+    { level: "L6", role: t('site.about_orgL6'), desc: t('site.about_orgL6Desc') },
+  ];
+
   return (
     <>
       <Navbar />
@@ -16,10 +43,10 @@ export default function AboutPage() {
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <ScrollReveal delay={0.1}>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">CROWNY를 소개합니다</h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">{t('site.about_heroTitle')}</h1>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
-            <p className="text-base md:text-lg text-neutral-400">153개국을 연결하는 글로벌 비즈니스 생태계</p>
+            <p className="text-base md:text-lg text-neutral-400">{t('site.about_heroDesc')}</p>
           </ScrollReveal>
         </div>
       </section>
@@ -30,21 +57,27 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-12">
             <ScrollReveal direction="left">
               <div className="space-y-6">
-                <div className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-[3px]">미션</div>
-                <h2 className="text-2xl font-bold text-neutral-900">전 세계의 사업을 하나로 연결하여<br/>공동 번영을 실현합니다</h2>
+                <div className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-[3px]">{t('site.about_mission')}</div>
+                <h2 className="text-2xl font-bold text-neutral-900">{t('site.about_missionTitle').split('\n').reduce<React.ReactNode[]>((acc, line, i, arr) => {
+                  acc.push(line);
+                  if (i < arr.length - 1) acc.push(<br key={i} />);
+                  return acc;
+                }, [])}</h2>
                 <p className="text-neutral-600 leading-relaxed">
-                  CROWNY는 각 국가의 산업 역량을 결집하고, 국경을 초월한 비즈니스 네트워크를 구축하여
-                  모든 참여자가 함께 성장할 수 있는 플랫폼을 제공합니다.
+                  {t('site.about_missionDesc')}
                 </p>
               </div>
             </ScrollReveal>
             <ScrollReveal direction="right">
               <div className="space-y-6">
-                <div className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-[3px]">비전</div>
-                <h2 className="text-2xl font-bold text-neutral-900">2030년까지<br/>153개국 완전 연결</h2>
+                <div className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-[3px]">{t('site.about_vision')}</div>
+                <h2 className="text-2xl font-bold text-neutral-900">{t('site.about_visionTitle').split('\n').reduce<React.ReactNode[]>((acc, line, i, arr) => {
+                  acc.push(line);
+                  if (i < arr.length - 1) acc.push(<br key={i} />);
+                  return acc;
+                }, [])}</h2>
                 <p className="text-neutral-600 leading-relaxed">
-                  금융, 바이오, 에너지, 재화, 구호 5대 산업을 축으로 각 국가에 153개 기업을 육성하고,
-                  기업당 1,530억 원의 가치를 창출하는 것이 우리의 비전입니다.
+                  {t('site.about_visionDesc')}
                 </p>
               </div>
             </ScrollReveal>
@@ -57,17 +90,13 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-3">핵심 가치</h2>
-              <p className="text-neutral-500">CROWNY의 모든 결정은 이 가치를 기반으로 합니다</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-3">{t('site.about_coreValues')}</h2>
+              <p className="text-neutral-500">{t('site.about_coreValuesDesc')}</p>
             </div>
           </ScrollReveal>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { title: "투명성", desc: "모든 자본 흐름과 사업 현황을 실시간으로 투명하게 공개합니다.", icon: "T", aurora: "from-cyan-400/[0.3] via-neutral-900 to-neutral-900" },
-              { title: "지속가능성", desc: "단기 이익이 아닌 장기적 가치 창출과 사회적 영향을 추구합니다.", icon: "S", aurora: "from-emerald-400/[0.3] via-neutral-900 to-neutral-900" },
-              { title: "글로벌 협력", desc: "국경을 넘어 각국의 강점을 결합하여 시너지를 극대화합니다.", icon: "G", aurora: "from-purple-400/[0.3] via-neutral-900 to-neutral-900" },
-            ].map((v, i) => (
-              <ScrollReveal key={v.title} delay={i * 0.15}>
+            {coreValues.map((v, i) => (
+              <ScrollReveal key={i} delay={i * 0.15}>
                 <div className="bg-white rounded-[3px] p-8 border border-neutral-200 h-full">
                   <div className={`w-10 h-10 rounded-[3px] bg-gradient-to-br ${v.aurora} flex items-center justify-center text-sm font-bold text-white mb-4 aurora-icon`}>{v.icon}</div>
                   <h3 className="text-lg font-semibold text-neutral-900 mb-2">{v.title}</h3>
@@ -84,42 +113,42 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-3">토큰 이코노미</h2>
-              <p className="text-neutral-500">CROWNA 코인 기반의 내부 경제 시스템</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-3">{t('site.about_tokenEconomy')}</h2>
+              <p className="text-neutral-500">{t('site.about_tokenEconomyDesc')}</p>
             </div>
           </ScrollReveal>
           <div className="grid md:grid-cols-2 gap-8">
             <ScrollReveal direction="left">
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-neutral-900">CROWNA 코인</h3>
+                <h3 className="text-xl font-bold text-neutral-900">{t('site.about_crownaCoin')}</h3>
                 <ul className="space-y-3 text-sm text-neutral-600">
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
-                    <span>총 <strong className="text-neutral-900">234억개</strong> 발행, 폴리곤(Polygon) 네트워크 기반</span>
+                    <span>{t('site.about_coinFeature1', { amount: '234억' })}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
-                    <span>중앙화 운영으로 시작, 전용 크라우니 지갑 제공</span>
+                    <span>{t('site.about_coinFeature2')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
-                    <span>크라우니 네트워크 비즈니스 전용 결제 수단</span>
+                    <span>{t('site.about_coinFeature3')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0" />
-                    <span>코인 소각 없이 보유·유통으로 가치 관리</span>
+                    <span>{t('site.about_coinFeature4')}</span>
                   </li>
                 </ul>
               </div>
             </ScrollReveal>
             <ScrollReveal direction="right">
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-neutral-900">가치 체계</h3>
+                <h3 className="text-xl font-bold text-neutral-900">{t('site.about_valueSystem')}</h3>
                 <div className="space-y-3">
                   <div className="bg-neutral-50 rounded-[3px] p-4 border border-neutral-200">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-neutral-700">시작 가격</span>
-                      <span className="text-sm font-bold text-neutral-900">₩25,500 (10 PONE)</span>
+                      <span className="text-sm font-medium text-neutral-700">{t('site.about_startPriceLabel')}</span>
+                      <span className="text-sm font-bold text-neutral-900">{t('site.about_startPriceValue')}</span>
                     </div>
                     <div className="h-1.5 bg-neutral-200 rounded-[3px] overflow-hidden">
                       <div className="h-full bg-neutral-400 rounded-[3px]" style={{width: "16.7%"}} />
@@ -127,14 +156,14 @@ export default function AboutPage() {
                   </div>
                   <div className="bg-neutral-50 rounded-[3px] p-4 border border-neutral-200">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-neutral-700">목표 통용 가격</span>
-                      <span className="text-sm font-bold text-neutral-900">₩153,000</span>
+                      <span className="text-sm font-medium text-neutral-700">{t('site.about_targetPriceLabel')}</span>
+                      <span className="text-sm font-bold text-neutral-900">{t('site.about_targetPriceValue')}</span>
                     </div>
                     <div className="h-1.5 bg-neutral-200 rounded-[3px] overflow-hidden">
                       <div className="h-full bg-neutral-700 rounded-[3px]" style={{width: "100%"}} />
                     </div>
                   </div>
-                  <p className="text-xs text-neutral-500">평균 7% 이상 가치 상승 목표 &middot; ₩153,000 도달 시까지 내부 서비스 활성화</p>
+                  <p className="text-xs text-neutral-500">{t('site.about_priceNote')}</p>
                 </div>
               </div>
             </ScrollReveal>
@@ -147,18 +176,12 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-3">로드맵</h2>
-              <p className="text-neutral-500">단계적으로 글로벌 네트워크를 확장합니다</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-3">{t('site.about_roadmap')}</h2>
+              <p className="text-neutral-500">{t('site.about_roadmapDesc')}</p>
             </div>
           </ScrollReveal>
           <div className="space-y-6">
-            {[
-              { phase: "Phase 1", period: "2026 상반기", title: "MVP 런칭", desc: "한국 1개국, 5개 기업으로 플랫폼 검증", status: "진행 중" },
-              { phase: "Phase 2", period: "2026 하반기", title: "아시아 확장", desc: "일본, 베트남 등 아시아 5개국 확대", status: "예정" },
-              { phase: "Phase 3", period: "2027", title: "글로벌 확장", desc: "유럽·북미 주요국 진출 및 투자 시스템 고도화", status: "예정" },
-              { phase: "Phase 4", period: "2028~2029", title: "전 대륙 커버리지", desc: "아프리카, 남미 포함 100개국 달성", status: "예정" },
-              { phase: "Phase 5", period: "2030", title: "153개국 완성", desc: "전 세계 153개국 네트워크 완성 및 자율 운영 체제 구축", status: "예정" },
-            ].map((item, i) => (
+            {roadmapItems.map((item, i) => (
               <ScrollReveal key={item.phase} delay={i * 0.1}>
                 <div className="flex gap-6 items-start">
                   <div className="flex flex-col items-center">
@@ -187,20 +210,12 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 mb-3">조직 구조</h2>
-              <p className="text-neutral-500">7단계 역할 체계로 효율적인 글로벌 운영</p>
+              <h2 className="text-3xl font-bold text-neutral-900 mb-3">{t('site.about_orgTitle')}</h2>
+              <p className="text-neutral-500">{t('site.about_orgDesc')}</p>
             </div>
           </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { level: "L0", role: "글로벌 관리자", desc: "전체 플랫폼 총괄" },
-              { level: "L1", role: "국가 관리자", desc: "해당 국가 사업 관리" },
-              { level: "L2", role: "산업 관리자", desc: "산업별 전략 수립" },
-              { level: "L3", role: "기업 관리자", desc: "개별 기업 운영" },
-              { level: "L4", role: "사업가", desc: "실질적 사업 수행" },
-              { level: "L5", role: "영업 담당", desc: "시장 개척 및 영업" },
-              { level: "L6", role: "투자자", desc: "자본 투자 및 성장 참여" },
-            ].map((item, i) => (
+            {orgItems.map((item, i) => (
               <ScrollReveal key={item.level} delay={i * 0.08}>
                 <div className="bg-white rounded-[3px] p-5 border border-neutral-200 h-full">
                   <div className="text-xs font-mono text-neutral-500 mb-1">{item.level}</div>
@@ -221,17 +236,17 @@ export default function AboutPage() {
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center text-white relative z-10">
           <ScrollReveal>
-            <h2 className="text-2xl font-bold mb-4">지금 CROWNY와 함께하세요</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('site.about_ctaTitle')}</h2>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <p className="text-neutral-400 mb-8">글로벌 비즈니스의 새로운 기준을 만들어갑니다</p>
+            <p className="text-neutral-400 mb-8">{t('site.about_ctaDesc')}</p>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <Link
               href="/register"
               className="inline-block px-8 py-3.5 bg-white text-neutral-900 font-semibold rounded-[3px] hover:bg-neutral-100 transition"
             >
-              파트너 등록
+              {t('site.about_ctaButton')}
             </Link>
           </ScrollReveal>
         </div>

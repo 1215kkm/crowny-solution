@@ -3,19 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import { useTranslation } from "@/i18n";
 import { MOCK_ENTERPRISES, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
-const TABS = [
-  { label: "전체", code: "all" },
-  { label: "금융", code: "finance" },
-  { label: "바이오", code: "bio" },
-  { label: "에너지", code: "energy" },
-  { label: "재화", code: "goods" },
-  { label: "구호", code: "aid" },
-];
-
 export default function EnterprisesPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("all");
+
+  const TABS = [
+    { label: t('site.ent_all'), code: "all" },
+    { label: t('site.ent_finance'), code: "finance" },
+    { label: t('site.ent_bio'), code: "bio" },
+    { label: t('site.ent_energy'), code: "energy" },
+    { label: t('site.ent_goods'), code: "goods" },
+    { label: t('site.ent_aid'), code: "aid" },
+  ];
 
   const filtered = activeTab === "all"
     ? MOCK_ENTERPRISES
@@ -27,14 +29,14 @@ export default function EnterprisesPage() {
       <main className="max-w-6xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900">등록 기업</h1>
-            <p className="text-sm text-neutral-500 mt-1">현재 {MOCK_ENTERPRISES.length}개 기업이 등록되어 있습니다</p>
+            <h1 className="text-2xl font-bold text-neutral-900">{t('site.ent_title')}</h1>
+            <p className="text-sm text-neutral-500 mt-1">{t('site.ent_count', { count: String(MOCK_ENTERPRISES.length) })}</p>
           </div>
           <Link
             href="/enterprises/new"
             className="px-5 py-2.5 bg-neutral-900 text-white text-sm font-medium rounded-[3px] hover:bg-neutral-800 transition"
           >
-            + 기업 등록
+            {t('site.ent_register')}
           </Link>
         </div>
 
@@ -82,7 +84,7 @@ export default function EnterprisesPage() {
 
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-neutral-400">기업가치</span>
+                    <span className="text-neutral-400">{t('site.ent_valuation')}</span>
                     <span className="font-medium text-neutral-700">{formatKRW(ent.currentValuation)} / {formatKRW(ent.valuationTarget)}</span>
                   </div>
                   <div className="h-1.5 bg-neutral-100 rounded-[3px] overflow-hidden">
@@ -102,7 +104,7 @@ export default function EnterprisesPage() {
 
         {filtered.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-neutral-400 text-sm">해당 산업의 등록된 기업이 없습니다</p>
+            <p className="text-neutral-400 text-sm">{t('site.ent_noEnterprise')}</p>
           </div>
         )}
       </main>
