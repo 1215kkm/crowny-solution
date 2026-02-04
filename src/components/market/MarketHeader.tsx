@@ -2,16 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-const navItems = [
-  { href: '/market', label: '홈' },
-  { href: '/market/search', label: '검색' },
-  { href: '/market/chat', label: '채팅' },
-  { href: '/market/my', label: 'MY' },
-];
+import { useTranslation } from '@/i18n';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function MarketHeader() {
   const pathname = usePathname();
+  const { t } = useTranslation();
+
+  const navItems = [
+    { href: '/market', label: t('home') },
+    { href: '/market/search', label: t('search') },
+    { href: '/market/chat', label: t('chat') },
+    { href: '/market/my', label: t('my') },
+  ];
 
   const isActive = (href: string) => {
     if (href === '/market') {
@@ -37,7 +40,7 @@ export default function MarketHeader() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="상품명, 지역명으로 검색"
+                placeholder={t('market.searchPlaceholder')}
                 className="w-full px-4 py-2 pl-10 bg-neutral-900 border border-neutral-800 rounded-[3px] text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600 transition"
               />
               <svg
@@ -72,14 +75,11 @@ export default function MarketHeader() {
               href="/market/sell"
               className="ml-2 px-4 py-2 bg-white text-neutral-900 text-sm font-semibold rounded-[3px] hover:bg-neutral-100 transition"
             >
-              판매하기
+              {t('sell')}
             </Link>
-            <Link
-              href="/"
-              className="ml-2 px-3 py-2 text-sm text-neutral-500 hover:text-neutral-300 transition"
-            >
-              메인으로
-            </Link>
+            <div className="ml-2">
+              <LanguageSwitcher />
+            </div>
           </nav>
         </div>
       </div>

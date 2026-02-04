@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from '@/i18n';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -89,30 +90,37 @@ const mockTransactions: Transaction[] = [
   },
 ];
 
-const transactionTypeLabels: Record<TransactionType, { label: string; icon: ReactNode; color: string }> = {
-  DEPOSIT: { label: '충전', icon: <ArrowDownIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
-  WITHDRAW: { label: '출금', icon: <ArrowUpIcon className="w-5 h-5" />, color: 'text-[var(--error)]' },
-  PURCHASE: { label: '구매', icon: <ShoppingCartIcon className="w-5 h-5" />, color: 'text-[var(--error)]' },
-  SALE: { label: '판매', icon: <MoneyIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
-  COMMISSION: { label: '수수료', icon: <SparkleIcon className="w-5 h-5" />, color: 'text-[var(--accent)]' },
-  TRANSFER: { label: '송금', icon: <SwapIcon className="w-5 h-5" />, color: 'text-[var(--info)]' },
-  ESCROW_LOCK: { label: '에스크로', icon: <LockIcon className="w-5 h-5" />, color: 'text-[var(--warning)]' },
-  ESCROW_RELEASE: { label: '에스크로 해제', icon: <LockOpenIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
 };
 
-const tabs = [
-  { id: 'all', label: '전체' },
-  { id: 'income', label: '수입' },
-  { id: 'expense', label: '지출' },
-];
-
 export default function WalletPage() {
+  const { t, locale } = useTranslation();
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
   const [activeTab, setActiveTab] = useState('all');
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
+  const transactionTypeLabels: Record<TransactionType, { label: string; icon: ReactNode; color: string }> = {
+    DEPOSIT: { label: t('market.deposit_label'), icon: <ArrowDownIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
+    WITHDRAW: { label: t('market.withdraw_label'), icon: <ArrowUpIcon className="w-5 h-5" />, color: 'text-[var(--error)]' },
+    PURCHASE: { label: t('market.purchase_label'), icon: <ShoppingCartIcon className="w-5 h-5" />, color: 'text-[var(--error)]' },
+    SALE: { label: t('market.sale_label'), icon: <MoneyIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
+    COMMISSION: { label: t('market.commission_label'), icon: <SparkleIcon className="w-5 h-5" />, color: 'text-[var(--accent)]' },
+    TRANSFER: { label: t('market.transfer_label'), icon: <SwapIcon className="w-5 h-5" />, color: 'text-[var(--info)]' },
+    ESCROW_LOCK: { label: t('market.escrow_label'), icon: <LockIcon className="w-5 h-5" />, color: 'text-[var(--warning)]' },
+    ESCROW_RELEASE: { label: t('market.escrowRelease_label'), icon: <LockOpenIcon className="w-5 h-5" />, color: 'text-[var(--success)]' },
+  };
+
+  const tabs = [
+    { id: 'all', label: t('all') },
+    { id: 'income', label: t('market.income') },
+    { id: 'expense', label: t('market.expense') },
+  ];
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(Math.abs(price));
+    return new Intl.NumberFormat(intlLocale).format(Math.abs(price));
   };
 
   const formatDate = (dateString: string) => {
@@ -122,10 +130,10 @@ export default function WalletPage() {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (hours < 1) return '방금';
-    if (hours < 24) return `${hours}시간 전`;
-    if (days < 7) return `${days}일 전`;
-    return date.toLocaleDateString('ko-KR');
+    if (hours < 1) return t('market.time_just');
+    if (hours < 24) return t('market.time_hoursAgo', { count: String(hours) });
+    if (days < 7) return t('market.time_daysAgo', { count: String(days) });
+    return date.toLocaleDateString(intlLocale);
   };
 
   const filteredTransactions = mockTransactions.filter((tx) => {
@@ -151,7 +159,7 @@ export default function WalletPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </Link>
-          <h1 className="text-[var(--text-body)] font-semibold">내 지갑</h1>
+          <h1 className="text-[var(--text-body)] font-semibold">{t('market.myWallet')}</h1>
           <button className="p-2">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
@@ -161,7 +169,7 @@ export default function WalletPage() {
 
         {/* 잔액 */}
         <div className="px-[var(--spacing-md)] pb-[var(--spacing-lg)]">
-          <p className="text-[var(--text-caption)] opacity-70 mb-1">사용 가능</p>
+          <p className="text-[var(--text-caption)] opacity-70 mb-1">{t('market.available')}</p>
           <p className="text-[var(--text-display)] font-bold mb-2">
             {formatPrice(mockWallet.balance)}
             <span className="text-[var(--text-body)] ml-1 opacity-80">CROWNY</span>
@@ -169,10 +177,10 @@ export default function WalletPage() {
 
           <div className="flex gap-4 text-[var(--text-caption)] opacity-70 mb-4">
             {mockWallet.pendingBalance > 0 && (
-              <span>거래 중: {formatPrice(mockWallet.pendingBalance)}</span>
+              <span>{t('market.inTransaction')}: {formatPrice(mockWallet.pendingBalance)}</span>
             )}
             {mockWallet.lockedBalance > 0 && (
-              <span>잠금: {formatPrice(mockWallet.lockedBalance)}</span>
+              <span>{t('market.locked')}: {formatPrice(mockWallet.lockedBalance)}</span>
             )}
           </div>
 
@@ -185,7 +193,7 @@ export default function WalletPage() {
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
               </svg>
-              충전
+              {t('market.deposit')}
             </button>
             <button
               onClick={() => setShowWithdrawModal(true)}
@@ -194,13 +202,13 @@ export default function WalletPage() {
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
               </svg>
-              출금
+              {t('market.withdraw')}
             </button>
             <button className="btn flex-1 bg-white/20 hover:bg-white/30 text-white border-0">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
               </svg>
-              송금
+              {t('market.transfer')}
             </button>
           </div>
         </div>
@@ -211,7 +219,7 @@ export default function WalletPage() {
         <div className="card p-[var(--spacing-md)] mb-[var(--spacing-md)]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">지갑 주소</p>
+              <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.walletAddress')}</p>
               <p className="text-[var(--text-body-sm)] font-mono">{mockWallet.walletAddress}</p>
             </div>
             <button className="btn btn-ghost btn-sm">
@@ -225,13 +233,13 @@ export default function WalletPage() {
         {/* 월간 통계 */}
         <div className="grid grid-cols-2 gap-[var(--spacing-md)] mb-[var(--spacing-md)]">
           <div className="card p-[var(--spacing-md)]">
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">이번달 수입</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.monthlyIncome')}</p>
             <p className="text-[var(--text-h4)] font-bold text-[var(--success)]">
               +{formatPrice(stats.totalIncome)}
             </p>
           </div>
           <div className="card p-[var(--spacing-md)]">
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">이번달 지출</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">{t('market.monthlyExpense')}</p>
             <p className="text-[var(--text-h4)] font-bold text-[var(--error)]">
               -{formatPrice(stats.totalExpense)}
             </p>
@@ -287,7 +295,7 @@ export default function WalletPage() {
             <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
             </svg>
-            <p className="text-[var(--text-body-sm)]">거래 내역이 없습니다</p>
+            <p className="text-[var(--text-body-sm)]">{t('market.noTransactions')}</p>
           </div>
         )}
       </div>
@@ -298,7 +306,7 @@ export default function WalletPage() {
           <div className="overlay" onClick={() => setShowDepositModal(false)} />
           <div className="modal p-[var(--spacing-lg)]">
             <div className="flex items-center justify-between mb-[var(--spacing-lg)]">
-              <h2 className="text-[var(--text-h4)] font-bold">충전하기</h2>
+              <h2 className="text-[var(--text-h4)] font-bold">{t('market.depositTitle')}</h2>
               <button onClick={() => setShowDepositModal(false)} className="p-2">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -307,7 +315,7 @@ export default function WalletPage() {
             </div>
 
             <div className="mb-[var(--spacing-md)]">
-              <label className="block text-[var(--text-body-sm)] font-medium mb-2">충전 금액</label>
+              <label className="block text-[var(--text-body-sm)] font-medium mb-2">{t('market.depositAmount')}</label>
               <div className="grid grid-cols-3 gap-2 mb-[var(--spacing-sm)]">
                 {[1000, 5000, 10000, 50000, 100000, 500000].map((amount) => (
                   <button key={amount} className="btn btn-outline btn-sm">
@@ -318,7 +326,7 @@ export default function WalletPage() {
               <div className="relative">
                 <input
                   type="number"
-                  placeholder="직접 입력"
+                  placeholder={t('market.directInput')}
                   className="input pr-20"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--foreground-secondary)]">
@@ -329,12 +337,12 @@ export default function WalletPage() {
 
             <div className="bg-[var(--background-secondary)] rounded-[var(--border-radius)] p-[var(--spacing-md)] mb-[var(--spacing-lg)]">
               <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)]">
-                외부 지갑 또는 거래소에서 위 지갑 주소로 CROWNY를 전송하시면 자동으로 충전됩니다.
+                {t('market.depositGuide')}
               </p>
             </div>
 
             <button className="btn btn-primary btn-lg btn-full">
-              충전 주소 복사
+              {t('market.copyAddress')}
             </button>
           </div>
         </>
@@ -346,7 +354,7 @@ export default function WalletPage() {
           <div className="overlay" onClick={() => setShowWithdrawModal(false)} />
           <div className="modal p-[var(--spacing-lg)]">
             <div className="flex items-center justify-between mb-[var(--spacing-lg)]">
-              <h2 className="text-[var(--text-h4)] font-bold">출금하기</h2>
+              <h2 className="text-[var(--text-h4)] font-bold">{t('market.withdrawTitle')}</h2>
               <button onClick={() => setShowWithdrawModal(false)} className="p-2">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -355,16 +363,16 @@ export default function WalletPage() {
             </div>
 
             <div className="mb-[var(--spacing-md)]">
-              <label className="block text-[var(--text-body-sm)] font-medium mb-2">출금 주소</label>
+              <label className="block text-[var(--text-body-sm)] font-medium mb-2">{t('market.withdrawAddress')}</label>
               <input
                 type="text"
-                placeholder="외부 지갑 주소 입력"
+                placeholder={t('market.enterWalletAddress')}
                 className="input font-mono"
               />
             </div>
 
             <div className="mb-[var(--spacing-md)]">
-              <label className="block text-[var(--text-body-sm)] font-medium mb-2">출금 금액</label>
+              <label className="block text-[var(--text-body-sm)] font-medium mb-2">{t('market.withdrawAmount')}</label>
               <div className="relative">
                 <input
                   type="number"
@@ -376,18 +384,18 @@ export default function WalletPage() {
                 </span>
               </div>
               <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mt-1">
-                출금 가능: {formatPrice(mockWallet.balance)} CROWNY
+                {t('market.withdrawAvailable', { amount: formatPrice(mockWallet.balance) })}
               </p>
             </div>
 
             <div className="bg-[var(--warning-bg)] rounded-[var(--border-radius)] p-[var(--spacing-md)] mb-[var(--spacing-lg)]">
               <p className="text-[var(--text-caption)] text-[var(--warning)]">
-                출금 수수료: 10 CROWNY / 처리 시간: 약 10분
+                {t('market.withdrawFee')}
               </p>
             </div>
 
             <button className="btn btn-primary btn-lg btn-full">
-              출금 신청
+              {t('market.applyWithdraw')}
             </button>
           </div>
         </>

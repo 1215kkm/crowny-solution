@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation } from '@/i18n';
 
 type OrderStatus = 'PENDING' | 'PAID' | 'SHIPPING' | 'DELIVERED' | 'CONFIRMED' | 'CANCELLED' | 'REFUNDED';
 
@@ -86,32 +87,38 @@ const mockOrders: Order[] = [
   },
 ];
 
-const statusLabels: Record<OrderStatus, { label: string; color: string }> = {
-  PENDING: { label: '결제 대기', color: 'badge-warning' },
-  PAID: { label: '결제 완료', color: 'badge-info' },
-  SHIPPING: { label: '배송중', color: 'badge-info' },
-  DELIVERED: { label: '배송 완료', color: 'badge-success' },
-  CONFIRMED: { label: '구매 확정', color: 'badge-success' },
-  CANCELLED: { label: '취소', color: 'badge-error' },
-  REFUNDED: { label: '환불 완료', color: 'badge-error' },
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
 };
 
-const tabs = [
-  { id: 'all', label: '전체' },
-  { id: 'ongoing', label: '진행중' },
-  { id: 'completed', label: '완료' },
-  { id: 'cancelled', label: '취소/환불' },
-];
-
 export default function PurchasesPage() {
+  const { t, locale } = useTranslation();
   const [activeTab, setActiveTab] = useState('all');
+  const intlLocale = LOCALE_MAP[locale] || 'en-US';
+
+  const statusLabels: Record<OrderStatus, { label: string; color: string }> = {
+    PENDING: { label: t('market.orderStatus_pending'), color: 'badge-warning' },
+    PAID: { label: t('market.orderStatus_paid'), color: 'badge-info' },
+    SHIPPING: { label: t('market.orderStatus_shipping'), color: 'badge-info' },
+    DELIVERED: { label: t('market.orderStatus_delivered'), color: 'badge-success' },
+    CONFIRMED: { label: t('market.orderStatus_confirmed'), color: 'badge-success' },
+    CANCELLED: { label: t('market.orderStatus_cancelled'), color: 'badge-error' },
+    REFUNDED: { label: t('market.orderStatus_refunded'), color: 'badge-error' },
+  };
+
+  const tabs = [
+    { id: 'all', label: t('all') },
+    { id: 'ongoing', label: t('market.ongoing') },
+    { id: 'completed', label: t('market.completed') },
+    { id: 'cancelled', label: t('market.cancelledRefunded') },
+  ];
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(intlLocale).format(price);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
+    return new Date(dateString).toLocaleDateString(intlLocale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -136,7 +143,7 @@ export default function PurchasesPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </Link>
-          <h1 className="text-[var(--text-body)] font-semibold ml-2">구매 내역</h1>
+          <h1 className="text-[var(--text-body)] font-semibold ml-2">{t('market.purchaseHistory')}</h1>
         </div>
 
         {/* 탭 */}
@@ -166,7 +173,7 @@ export default function PurchasesPage() {
                       {formatDate(order.createdAt)}
                     </p>
                     <p className="text-[var(--text-caption)] text-[var(--foreground-secondary)]">
-                      주문번호: {order.id}
+                      {t('market.orderNumber')}: {order.id}
                     </p>
                   </div>
                   <span className={`badge ${statusLabels[order.status].color}`}>
@@ -197,7 +204,7 @@ export default function PurchasesPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-[var(--text-body-sm)] line-clamp-2 mb-1">{order.product.title}</p>
                       <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mb-1">
-                        판매자: {order.seller.name}
+                        {t('market.seller')}: {order.seller.name}
                       </p>
                       <p className="text-[var(--text-body)] font-bold">
                         {formatPrice(order.totalAmount)} CROWNY
@@ -213,26 +220,26 @@ export default function PurchasesPage() {
                 <div className="flex gap-2 p-[var(--spacing-md)] pt-0">
                   {order.status === 'DELIVERED' && (
                     <button className="btn btn-primary btn-sm flex-1">
-                      구매 확정
+                      {t('market.confirmPurchase')}
                     </button>
                   )}
                   {order.status === 'CONFIRMED' && (
                     <button className="btn btn-outline btn-sm flex-1">
-                      리뷰 작성
+                      {t('market.writeReview')}
                     </button>
                   )}
                   {['PAID', 'SHIPPING', 'DELIVERED'].includes(order.status) && (
                     <Link href={`/market/chat/${order.id}`} className="btn btn-outline btn-sm flex-1">
-                      채팅하기
+                      {t('market.chatWithSeller')}
                     </Link>
                   )}
                   {order.status === 'PENDING' && (
                     <>
                       <button className="btn btn-primary btn-sm flex-1">
-                        결제하기
+                        {t('market.pay')}
                       </button>
                       <button className="btn btn-outline btn-sm flex-1 text-[var(--error)]">
-                        주문 취소
+                        {t('market.cancelOrder')}
                       </button>
                     </>
                   )}
@@ -245,9 +252,9 @@ export default function PurchasesPage() {
             <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
-            <p className="text-[var(--text-body)]">구매 내역이 없습니다</p>
+            <p className="text-[var(--text-body)]">{t('market.noPurchases')}</p>
             <Link href="/market" className="btn btn-primary mt-4">
-              쇼핑하러 가기
+              {t('market.goShopping')}
             </Link>
           </div>
         )}

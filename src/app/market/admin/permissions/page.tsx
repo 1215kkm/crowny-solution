@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/i18n';
 
 type Grade = 'SUPER_ADMIN' | 'CROWN' | 'DIAMOND' | 'GOLD' | 'SILVER' | 'BRONZE';
 
@@ -11,45 +12,22 @@ interface Permission {
   category: string;
 }
 
-const PERMISSIONS: Permission[] = [
-  // 회원 관리
-  { id: 'users_view', name: '회원 조회', description: '회원 목록 및 상세 정보 조회', category: '회원 관리' },
-  { id: 'users_edit', name: '회원 수정', description: '회원 정보 수정', category: '회원 관리' },
-  { id: 'users_grade', name: '등급 변경', description: '회원 등급 변경 (자신보다 낮은 등급만)', category: '회원 관리' },
-  { id: 'users_ban', name: '회원 제재', description: '회원 정지/차단 처리', category: '회원 관리' },
-
-  // 거래 관리
-  { id: 'tx_view', name: '거래 조회', description: '모든 거래 내역 조회', category: '거래 관리' },
-  { id: 'tx_cancel', name: '거래 취소', description: '거래 강제 취소', category: '거래 관리' },
-  { id: 'tx_release', name: '에스크로 해제', description: '에스크로 강제 해제', category: '거래 관리' },
-  { id: 'tx_refund', name: '환불 처리', description: '거래 환불 처리', category: '거래 관리' },
-
-  // 정산 관리
-  { id: 'commission_view', name: '수수료 조회', description: '수수료 내역 조회', category: '정산 관리' },
-  { id: 'commission_edit', name: '수수료율 설정', description: '등급별 수수료율 설정', category: '정산 관리' },
-  { id: 'withdraw_approve', name: '출금 승인', description: '출금 요청 승인/거절', category: '정산 관리' },
-  { id: 'settlement', name: '정산 실행', description: '정산 실행 및 관리', category: '정산 관리' },
-
-  // 신고 관리
-  { id: 'report_view', name: '신고 조회', description: '신고 내역 조회', category: '신고 관리' },
-  { id: 'report_handle', name: '신고 처리', description: '신고 접수/처리', category: '신고 관리' },
-  { id: 'dispute_resolve', name: '분쟁 해결', description: '거래 분쟁 중재 및 해결', category: '신고 관리' },
-
-  // 시스템 관리
-  { id: 'settings_view', name: '설정 조회', description: '시스템 설정 조회', category: '시스템 관리' },
-  { id: 'settings_edit', name: '설정 변경', description: '시스템 설정 변경', category: '시스템 관리' },
-  { id: 'admin_create', name: '관리자 생성', description: '하위 관리자 계정 생성', category: '시스템 관리' },
-  { id: 'admin_delete', name: '관리자 삭제', description: '하위 관리자 계정 삭제', category: '시스템 관리' },
-];
-
-const GRADE_INFO: Record<Grade, { name: string; color: string; level: number }> = {
-  SUPER_ADMIN: { name: '슈퍼관리자', color: 'var(--grade-super-admin)', level: 6 },
-  CROWN: { name: 'CROWN', color: 'var(--grade-crown)', level: 5 },
-  DIAMOND: { name: 'DIAMOND', color: 'var(--grade-diamond)', level: 4 },
-  GOLD: { name: 'GOLD', color: 'var(--grade-gold)', level: 3 },
-  SILVER: { name: 'SILVER', color: 'var(--grade-silver)', level: 2 },
-  BRONZE: { name: 'BRONZE', color: 'var(--grade-bronze)', level: 1 },
+const GRADE_STYLES: Record<Grade, { color: string; level: number }> = {
+  SUPER_ADMIN: { color: 'var(--grade-super-admin)', level: 6 },
+  CROWN: { color: 'var(--grade-crown)', level: 5 },
+  DIAMOND: { color: 'var(--grade-diamond)', level: 4 },
+  GOLD: { color: 'var(--grade-gold)', level: 3 },
+  SILVER: { color: 'var(--grade-silver)', level: 2 },
+  BRONZE: { color: 'var(--grade-bronze)', level: 1 },
 };
+
+const ALL_PERMISSION_IDS = [
+  'users_view', 'users_edit', 'users_grade', 'users_ban',
+  'tx_view', 'tx_cancel', 'tx_release', 'tx_refund',
+  'commission_view', 'commission_edit', 'withdraw_approve', 'settlement',
+  'report_view', 'report_handle', 'dispute_resolve',
+  'settings_view', 'settings_edit', 'admin_create', 'admin_delete',
+];
 
 const COMMISSION_RATES: Record<Grade, number> = {
   SUPER_ADMIN: 0,
@@ -60,9 +38,8 @@ const COMMISSION_RATES: Record<Grade, number> = {
   BRONZE: 0.25,
 };
 
-// 초기 권한 설정
 const initialPermissions: Record<Grade, string[]> = {
-  SUPER_ADMIN: PERMISSIONS.map(p => p.id), // 모든 권한
+  SUPER_ADMIN: ALL_PERMISSION_IDS,
   CROWN: ['users_view', 'users_edit', 'users_grade', 'users_ban', 'tx_view', 'tx_cancel', 'tx_release', 'commission_view', 'withdraw_approve', 'report_view', 'report_handle', 'dispute_resolve', 'admin_create'],
   DIAMOND: ['users_view', 'users_edit', 'users_grade', 'tx_view', 'tx_cancel', 'commission_view', 'report_view', 'report_handle'],
   GOLD: ['users_view', 'users_edit', 'tx_view', 'report_view', 'report_handle'],
@@ -71,6 +48,48 @@ const initialPermissions: Record<Grade, string[]> = {
 };
 
 export default function PermissionsPage() {
+  const { t } = useTranslation();
+
+  const GRADE_INFO: Record<Grade, { name: string; color: string; level: number }> = {
+    SUPER_ADMIN: { name: t('grade_super_admin'), color: GRADE_STYLES.SUPER_ADMIN.color, level: GRADE_STYLES.SUPER_ADMIN.level },
+    CROWN: { name: t('grade_crown'), color: GRADE_STYLES.CROWN.color, level: GRADE_STYLES.CROWN.level },
+    DIAMOND: { name: t('grade_diamond'), color: GRADE_STYLES.DIAMOND.color, level: GRADE_STYLES.DIAMOND.level },
+    GOLD: { name: t('grade_gold'), color: GRADE_STYLES.GOLD.color, level: GRADE_STYLES.GOLD.level },
+    SILVER: { name: t('grade_silver'), color: GRADE_STYLES.SILVER.color, level: GRADE_STYLES.SILVER.level },
+    BRONZE: { name: t('grade_bronze'), color: GRADE_STYLES.BRONZE.color, level: GRADE_STYLES.BRONZE.level },
+  };
+
+  const PERMISSIONS: Permission[] = [
+    // User Management
+    { id: 'users_view', name: t('admin.perm_users_view'), description: t('admin.perm_users_view_desc'), category: 'admin.cat_userMgmt' },
+    { id: 'users_edit', name: t('admin.perm_users_edit'), description: t('admin.perm_users_edit_desc'), category: 'admin.cat_userMgmt' },
+    { id: 'users_grade', name: t('admin.perm_users_grade'), description: t('admin.perm_users_grade_desc'), category: 'admin.cat_userMgmt' },
+    { id: 'users_ban', name: t('admin.perm_users_ban'), description: t('admin.perm_users_ban_desc'), category: 'admin.cat_userMgmt' },
+
+    // Transaction Management
+    { id: 'tx_view', name: t('admin.perm_tx_view'), description: t('admin.perm_tx_view_desc'), category: 'admin.cat_txMgmt' },
+    { id: 'tx_cancel', name: t('admin.perm_tx_cancel'), description: t('admin.perm_tx_cancel_desc'), category: 'admin.cat_txMgmt' },
+    { id: 'tx_release', name: t('admin.perm_tx_release'), description: t('admin.perm_tx_release_desc'), category: 'admin.cat_txMgmt' },
+    { id: 'tx_refund', name: t('admin.perm_tx_refund'), description: t('admin.perm_tx_refund_desc'), category: 'admin.cat_txMgmt' },
+
+    // Settlement Management
+    { id: 'commission_view', name: t('admin.perm_commission_view'), description: t('admin.perm_commission_view_desc'), category: 'admin.cat_settlementMgmt' },
+    { id: 'commission_edit', name: t('admin.perm_commission_edit'), description: t('admin.perm_commission_edit_desc'), category: 'admin.cat_settlementMgmt' },
+    { id: 'withdraw_approve', name: t('admin.perm_withdraw_approve'), description: t('admin.perm_withdraw_approve_desc'), category: 'admin.cat_settlementMgmt' },
+    { id: 'settlement', name: t('admin.perm_settlement'), description: t('admin.perm_settlement_desc'), category: 'admin.cat_settlementMgmt' },
+
+    // Report Management
+    { id: 'report_view', name: t('admin.perm_report_view'), description: t('admin.perm_report_view_desc'), category: 'admin.cat_reportMgmt' },
+    { id: 'report_handle', name: t('admin.perm_report_handle'), description: t('admin.perm_report_handle_desc'), category: 'admin.cat_reportMgmt' },
+    { id: 'dispute_resolve', name: t('admin.perm_dispute_resolve'), description: t('admin.perm_dispute_resolve_desc'), category: 'admin.cat_reportMgmt' },
+
+    // System Management
+    { id: 'settings_view', name: t('admin.perm_settings_view'), description: t('admin.perm_settings_view_desc'), category: 'admin.cat_systemMgmt' },
+    { id: 'settings_edit', name: t('admin.perm_settings_edit'), description: t('admin.perm_settings_edit_desc'), category: 'admin.cat_systemMgmt' },
+    { id: 'admin_create', name: t('admin.perm_admin_create'), description: t('admin.perm_admin_create_desc'), category: 'admin.cat_systemMgmt' },
+    { id: 'admin_delete', name: t('admin.perm_admin_delete'), description: t('admin.perm_admin_delete_desc'), category: 'admin.cat_systemMgmt' },
+  ];
+
   const [gradePermissions, setGradePermissions] = useState(initialPermissions);
   const [selectedGrade, setSelectedGrade] = useState<Grade>('CROWN');
   const [commissionRates, setCommissionRates] = useState(COMMISSION_RATES);
@@ -79,7 +98,7 @@ export default function PermissionsPage() {
   const categories = [...new Set(PERMISSIONS.map(p => p.category))];
 
   const togglePermission = (permissionId: string) => {
-    if (selectedGrade === 'SUPER_ADMIN') return; // 슈퍼관리자는 수정 불가
+    if (selectedGrade === 'SUPER_ADMIN') return;
 
     setGradePermissions(prev => {
       const current = prev[selectedGrade];
@@ -103,14 +122,14 @@ export default function PermissionsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">등급/권한 설정</h1>
-        <p className="text-[var(--foreground-muted)]">각 등급별 권한과 수수료율을 설정합니다</p>
+        <h1 className="text-2xl font-bold">{t('admin.permissions')}</h1>
+        <p className="text-[var(--foreground-muted)]">{t('admin.permissionsDesc')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* 등급 선택 */}
+        {/* Grade Selection */}
         <div className="card p-4">
-          <h2 className="font-semibold mb-4">등급 선택</h2>
+          <h2 className="font-semibold mb-4">{t('admin.selectGrade')}</h2>
           <div className="space-y-2">
             {(Object.keys(GRADE_INFO) as Grade[]).map((grade) => (
               <button
@@ -134,11 +153,11 @@ export default function PermissionsPage() {
             ))}
           </div>
 
-          {/* 수수료율 설정 */}
+          {/* Commission Rate Settings */}
           <div className="mt-6 pt-4 border-t border-[var(--border-color)]">
-            <h3 className="font-semibold mb-3">수수료 분배율 (%)</h3>
+            <h3 className="font-semibold mb-3">{t('admin.commissionDistribution')}</h3>
             <p className="text-xs text-[var(--foreground-muted)] mb-3">
-              거래 완료 시 상위 등급에게 분배되는 수수료율
+              {t('admin.commissionDistDesc')}
             </p>
             {(Object.keys(GRADE_INFO) as Grade[]).filter(g => g !== 'SUPER_ADMIN').map((grade) => (
               <div key={grade} className="flex items-center gap-2 mb-2">
@@ -160,7 +179,7 @@ export default function PermissionsPage() {
               </div>
             ))}
             <div className="mt-2 pt-2 border-t border-[var(--border-color)] flex justify-between">
-              <span className="text-sm font-medium">총 수수료</span>
+              <span className="text-sm font-medium">{t('admin.totalCommissionRate')}</span>
               <span className="text-sm font-bold">
                 {Object.entries(commissionRates)
                   .filter(([k]) => k !== 'SUPER_ADMIN')
@@ -171,7 +190,7 @@ export default function PermissionsPage() {
           </div>
         </div>
 
-        {/* 권한 설정 */}
+        {/* Permission Settings */}
         <div className="lg:col-span-2 card p-4">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -180,12 +199,12 @@ export default function PermissionsPage() {
                   className="w-4 h-4 rounded-full"
                   style={{ backgroundColor: GRADE_INFO[selectedGrade].color }}
                 />
-                {GRADE_INFO[selectedGrade].name} 권한
+                {t('admin.gradePermissions', { grade: GRADE_INFO[selectedGrade].name })}
               </h2>
               <p className="text-sm text-[var(--foreground-muted)]">
                 {selectedGrade === 'SUPER_ADMIN'
-                  ? '슈퍼관리자는 모든 권한을 가집니다 (수정 불가)'
-                  : '체크된 권한만 사용할 수 있습니다'
+                  ? t('admin.superAdminAllPerms')
+                  : t('admin.checkedPermsOnly')
                 }
               </p>
             </div>
@@ -199,7 +218,7 @@ export default function PermissionsPage() {
             {categories.map((category) => (
               <div key={category}>
                 <h3 className="text-sm font-semibold text-[var(--foreground-muted)] mb-2">
-                  {category}
+                  {t(category)}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {PERMISSIONS.filter(p => p.category === category).map((permission) => {
@@ -238,7 +257,7 @@ export default function PermissionsPage() {
         </div>
       </div>
 
-      {/* 저장 버튼 */}
+      {/* Save Button */}
       <div className="mt-6 flex justify-end gap-3">
         <button
           onClick={() => {
@@ -247,22 +266,22 @@ export default function PermissionsPage() {
           }}
           className="px-4 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)] hover:bg-[var(--background-secondary)]"
         >
-          초기화
+          {t('admin.reset')}
         </button>
         <button
           onClick={handleSave}
           className="px-6 py-2 bg-[var(--primary)] text-white rounded-[var(--border-radius)] hover:opacity-90"
         >
-          저장하기
+          {t('admin.saveSettings')}
         </button>
       </div>
 
-      {/* 저장 완료 모달 */}
+      {/* Save Complete Modal */}
       {showSaveModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] text-center">
             <span className="text-4xl">✅</span>
-            <p className="mt-2 font-medium">설정이 저장되었습니다</p>
+            <p className="mt-2 font-medium">{t('admin.settingsSaved')}</p>
           </div>
         </div>
       )}

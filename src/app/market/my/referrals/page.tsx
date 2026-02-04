@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslation, type Locale } from '@/i18n';
 
 type MarketGrade = 'SUPER_ADMIN' | 'CROWN' | 'DIAMOND' | 'GOLD' | 'SILVER' | 'BRONZE';
 
@@ -56,22 +57,33 @@ const mockSubordinates: Member[] = [
   },
 ];
 
-const gradeInfo: Record<MarketGrade, { label: string; color: string }> = {
-  SUPER_ADMIN: { label: '슈퍼관리자', color: 'bg-[var(--grade-super-admin)]' },
-  CROWN: { label: '크라운', color: 'bg-[var(--grade-crown)] text-[var(--foreground)]' },
-  DIAMOND: { label: '다이아몬드', color: 'bg-[var(--grade-diamond)]' },
-  GOLD: { label: '골드', color: 'bg-[var(--grade-gold)] text-[var(--foreground)]' },
-  SILVER: { label: '실버', color: 'bg-[var(--grade-silver)]' },
-  BRONZE: { label: '브론즈', color: 'bg-[var(--grade-bronze)]' },
+const LOCALE_MAP: Record<Locale, string> = {
+  ko: 'ko-KR',
+  en: 'en-US',
+  zh: 'zh-CN',
+  ja: 'ja-JP',
+  vi: 'vi-VN',
+  th: 'th-TH',
 };
 
 export default function ReferralsPage() {
+  const { t, locale } = useTranslation();
+
+  const gradeInfo: Record<MarketGrade, { label: string; color: string }> = {
+    SUPER_ADMIN: { label: t('grade_super_admin'), color: 'bg-[var(--grade-super-admin)]' },
+    CROWN: { label: t('grade_crown'), color: 'bg-[var(--grade-crown)] text-[var(--foreground)]' },
+    DIAMOND: { label: t('grade_diamond'), color: 'bg-[var(--grade-diamond)]' },
+    GOLD: { label: t('grade_gold'), color: 'bg-[var(--grade-gold)] text-[var(--foreground)]' },
+    SILVER: { label: t('grade_silver'), color: 'bg-[var(--grade-silver)]' },
+    BRONZE: { label: t('grade_bronze'), color: 'bg-[var(--grade-bronze)]' },
+  };
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
+    return new Intl.NumberFormat(LOCALE_MAP[locale]).format(price);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
+    return new Date(dateString).toLocaleDateString(LOCALE_MAP[locale], {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -107,15 +119,15 @@ export default function ReferralsPage() {
             </span>
           </div>
           <div className="flex items-center gap-3 text-[var(--text-caption)] text-[var(--foreground-muted)]">
-            <span>가입: {formatDate(member.joinedAt)}</span>
+            <span>{t('market.joined')}: {formatDate(member.joinedAt)}</span>
             <span>·</span>
-            <span>거래: {formatPrice(member.totalSales)} CROWNY</span>
+            <span>{t('market.trade')}: {formatPrice(member.totalSales)} CROWNY</span>
           </div>
         </div>
         {member.subordinateCount > 0 && (
           <div className="text-right">
-            <p className="text-[var(--text-body-sm)] font-medium">{member.subordinateCount}명</p>
-            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">산하</p>
+            <p className="text-[var(--text-body-sm)] font-medium">{t('market.members', { count: String(member.subordinateCount) })}</p>
+            <p className="text-[var(--text-caption)] text-[var(--foreground-muted)]">{t('market.subordinate')}</p>
           </div>
         )}
       </div>
@@ -133,10 +145,10 @@ export default function ReferralsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </Link>
-            <h1 className="text-[var(--text-body)] font-semibold ml-2">추천 회원</h1>
+            <h1 className="text-[var(--text-body)] font-semibold ml-2">{t('market.myReferrals')}</h1>
           </div>
           <button className="btn btn-primary btn-sm">
-            초대하기
+            {t('market.invite')}
           </button>
         </div>
       </header>
@@ -144,7 +156,7 @@ export default function ReferralsPage() {
       <div className="market-container py-[var(--spacing-md)]">
         {/* 조직도 시각화 */}
         <div className="card p-[var(--spacing-lg)] mb-[var(--spacing-lg)] text-center">
-          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-md)]">내 조직 구조</h2>
+          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-md)]">{t('market.myOrgStructure')}</h2>
 
           {/* 트리 구조 */}
           <div className="relative">
@@ -162,8 +174,8 @@ export default function ReferralsPage() {
             {/* 나 */}
             <div className="mb-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-white rounded-[var(--border-radius-full)]">
-                <span className="badge bg-white/20 text-white text-[var(--text-tiny)]">실버</span>
-                <span className="text-[var(--text-body-sm)] font-medium">나</span>
+                <span className="badge bg-white/20 text-white text-[var(--text-tiny)]">{t('grade_silver')}</span>
+                <span className="text-[var(--text-body-sm)] font-medium">{t('market.me')}</span>
               </div>
               {mockSubordinates.length > 0 && (
                 <div className="w-px h-6 bg-[var(--border-color)] mx-auto" />
@@ -188,7 +200,7 @@ export default function ReferralsPage() {
 
         {/* 내 추천인 */}
         <div className="mb-[var(--spacing-lg)]">
-          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">내 추천인</h2>
+          <h2 className="text-[var(--text-body-sm)] font-semibold mb-[var(--spacing-sm)]">{t('market.mySponsor')}</h2>
           <MemberCard member={mockSponsor} />
         </div>
 
@@ -196,8 +208,8 @@ export default function ReferralsPage() {
         <div>
           <div className="flex items-center justify-between mb-[var(--spacing-sm)]">
             <h2 className="text-[var(--text-body-sm)] font-semibold">
-              내 추천 회원
-              <span className="text-[var(--foreground-muted)] ml-1">({mockSubordinates.length}명)</span>
+              {t('market.myReferralMembers')}
+              <span className="text-[var(--foreground-muted)] ml-1">({t('market.members', { count: String(mockSubordinates.length) })})</span>
             </h2>
           </div>
 
@@ -212,9 +224,9 @@ export default function ReferralsPage() {
               <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
               </svg>
-              <p className="text-[var(--text-body-sm)] mb-2">아직 추천한 회원이 없습니다</p>
+              <p className="text-[var(--text-body-sm)] mb-2">{t('market.noReferrals')}</p>
               <button className="btn btn-primary">
-                친구 초대하기
+                {t('market.inviteFriends')}
               </button>
             </div>
           )}
@@ -222,7 +234,7 @@ export default function ReferralsPage() {
 
         {/* 초대 링크 */}
         <div className="card p-[var(--spacing-md)] mt-[var(--spacing-lg)]">
-          <h3 className="text-[var(--text-body-sm)] font-semibold mb-2">내 초대 링크</h3>
+          <h3 className="text-[var(--text-body-sm)] font-semibold mb-2">{t('market.myInviteLink')}</h3>
           <div className="flex gap-2">
             <input
               type="text"
@@ -231,11 +243,11 @@ export default function ReferralsPage() {
               className="input flex-1 text-[var(--text-caption)] font-mono bg-[var(--background-secondary)]"
             />
             <button className="btn btn-primary">
-              복사
+              {t('market.copy')}
             </button>
           </div>
           <p className="text-[var(--text-caption)] text-[var(--foreground-muted)] mt-2">
-            이 링크로 가입한 회원은 자동으로 내 산하 회원이 됩니다.
+            {t('market.inviteLinkDesc')}
           </p>
         </div>
       </div>

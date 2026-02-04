@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/i18n';
 
 type WithdrawStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
 
@@ -23,6 +24,10 @@ interface WithdrawRequest {
   processedAt: string | null;
 }
 
+const LOCALE_MAP: Record<string, string> = {
+  ko: 'ko-KR', en: 'en-US', zh: 'zh-CN', ja: 'ja-JP', vi: 'vi-VN', th: 'th-TH',
+};
+
 const mockCommissions: Commission[] = [
   { id: 'c1', transactionId: 'tx1', recipient: { name: '김크라운', grade: 'CROWN' }, amount: 75, rate: 0.5, createdAt: '2024-02-03 14:30' },
   { id: 'c2', transactionId: 'tx1', recipient: { name: '이다이아', grade: 'DIAMOND' }, amount: 225, rate: 1.5, createdAt: '2024-02-03 14:30' },
@@ -38,13 +43,6 @@ const mockWithdrawals: WithdrawRequest[] = [
   { id: 'w4', user: { name: '한유저', grade: 'SILVER' }, amount: 5000, bankInfo: '하나 555-666-777888', status: 'REJECTED', requestedAt: '2024-01-30 14:00', processedAt: '2024-01-31 10:00' },
 ];
 
-const STATUS_INFO: Record<WithdrawStatus, { name: string; color: string }> = {
-  PENDING: { name: '대기', color: 'bg-yellow-100 text-yellow-700' },
-  APPROVED: { name: '승인', color: 'bg-blue-100 text-blue-700' },
-  REJECTED: { name: '거절', color: 'bg-red-100 text-red-700' },
-  COMPLETED: { name: '완료', color: 'bg-green-100 text-green-700' },
-};
-
 const GRADE_COLORS: Record<string, string> = {
   CROWN: 'var(--grade-crown)',
   DIAMOND: 'var(--grade-diamond)',
@@ -54,12 +52,20 @@ const GRADE_COLORS: Record<string, string> = {
 };
 
 export default function CommissionsPage() {
+  const { t, locale } = useTranslation();
   const [activeTab, setActiveTab] = useState<'commissions' | 'withdrawals'>('withdrawals');
   const [withdrawals, setWithdrawals] = useState(mockWithdrawals);
   const [selectedWithdraw, setSelectedWithdraw] = useState<WithdrawRequest | null>(null);
   const [showProcessModal, setShowProcessModal] = useState(false);
 
-  const formatNumber = (num: number) => new Intl.NumberFormat('ko-KR').format(num);
+  const STATUS_INFO: Record<WithdrawStatus, { name: string; color: string }> = {
+    PENDING: { name: t('admin.withdraw_pending'), color: 'bg-yellow-100 text-yellow-700' },
+    APPROVED: { name: t('admin.withdraw_approved'), color: 'bg-blue-100 text-blue-700' },
+    REJECTED: { name: t('admin.withdraw_rejected'), color: 'bg-red-100 text-red-700' },
+    COMPLETED: { name: t('admin.withdraw_completed'), color: 'bg-green-100 text-green-700' },
+  };
+
+  const formatNumber = (num: number) => new Intl.NumberFormat(LOCALE_MAP[locale] || 'ko-KR').format(num);
 
   const totalCommissions = mockCommissions.reduce((sum, c) => sum + c.amount, 0);
   const pendingWithdrawals = withdrawals.filter(w => w.status === 'PENDING');
@@ -78,29 +84,29 @@ export default function CommissionsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">수수료/정산 관리</h1>
-        <p className="text-[var(--foreground-muted)]">수수료 내역과 출금 요청을 관리합니다</p>
+        <h1 className="text-2xl font-bold">{t('admin.commissionMgmt')}</h1>
+        <p className="text-[var(--foreground-muted)]">{t('admin.commissionMgmtDesc')}</p>
       </div>
 
       {/* 통계 카드 */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="card p-4">
-          <p className="text-sm text-[var(--foreground-muted)]">오늘 수수료 수익</p>
+          <p className="text-sm text-[var(--foreground-muted)]">{t('admin.todayCommission')}</p>
           <p className="text-2xl font-bold">{formatNumber(totalCommissions)}</p>
           <p className="text-xs text-[var(--foreground-muted)]">CROWNY</p>
         </div>
         <div className="card p-4">
-          <p className="text-sm text-[var(--foreground-muted)]">대기중 출금</p>
+          <p className="text-sm text-[var(--foreground-muted)]">{t('admin.pendingWithdrawals')}</p>
           <p className="text-2xl font-bold text-orange-600">{pendingWithdrawals.length}</p>
-          <p className="text-xs text-[var(--foreground-muted)]">건</p>
+          <p className="text-xs text-[var(--foreground-muted)]">{t('admin.count')}</p>
         </div>
         <div className="card p-4">
-          <p className="text-sm text-[var(--foreground-muted)]">대기중 금액</p>
+          <p className="text-sm text-[var(--foreground-muted)]">{t('admin.pendingAmount')}</p>
           <p className="text-2xl font-bold">{formatNumber(totalPendingAmount)}</p>
           <p className="text-xs text-[var(--foreground-muted)]">CROWNY</p>
         </div>
         <div className="card p-4">
-          <p className="text-sm text-[var(--foreground-muted)]">이번 달 정산</p>
+          <p className="text-sm text-[var(--foreground-muted)]">{t('admin.monthlySettlement')}</p>
           <p className="text-2xl font-bold">{formatNumber(2340000)}</p>
           <p className="text-xs text-[var(--foreground-muted)]">CROWNY</p>
         </div>
@@ -116,7 +122,7 @@ export default function CommissionsPage() {
               : 'bg-[var(--background-secondary)]'
           }`}
         >
-          출금 요청 ({pendingWithdrawals.length})
+          {t('admin.withdrawRequests', { count: String(pendingWithdrawals.length) })}
         </button>
         <button
           onClick={() => setActiveTab('commissions')}
@@ -126,7 +132,7 @@ export default function CommissionsPage() {
               : 'bg-[var(--background-secondary)]'
           }`}
         >
-          수수료 내역
+          {t('admin.commissionHistory')}
         </button>
       </div>
 
@@ -137,12 +143,12 @@ export default function CommissionsPage() {
             <table className="w-full">
               <thead className="bg-[var(--background-secondary)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium">요청자</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium">금액</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">계좌정보</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">상태</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">요청일시</th>
-                  <th className="px-4 py-3 text-center text-sm font-medium">처리</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_requester')}</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium">{t('admin.col_amount')}</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_bankInfo')}</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_status')}</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_requestDate')}</th>
+                  <th className="px-4 py-3 text-center text-sm font-medium">{t('admin.col_process')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,13 +178,13 @@ export default function CommissionsPage() {
                             onClick={() => { setSelectedWithdraw(withdraw); setShowProcessModal(true); }}
                             className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-[var(--border-radius)] hover:bg-green-200"
                           >
-                            승인
+                            {t('admin.approve')}
                           </button>
                           <button
                             onClick={() => handleProcess(withdraw, 'REJECTED')}
                             className="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-[var(--border-radius)] hover:bg-red-200"
                           >
-                            거절
+                            {t('admin.reject')}
                           </button>
                         </div>
                       ) : (
@@ -202,11 +208,11 @@ export default function CommissionsPage() {
             <table className="w-full">
               <thead className="bg-[var(--background-secondary)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium">거래 ID</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">수령자</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium">수수료율</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium">금액</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">일시</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_txId')}</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_recipient')}</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium">{t('admin.col_commissionRate')}</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium">{t('admin.col_amount')}</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">{t('admin.col_datetime')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -240,7 +246,7 @@ export default function CommissionsPage() {
       {showProcessModal && selectedWithdraw && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[var(--border-radius)] w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">출금 승인</h3>
+            <h3 className="text-lg font-bold mb-4">{t('admin.withdrawApproval')}</h3>
             <div className="bg-[var(--background-secondary)] p-4 rounded-[var(--border-radius)] mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <span
@@ -253,20 +259,20 @@ export default function CommissionsPage() {
               <p className="text-sm text-[var(--foreground-muted)] mt-2">{selectedWithdraw.bankInfo}</p>
             </div>
             <p className="text-sm text-[var(--foreground-muted)] mb-4">
-              해당 계좌로 출금을 승인하시겠습니까?
+              {t('admin.withdrawApprovalConfirm')}
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowProcessModal(false)}
                 className="flex-1 py-2 border border-[var(--border-color)] rounded-[var(--border-radius)]"
               >
-                취소
+                {t('cancel')}
               </button>
               <button
                 onClick={() => handleProcess(selectedWithdraw, 'APPROVED')}
                 className="flex-1 py-2 bg-green-600 text-white rounded-[var(--border-radius)]"
               >
-                승인
+                {t('admin.approve')}
               </button>
             </div>
           </div>

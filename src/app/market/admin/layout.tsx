@@ -1,8 +1,10 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { I18nProvider, Namespace, useTranslation } from '@/i18n';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import {
   DashboardIcon,
   SecurityIcon,
@@ -33,16 +35,16 @@ const GRADE_PERMISSIONS = {
   BRONZE: ['reports'],
 };
 
-const MENU_ITEMS: { href: string; label: string; icon: ReactNode; permission: string }[] = [
-  { href: '/market/admin', label: '대시보드', icon: <DashboardIcon className="w-5 h-5" />, permission: 'all' },
-  { href: '/market/admin/permissions', label: '등급/권한 설정', icon: <SecurityIcon className="w-5 h-5" />, permission: 'all' },
-  { href: '/market/admin/users', label: '회원 관리', icon: <GroupIcon className="w-5 h-5" />, permission: 'users' },
-  { href: '/market/admin/sub-admins', label: '하위 관리자', icon: <BadgeIcon className="w-5 h-5" />, permission: 'sub_admins' },
-  { href: '/market/admin/transactions', label: '거래 관리', icon: <PaymentIcon className="w-5 h-5" />, permission: 'transactions' },
-  { href: '/market/admin/commissions', label: '수수료/정산', icon: <MoneyIcon className="w-5 h-5" />, permission: 'commissions' },
-  { href: '/market/admin/reports', label: '신고/분쟁', icon: <ReportIcon className="w-5 h-5" />, permission: 'reports' },
-  { href: '/market/admin/products', label: '상품 관리', icon: <InventoryIcon className="w-5 h-5" />, permission: 'all' },
-  { href: '/market/admin/settings', label: '시스템 설정', icon: <SettingsIcon className="w-5 h-5" />, permission: 'all' },
+const MENU_ITEMS: { href: string; labelKey: string; icon: ReactNode; permission: string }[] = [
+  { href: '/market/admin', labelKey: 'admin.dashboard', icon: <DashboardIcon className="w-5 h-5" />, permission: 'all' },
+  { href: '/market/admin/permissions', labelKey: 'admin.permissions', icon: <SecurityIcon className="w-5 h-5" />, permission: 'all' },
+  { href: '/market/admin/users', labelKey: 'admin.userManagement', icon: <GroupIcon className="w-5 h-5" />, permission: 'users' },
+  { href: '/market/admin/sub-admins', labelKey: 'admin.subAdmins', icon: <BadgeIcon className="w-5 h-5" />, permission: 'sub_admins' },
+  { href: '/market/admin/transactions', labelKey: 'admin.transactionMgmt', icon: <PaymentIcon className="w-5 h-5" />, permission: 'transactions' },
+  { href: '/market/admin/commissions', labelKey: 'admin.commissionMgmt', icon: <MoneyIcon className="w-5 h-5" />, permission: 'commissions' },
+  { href: '/market/admin/reports', labelKey: 'admin.reportMgmt', icon: <ReportIcon className="w-5 h-5" />, permission: 'reports' },
+  { href: '/market/admin/products', labelKey: 'admin.productMgmt', icon: <InventoryIcon className="w-5 h-5" />, permission: 'all' },
+  { href: '/market/admin/settings', labelKey: 'admin.systemSettings', icon: <SettingsIcon className="w-5 h-5" />, permission: 'all' },
 ];
 
 const GRADE_COLORS: Record<string, string> = {
@@ -54,23 +56,24 @@ const GRADE_COLORS: Record<string, string> = {
   BRONZE: 'var(--grade-bronze)',
 };
 
-const GRADE_NAMES: Record<string, string> = {
-  SUPER_ADMIN: '슈퍼관리자',
-  CROWN: 'CROWN',
-  DIAMOND: 'DIAMOND',
-  GOLD: 'GOLD',
-  SILVER: 'SILVER',
-  BRONZE: 'BRONZE',
-};
+const GRADE_KEYS: { key: string; labelKey: string }[] = [
+  { key: 'SUPER_ADMIN', labelKey: 'grade_super_admin' },
+  { key: 'CROWN', labelKey: 'grade_crown' },
+  { key: 'DIAMOND', labelKey: 'grade_diamond' },
+  { key: 'GOLD', labelKey: 'grade_gold' },
+  { key: 'SILVER', labelKey: 'grade_silver' },
+  { key: 'BRONZE', labelKey: 'grade_bronze' },
+];
 
 function hasPermission(grade: keyof typeof GRADE_PERMISSIONS, permission: string): boolean {
   const permissions = GRADE_PERMISSIONS[grade];
   return permissions.includes('all') || permissions.includes(permission);
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { t } = useTranslation();
 
   const filteredMenu = MENU_ITEMS.filter(item =>
     hasPermission(currentAdmin.grade, item.permission)
@@ -91,19 +94,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <span className="text-[var(--accent)] text-sm font-medium">ADMIN</span>
         </Link>
         <div className="ml-auto flex items-center gap-4">
+          <LanguageSwitcher />
           <div className="flex items-center gap-2">
             <span
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: GRADE_COLORS[currentAdmin.grade] }}
             />
-            <span className="text-sm">{GRADE_NAMES[currentAdmin.grade]}</span>
+            <span className="text-sm">{t(`grade_${currentAdmin.grade.toLowerCase()}`)}</span>
           </div>
           <div className="text-sm">{currentAdmin.name}</div>
           <Link
             href="/market"
             className="text-sm px-3 py-1 bg-white/10 rounded-[var(--border-radius)] hover:bg-white/20"
           >
-            마켓으로
+            {t('market.goToMarket')}
           </Link>
         </div>
       </header>
@@ -130,7 +134,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       }`}
                     >
                       <span>{item.icon}</span>
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <span className="text-sm font-medium">{t(item.labelKey)}</span>
                     </Link>
                   </li>
                 );
@@ -140,15 +144,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* 등급 안내 */}
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[var(--border-color)]">
-            <p className="text-xs text-[var(--foreground-muted)] mb-2">등급 체계</p>
+            <p className="text-xs text-[var(--foreground-muted)] mb-2">{t('admin.gradeSystem')}</p>
             <div className="space-y-1">
-              {Object.entries(GRADE_NAMES).map(([key, name]) => (
+              {GRADE_KEYS.map(({ key, labelKey }) => (
                 <div key={key} className="flex items-center gap-2 text-xs">
                   <span
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: GRADE_COLORS[key] }}
                   />
-                  <span>{name}</span>
+                  <span>{t(labelKey)}</span>
                 </div>
               ))}
             </div>
@@ -165,5 +169,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const namespaces = useMemo<Namespace[]>(() => ['common', 'market', 'admin'], []);
+
+  return (
+    <I18nProvider namespaces={namespaces}>
+      <AdminLayoutInner>{children}</AdminLayoutInner>
+    </I18nProvider>
   );
 }
