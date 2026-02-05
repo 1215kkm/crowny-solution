@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useCallback, useEffect, ReactNode 
 import React from 'react';
 
 export type Locale = 'ko' | 'en' | 'zh' | 'ja' | 'vi' | 'th';
-export type Namespace = 'common' | 'market' | 'admin';
+export type Namespace = 'common' | 'market' | 'admin' | 'site';
 
 export const LOCALES: { code: Locale; label: string; flag: string }[] = [
   { code: 'ko', label: '한국어', flag: '🇰🇷' },
@@ -19,6 +19,46 @@ export const LOCALES: { code: Locale; label: string; flag: string }[] = [
 type TranslationDict = Record<string, string>;
 type LoadedTranslations = Partial<Record<Namespace, TranslationDict>>;
 
+// Explicit import map - ensures bundler correctly resolves all translation files
+const importMap: Record<Locale, Record<Namespace, () => Promise<{ default: TranslationDict }>>> = {
+  ko: {
+    common: () => import('./locales/ko/common.json'),
+    market: () => import('./locales/ko/market.json'),
+    admin: () => import('./locales/ko/admin.json'),
+    site: () => import('./locales/ko/site.json'),
+  },
+  en: {
+    common: () => import('./locales/en/common.json'),
+    market: () => import('./locales/en/market.json'),
+    admin: () => import('./locales/en/admin.json'),
+    site: () => import('./locales/en/site.json'),
+  },
+  zh: {
+    common: () => import('./locales/zh/common.json'),
+    market: () => import('./locales/zh/market.json'),
+    admin: () => import('./locales/zh/admin.json'),
+    site: () => import('./locales/zh/site.json'),
+  },
+  ja: {
+    common: () => import('./locales/ja/common.json'),
+    market: () => import('./locales/ja/market.json'),
+    admin: () => import('./locales/ja/admin.json'),
+    site: () => import('./locales/ja/site.json'),
+  },
+  vi: {
+    common: () => import('./locales/vi/common.json'),
+    market: () => import('./locales/vi/market.json'),
+    admin: () => import('./locales/vi/admin.json'),
+    site: () => import('./locales/vi/site.json'),
+  },
+  th: {
+    common: () => import('./locales/th/common.json'),
+    market: () => import('./locales/th/market.json'),
+    admin: () => import('./locales/th/admin.json'),
+    site: () => import('./locales/th/site.json'),
+  },
+};
+
 // Cache for loaded translations
 const translationCache: Partial<Record<Locale, LoadedTranslations>> = {};
 
@@ -28,7 +68,12 @@ async function loadTranslations(locale: Locale, ns: Namespace): Promise<Translat
   }
 
   try {
-    const mod = await import(`./locales/${locale}/${ns}.json`);
+    const loader = importMap[locale]?.[ns];
+    if (!loader) {
+      console.warn(`No import map entry: ${locale}/${ns}`);
+      return {};
+    }
+    const mod = await loader();
     const dict = mod.default as TranslationDict;
 
     if (!translationCache[locale]) {
@@ -121,7 +166,7 @@ export function I18nProvider({
       const dotIndex = key.indexOf('.');
       if (dotIndex !== -1) {
         const prefix = key.substring(0, dotIndex) as Namespace;
-        if (['common', 'market', 'admin'].includes(prefix)) {
+        if (['common', 'market', 'admin', 'site'].includes(prefix)) {
           ns = prefix;
           actualKey = key.substring(dotIndex + 1);
         }

@@ -1,39 +1,44 @@
+"use client";
+
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import { useTranslation } from "@/i18n";
 import { MOCK_ENTERPRISES, MOCK_INVESTMENTS, MOCK_STATS, formatKRW, getStatusLabel, getStatusColor, getIndustryIcon, getIndustryAurora } from "@/lib/mockData";
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Navbar />
       <main className="max-w-6xl mx-auto px-6 py-10">
         {/* Welcome */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-neutral-900">대시보드</h1>
-          <p className="text-sm text-neutral-500 mt-1">CROWNY 플랫폼 현황을 한눈에 확인하세요</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('site.dash_title')}</h1>
+          <p className="text-sm text-neutral-500 mt-1">{t('site.dash_desc')}</p>
         </div>
 
         {/* Overview Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-[3px] border border-neutral-200 p-5">
-            <p className="text-xs text-neutral-400 mb-1">활성 국가</p>
+            <p className="text-xs text-neutral-400 mb-1">{t('site.dash_activeCountries')}</p>
             <p className="text-2xl font-bold text-neutral-900">{MOCK_STATS.totalCountries}</p>
-            <p className="text-xs text-neutral-400 mt-1">/ {MOCK_STATS.targetCountries} 목표</p>
+            <p className="text-xs text-neutral-400 mt-1">/ {MOCK_STATS.targetCountries} {t('site.dash_target')}</p>
           </div>
           <div className="bg-white rounded-[3px] border border-neutral-200 p-5">
-            <p className="text-xs text-neutral-400 mb-1">등록 기업</p>
+            <p className="text-xs text-neutral-400 mb-1">{t('site.dash_registeredEnt')}</p>
             <p className="text-2xl font-bold text-neutral-900">{MOCK_STATS.totalEnterprises}</p>
-            <p className="text-xs text-neutral-400 mt-1">/ {MOCK_STATS.targetEnterprises} 목표</p>
+            <p className="text-xs text-neutral-400 mt-1">/ {MOCK_STATS.targetEnterprises} {t('site.dash_target')}</p>
           </div>
           <div className="bg-white rounded-[3px] border border-neutral-200 p-5">
-            <p className="text-xs text-neutral-400 mb-1">총 투자액</p>
+            <p className="text-xs text-neutral-400 mb-1">{t('site.dash_totalInvestment')}</p>
             <p className="text-2xl font-bold text-neutral-900">{formatKRW(MOCK_STATS.totalInvestment)}</p>
-            <p className="text-xs text-neutral-500 mt-1">+12.5% 전월 대비</p>
+            <p className="text-xs text-neutral-500 mt-1">+12.5% {t('site.dash_vsLastMonth')}</p>
           </div>
           <div className="bg-white rounded-[3px] border border-neutral-200 p-5">
-            <p className="text-xs text-neutral-400 mb-1">총 기업가치</p>
+            <p className="text-xs text-neutral-400 mb-1">{t('site.dash_totalValuation')}</p>
             <p className="text-2xl font-bold text-neutral-900">{formatKRW(MOCK_STATS.totalValuation)}</p>
-            <p className="text-xs text-neutral-500 mt-1">+8.3% 전월 대비</p>
+            <p className="text-xs text-neutral-500 mt-1">+8.3% {t('site.dash_vsLastMonth')}</p>
           </div>
         </div>
 
@@ -41,8 +46,8 @@ export default function DashboardPage() {
           {/* Enterprise List */}
           <div className="md:col-span-2 bg-white rounded-[3px] border border-neutral-200 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-neutral-900">기업 현황</h2>
-              <Link href="/enterprises" className="text-sm text-neutral-500 hover:text-neutral-900 transition">전체 보기</Link>
+              <h2 className="text-lg font-semibold text-neutral-900">{t('site.dash_entStatus')}</h2>
+              <Link href="/enterprises" className="text-sm text-neutral-500 hover:text-neutral-900 transition">{t('site.dash_viewAll')}</Link>
             </div>
             <div className="space-y-3">
               {MOCK_ENTERPRISES.map((ent) => (
@@ -73,7 +78,7 @@ export default function DashboardPage() {
 
           {/* Recent Investments */}
           <div className="bg-white rounded-[3px] border border-neutral-200 p-6">
-            <h2 className="text-lg font-semibold text-neutral-900 mb-4">최근 투자</h2>
+            <h2 className="text-lg font-semibold text-neutral-900 mb-4">{t('site.dash_recentInvestments')}</h2>
             <div className="space-y-4">
               {MOCK_INVESTMENTS.map((inv) => (
                 <div key={inv.id} className="pb-3 border-b border-neutral-100 last:border-0">
